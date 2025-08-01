@@ -1,30 +1,32 @@
 <script setup>
+import { computed } from 'vue'
 import HelloWorld from './components/HelloWorld.vue'
+import { useBreakpoint } from './composables/useBreakpoint'
+
+const { isDesktop, isMobile } = useBreakpoint()
 </script>
 
 <template>
-  <div>
-    <a href="https://vite.dev" target="_blank">
-      <img src="/vite.svg" class="logo" alt="Vite logo" />
-    </a>
-    <a href="https://vuejs.org/" target="_blank">
-      <img src="./assets/vue.svg" class="logo vue" alt="Vue logo" />
-    </a>
+  <div id="app">
+    <!-- Desktop Warning Message -->
+    <div v-if="isDesktop" class="desktop-warning">
+      <div class="warning-content">
+        <div class="warning-icon"></div>
+        <h1>Mobile Only</h1>
+        <p>This application is designed for mobile use only.</p>
+        <p>Please switch to a smaller screen to continue.</p>
+      </div>
+    </div>
+
+    <!-- Mobile Content -->
+    <div v-else-if="isMobile" class="mobile-content">
+      <div class="mobile-header">
+        <h1>Mobile App</h1>
+        <p>Welcome to your mobile experience!</p>
+      </div>
+    </div>
   </div>
-  <HelloWorld msg="Vite + Vue" />
 </template>
 
 <style scoped>
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.vue:hover {
-  filter: drop-shadow(0 0 2em #42b883aa);
-}
 </style>
