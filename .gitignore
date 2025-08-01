@@ -4,3 +4,6 @@
 
 # Release
 target/
+
+# vue
+**/node_modules/
