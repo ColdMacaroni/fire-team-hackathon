@@ -1,9 +1,0 @@
-- Sweet and Sour chicken: https://www.tiktok.com/@i.am.never.full/video/7437898042843434270?is_from_webapp=1&sender_device=pc&web_id=7524569720273880596
-- Butter Chicken: https://www.tiktok.com/@thefeedfeed/video/7431699032680008990?is_from_webapp=1&sender_device=pc&web_id=7524569720273880596
-- Big Mac Taco: https://www.tiktok.com/@foodswelovetoeat/video/7249521754396183851?is_from_webapp=1&sender_device=pc&web_id=7524569720273880596
-- Watermelon Shaved Ice: https://www.tiktok.com/@itsvegansis/video/7508393135064599815?is_from_webapp=1&sender_device=pc&web_id=7524569720273880596
-- Cucumber Salad: https://www.tiktok.com/@eatpayylove/video/7320725246892412202?is_from_webapp=1&sender_device=pc&web_id=7524569720273880596
-- Accordian Potato: https://www.tiktok.com/@eatpayylove/video/7320725246892412202?is_from_webapp=1&sender_device=pc&web_id=7524569720273880596
-- Fire Chicken: https://www.tiktok.com/@q03vev/video/7428198317286313262?is_from_webapp=1&sender_device=pc&web_id=7524569720273880596 
-- Egg Fried Rice: https://www.tiktok.com/@aprilfoodie/video/7202984014461013294?is_from_webapp=1&sender_device=pc&web_id=7524569720273880596
-- Tiramisu: https://www.tiktok.com/@noorbakesss/video/7519965675989781782?is_from_webapp=1&sender_device=pc&web_id=7524569720273880596
