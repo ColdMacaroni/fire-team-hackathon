@@ -16,11 +16,9 @@ def tags_by_recipe_id(recipe_id: int) -> list[str]:
     """
 SELECT TagName
 FROM Tags NATURAL JOIN (
-HasTag NATURAL JOIN (
-SELECT RecipeId
-FROM Recipes
-WHERE RecipeId = ?
-)
+    SELECT TagId
+    FROM HasTag
+    WHERE RecipeId = ?
 ) AS AssociatedTags;
 """, (recipe_id,)
 ).fetchall()
@@ -33,11 +31,9 @@ def ingredients_by_recipe_id(recipe_id: int) -> list[Ingredient]:
     """
 SELECT IngredientId, IngredientName, Amount, AmountUnit
 FROM Ingredients NATURAL JOIN (
-Requires NATURAL JOIN (
-SELECT RecipeId
-FROM Recipes
-WHERE RecipeId = ?
-)
+    SELECT IngredientId, Amount,  AmountUnit
+    FROM Requires
+    WHERE RecipeId = ?
 ) AS RequiredIngredients;
 """, (recipe_id,)
 ).fetchall()
