@@ -15,4 +15,3 @@ class Recipe:
     photo_url: str
     ingredients: List[Ingredient]
     tags: List[str]
-
