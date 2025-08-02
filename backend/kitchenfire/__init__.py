@@ -115,14 +115,13 @@ def get_recipe_filtered_by_ingredient(without: str, with_="-"):
             IncludeIds(IngredientId) AS (VALUES {include_ids})
         SELECT DISTINCT RecipeId, RecipeName
         FROM Requires r
-        {"JOIN IncludeIds i ON r.IngredientId = i.IngredientId" if with_ != "-" else ""}
+        {"NATURAL JOIN IncludeIds" if with_ != "-" else ""}
         NATURAL JOIN Recipes
         WHERE RecipeId
             NOT IN (
                 SELECT DISTINCT r2.RecipeId
-                FROM ExcludeIds e
-                JOIN Requires r2
-                ON r2.IngredientId = e.IngredientId
+                FROM ExcludeIds
+                NATURAL JOIN Requires r2
             )
         """
 
