@@ -4,7 +4,6 @@ import json
 
 
 app = Flask(__name__)
-db = sqlite3.connect("data/fire.db")
 
 @app.get("/api/v1/recipe/by-id/<recipe_id>")
 def get_recipe_by_id(recipe_id):
@@ -24,6 +23,7 @@ def get_recipe_filtered_by_tag(without, with_="-"):
 
 @app.get("/api/v1/tag/all")
 def get_all_tags():
+    db = sqlite3.connect("data/fire.db")
     c = db.cursor()
     c.execute("SELECT TagId, TagName FROM Tags")
     tags = []
