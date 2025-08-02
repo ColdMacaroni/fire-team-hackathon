@@ -124,7 +124,7 @@ const updateIngredient = (index, field, value) => {
 }
 
 .ingredients-table {
-  border: 1px solid #dee2e6;
+  border: 1px solid #404040;
   border-radius: 8px;
   overflow: hidden;
   margin-bottom: 16px;
@@ -135,15 +135,15 @@ const updateIngredient = (index, field, value) => {
 .table-header {
   display: grid;
   grid-template-columns: 1fr 80px 80px 60px;
-  background: #f8f9fa;
-  border-bottom: 1px solid #dee2e6;
+  background: #404040;
+  border-bottom: 1px solid #505050;
   width: 100%;
 }
 
 .header-cell {
   padding: 8px 4px;
   font-weight: 600;
-  color: #495057;
+  color: #ffffff;
   font-size: 0.8rem;
   text-align: center;
   overflow: hidden;
@@ -154,12 +154,17 @@ const updateIngredient = (index, field, value) => {
 .table-row {
   display: grid;
   grid-template-columns: 1fr 80px 80px 60px;
-  border-bottom: 1px solid #dee2e6;
+  border-bottom: 1px solid #404040;
   width: 100%;
+  background: #2d2d2d;
 }
 
 .table-row:last-child {
   border-bottom: none;
+}
+
+.table-row:nth-child(even) {
+  background: #353535;
 }
 
 .table-cell {
@@ -173,32 +178,46 @@ const updateIngredient = (index, field, value) => {
 .amount-input {
   width: 100%;
   padding: 6px 8px;
-  border: 1px solid #dee2e6;
+  border: 1px solid #505050;
   border-radius: 4px;
   font-size: 0.8rem;
   box-sizing: border-box;
   min-width: 0;
+  background: #404040;
+  color: #ffffff;
+}
+
+.ingredient-input::placeholder,
+.amount-input::placeholder {
+  color: #b0b0b0;
 }
 
 .ingredient-input:focus,
 .amount-input:focus {
   outline: none;
-  border-color: #007bff;
+  border-color: #4CAF50;
+  background: #505050;
 }
 
 .unit-select {
   width: 100%;
   padding: 6px 8px;
-  border: 1px solid #dee2e6;
+  border: 1px solid #505050;
   border-radius: 4px;
   font-size: 0.8rem;
-  background: white;
+  background: #404040;
+  color: #ffffff;
   box-sizing: border-box;
   min-width: 0;
 }
 
+.unit-select option {
+  background: #404040;
+  color: #ffffff;
+}
+
 .add-btn {
-  background: #28a745;
+  background: #4CAF50;
   color: white;
   border: none;
   padding: 10px 20px;
@@ -212,11 +231,11 @@ const updateIngredient = (index, field, value) => {
 }
 
 .add-btn:hover {
-  background: #218838;
+  background: #45a049;
 }
 
 .remove-btn {
-  background: #dc3545;
+  background: #ff6b6b;
   color: white;
   border: none;
   width: 24px;
@@ -233,7 +252,7 @@ const updateIngredient = (index, field, value) => {
 }
 
 .remove-btn:hover {
-  background: #c82333;
+  background: #ff5252;
 }
 
 /* Responsive Design */

@@ -167,7 +167,7 @@ const resetForm = () => {
   width: 100vw;
   display: flex;
   flex-direction: column;
-  background: #f8f9fa;
+  background: #1a1a1a;
   overflow-x: hidden;
 }
 
@@ -183,27 +183,27 @@ const resetForm = () => {
 .create-content h1 {
   font-size: 2rem;
   margin-bottom: 1.5rem;
-  color: #2c3e50;
+  color: #ffffff;
   font-weight: 700;
   text-align: center;
 }
 
 .success-message {
-  background: #d4edda;
-  color: #155724;
+  background: #1e4d2b;
+  color: #4CAF50;
   padding: 1rem;
   border-radius: 8px;
   margin-bottom: 1rem;
-  border: 1px solid #c3e6cb;
+  border: 1px solid #4CAF50;
 }
 
 .error-message {
-  background: #f8d7da;
-  color: #721c24;
+  background: #4d1e1e;
+  color: #ff6b6b;
   padding: 1rem;
   border-radius: 8px;
   margin-bottom: 1rem;
-  border: 1px solid #f5c6cb;
+  border: 1px solid #ff6b6b;
 }
 
 .recipe-form {
@@ -216,24 +216,24 @@ const resetForm = () => {
 }
 
 .form-section {
-  background: white;
+  background: #2d2d2d;
   padding: 1.5rem;
   border-radius: 12px;
-  border: 1px solid #e9ecef;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  border: 1px solid #404040;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
   width: 100%;
   box-sizing: border-box;
 }
 
 .form-section h2 {
   margin: 0 0 1rem 0;
-  color: #2c3e50;
+  color: #ffffff;
   font-size: 1.3rem;
   font-weight: 600;
 }
 
 .submit-btn {
-  background: #007bff;
+  background: #4CAF50;
   color: white;
   border: none;
   padding: 1rem 2rem;
@@ -247,11 +247,11 @@ const resetForm = () => {
 }
 
 .submit-btn:hover:not(:disabled) {
-  background: #0056b3;
+  background: #45a049;
 }
 
 .submit-btn:disabled {
-  background: #6c757d;
+  background: #666666;
   cursor: not-allowed;
 }
 

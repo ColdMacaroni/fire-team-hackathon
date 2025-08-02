@@ -19,22 +19,24 @@ const { isDesktop, isMobile } = useBreakpoint()
     <!-- Mobile Content -->
     <div v-else-if="isMobile" class="mobile-content">
       <div class="mobile-nav">
-        <Navigation />
       </div>
       <div class="mobile-body">
         <RouterView />
       </div>
+        <Navigation />
     </div>
   </div>
 </template>
 
 <style scoped>
 #app {
-  padding: 0 !important;
+  padding: 0;
   margin: 0;
   height: 100vh;
   width: 100vw;
   overflow: hidden;
+  background: #1a1a1a;
+  color: #ffffff;
 }
 
 .mobile-content {
@@ -43,6 +45,7 @@ const { isDesktop, isMobile } = useBreakpoint()
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  background: #1a1a1a;
 }
 
 .mobile-nav {
@@ -50,6 +53,7 @@ const { isDesktop, isMobile } = useBreakpoint()
   top: 0;
   z-index: 10;
   flex-shrink: 0;
+  background: #2d2d2d;
 }
 
 .mobile-body {
@@ -57,6 +61,7 @@ const { isDesktop, isMobile } = useBreakpoint()
   overflow-y: auto;
   overflow-x: hidden;
   min-height: 0;
+  background: #1a1a1a;
 }
 
 .desktop-warning {
@@ -65,12 +70,16 @@ const { isDesktop, isMobile } = useBreakpoint()
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #f8f9fa;
+  background: #1a1a1a;
+  color: #ffffff;
 }
 
 .warning-content {
   text-align: center;
   padding: 2rem;
+  background: #2d2d2d;
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
 }
 
 .warning-icon {

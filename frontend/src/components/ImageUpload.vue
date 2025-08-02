@@ -95,7 +95,7 @@ const handleImageUpload = (event) => {
   width: 100%;
   height: auto;
   border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
   max-width: 100%;
 }
 
@@ -114,17 +114,17 @@ const handleImageUpload = (event) => {
   display: block;
   width: 100%;
   height: 200px;
-  border: 2px dashed #dee2e6;
+  border: 2px dashed #666666;
   border-radius: 8px;
   cursor: pointer;
   transition: all 0.3s ease;
-  background: white;
+  background: #404040;
   box-sizing: border-box;
 }
 
 .upload-label:hover {
-  border-color: #007bff;
-  background: #f8f9ff;
+  border-color: #4CAF50;
+  background: #505050;
 }
 
 .upload-content {
@@ -133,7 +133,7 @@ const handleImageUpload = (event) => {
   align-items: center;
   justify-content: center;
   height: 100%;
-  color: #6c757d;
+  color: #e0e0e0;
   padding: 1rem;
   box-sizing: border-box;
 }
@@ -141,7 +141,7 @@ const handleImageUpload = (event) => {
 .upload-hint {
   font-size: 0.875rem;
   margin-top: 8px;
-  color: #adb5bd;
+  color: #b0b0b0;
   text-align: center;
 }
 </style> 

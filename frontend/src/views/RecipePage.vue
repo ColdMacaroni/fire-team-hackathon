@@ -61,7 +61,7 @@
   width: 100%;
   display: flex;
   flex-direction: column;
-  background: #f8f9fa;
+  background: #1a1a1a;
 }
 
 .recipe-content {
@@ -73,14 +73,14 @@
 .recipe-content h1 {
   font-size: 2rem;
   margin-bottom: 0.5rem;
-  color: #2c3e50;
+  color: #ffffff;
   font-weight: 700;
 }
 
 .recipe-content > p {
   font-size: 1.1rem;
   margin-bottom: 2rem;
-  color: #6c757d;
+  color: #e0e0e0;
 }
 
 .recipe-grid {
@@ -90,31 +90,32 @@
 }
 
 .recipe-card {
-  background: white;
+  background: #2d2d2d;
   border-radius: 12px;
   overflow: hidden;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border: 1px solid #404040;
 }
 
 .recipe-card:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
 }
 
 .recipe-image {
   height: 200px;
-  background: #e9ecef;
+  background: #404040;
   position: relative;
 }
 
 .placeholder-image {
   width: 100%;
   height: 100%;
-  background: linear-gradient(45deg, #f0f0f0 25%, transparent 25%), 
-              linear-gradient(-45deg, #f0f0f0 25%, transparent 25%), 
-              linear-gradient(45deg, transparent 75%, #f0f0f0 75%), 
-              linear-gradient(-45deg, transparent 75%, #f0f0f0 75%);
+  background: linear-gradient(45deg, #404040 25%, transparent 25%), 
+              linear-gradient(-45deg, #404040 25%, transparent 25%), 
+              linear-gradient(45deg, transparent 75%, #404040 75%), 
+              linear-gradient(-45deg, transparent 75%, #404040 75%);
   background-size: 20px 20px;
   background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
 }
@@ -126,12 +127,12 @@
 .recipe-info h3 {
   font-size: 1.3rem;
   margin-bottom: 0.5rem;
-  color: #2c3e50;
+  color: #ffffff;
   font-weight: 600;
 }
 
 .recipe-info > p {
-  color: #6c757d;
+  color: #e0e0e0;
   margin-bottom: 1rem;
   font-size: 0.95rem;
 }
@@ -143,8 +144,8 @@
 }
 
 .tag {
-  background: #e9ecef;
-  color: #495057;
+  background: #4CAF50;
+  color: #ffffff;
   padding: 0.25rem 0.75rem;
   border-radius: 20px;
   font-size: 0.8rem;

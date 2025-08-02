@@ -27,7 +27,7 @@
   width: 100%;
   display: flex;
   flex-direction: column;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
   color: white;
 }
 
@@ -45,12 +45,14 @@
   font-size: 2.5rem;
   margin-bottom: 1rem;
   font-weight: 700;
+  color: #ffffff;
 }
 
 .home-content p {
   font-size: 1.2rem;
   margin-bottom: 3rem;
   opacity: 0.9;
+  color: #e0e0e0;
 }
 
 .feature-cards {
@@ -62,27 +64,30 @@
 }
 
 .feature-card {
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.05);
   backdrop-filter: blur(10px);
   border-radius: 16px;
   padding: 1.5rem;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  transition: transform 0.3s ease;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: transform 0.3s ease, background 0.3s ease;
 }
 
 .feature-card:hover {
   transform: translateY(-5px);
+  background: rgba(255, 255, 255, 0.1);
 }
 
 .feature-card h3 {
   font-size: 1.3rem;
   margin-bottom: 0.5rem;
   font-weight: 600;
+  color: #4CAF50;
 }
 
 .feature-card p {
   font-size: 1rem;
   opacity: 0.8;
   margin: 0;
+  color: #e0e0e0;
 }
 </style>

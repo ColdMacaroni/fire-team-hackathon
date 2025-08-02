@@ -87,20 +87,27 @@ const updateTag = (index, value) => {
 .tag-input {
   flex: 1;
   padding: 10px 12px;
-  border: 2px solid #e9ecef;
+  border: 2px solid #404040;
   border-radius: 6px;
   font-size: 0.9rem;
   box-sizing: border-box;
   min-width: 0;
+  background: #404040;
+  color: #ffffff;
+}
+
+.tag-input::placeholder {
+  color: #b0b0b0;
 }
 
 .tag-input:focus {
   outline: none;
-  border-color: #007bff;
+  border-color: #4CAF50;
+  background: #505050;
 }
 
 .add-btn {
-  background: #28a745;
+  background: #4CAF50;
   color: white;
   border: none;
   padding: 10px 20px;
@@ -114,11 +121,11 @@ const updateTag = (index, value) => {
 }
 
 .add-btn:hover {
-  background: #218838;
+  background: #45a049;
 }
 
 .remove-btn {
-  background: #dc3545;
+  background: #ff6b6b;
   color: white;
   border: none;
   width: 30px;
@@ -135,7 +142,7 @@ const updateTag = (index, value) => {
 }
 
 .remove-btn:hover {
-  background: #c82333;
+  background: #ff5252;
 }
 
 @media (max-width: 480px) {

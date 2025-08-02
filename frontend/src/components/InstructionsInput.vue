@@ -27,18 +27,25 @@ const emit = defineEmits(['update:modelValue'])
   width: 100%;
   max-width: 100%;
   padding: 16px;
-  border: 2px solid #e9ecef;
+  border: 2px solid #404040;
   border-radius: 8px;
   font-size: 1rem;
   font-family: inherit;
   resize: vertical;
   min-height: 150px;
   box-sizing: border-box;
+  background: #404040;
+  color: #ffffff;
+}
+
+.instructions-textarea::placeholder {
+  color: #b0b0b0;
 }
 
 .instructions-textarea:focus {
   outline: none;
-  border-color: #007bff;
+  border-color: #4CAF50;
+  background: #505050;
 }
 
 @media (max-width: 480px) {

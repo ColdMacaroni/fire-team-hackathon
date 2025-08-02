@@ -27,16 +27,23 @@ const emit = defineEmits(['update:modelValue'])
   width: 100%;
   max-width: 100%;
   padding: 12px 16px;
-  border: 2px solid #e9ecef;
+  border: 2px solid #404040;
   border-radius: 8px;
   font-size: 1rem;
   transition: border-color 0.3s ease;
   box-sizing: border-box;
+  background: #404040;
+  color: #ffffff;
+}
+
+.recipe-name-input::placeholder {
+  color: #b0b0b0;
 }
 
 .recipe-name-input:focus {
   outline: none;
-  border-color: #007bff;
+  border-color: #4CAF50;
+  background: #505050;
 }
 
 @media (max-width: 480px) {
