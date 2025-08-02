@@ -11,13 +11,15 @@ const props = defineProps({
 
 <template>
   <div class="recipe-tags">
+    <p>Tags:
     <span 
       v-for="tag in tags" 
       :key="tag" 
       class="tag"
     >
       {{ tag }}
-    </span>
+  </span>
+  </p>
   </div>
 </template>
 
@@ -25,16 +27,24 @@ const props = defineProps({
 .recipe-tags {
   display: flex;
   gap: 0.5rem;
-  margin-bottom: 2rem;
   flex-wrap: wrap;
+  color: #FFF;
+font-family: "Merriweather Sans";
+font-size: 18px;
+font-style: normal;
+font-weight: 400;
+line-height: 125.725%; /* 22.631px */
 }
 
 .tag {
-  background: #4CAF50;
-  color: #ffffff;
-  padding: 0.25rem 0.75rem;
-  border-radius: 20px;
-  font-size: 0.8rem;
-  font-weight: 500;
+padding: 0 3px;
+background: #472D2D;
+color: #FFF;
+font-family: "Merriweather Sans";
+font-size: 14px;
+height: fit-content;
+}
+p{
+  height: fit-content;
 }
 </style> 

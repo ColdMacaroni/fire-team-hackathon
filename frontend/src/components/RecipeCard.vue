@@ -51,13 +51,13 @@ const handleShowComments = () => {
 
 <style scoped>
 .recipe-card {
-  width: 100vw;
+  width: 90vw;
   height: 100%;
   display: flex;
-  position: relative;
-  scroll-snap-align: start;
+  scroll-snap-align: center;
   background: #2d2d2d;
   border-right: 1px solid #404040;
+  flex-shrink: 0;
 }
 
 /* Responsive Design */

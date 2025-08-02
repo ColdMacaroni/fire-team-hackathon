@@ -16,6 +16,8 @@ const props = defineProps({
 
 <template>
   <div class="recipe-content">
+    <div class="recipe-content-inner">
+
     <!-- Header with name and rank -->
     <RecipeHeader :recipe="recipe" />
     
@@ -24,6 +26,7 @@ const props = defineProps({
     
     <!-- Tags -->
     <RecipeTags :tags="recipe.tags" />
+    </div>
     
     <!-- Ingredients -->
     <RecipeIngredients :ingredients="recipe.ingredients" />
@@ -39,6 +42,14 @@ const props = defineProps({
   padding: 2rem;
   overflow-y: auto;
   color: #ffffff;
+}
+
+.recipe-content-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 15px;
+  align-self: stretch;
 }
 
 /* Responsive Design */
