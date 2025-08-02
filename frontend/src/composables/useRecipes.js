@@ -1,56 +1,59 @@
 import { ref, computed } from 'vue'
+import recipesData from '../data/recipes.json'
 
 export function useRecipes() {
   const recipes = ref([])
   const loading = ref(false)
   const error = ref(null)
 
-  // Load all recipes from localStorage
+  // Load all recipes from data/recipes.json
   const loadAllRecipes = async () => {
     try {
       loading.value = true
       error.value = null
 
-      const savedRecipes = localStorage.getItem('createdRecipes')
-      if (savedRecipes) {
-        recipes.value = JSON.parse(savedRecipes)
-      } else {
-        recipes.value = []
-      }
+      // Load recipes from the JSON file
+      recipes.value = recipesData.recipes || []
     } catch (err) {
       error.value = 'Failed to load recipes'
-      console.error('Error loading recipes from localStorage:', err)
+      console.error('Error loading recipes from JSON file:', err)
     } finally {
       loading.value = false
     }
   }
 
-  // Load a specific recipe by ID
+  // Load a specific recipe by ID from data/recipes.json or localStorage
   const loadRecipeById = async recipeId => {
     try {
       loading.value = true
       error.value = null
 
-      const savedRecipes = localStorage.getItem('createdRecipes')
-      if (savedRecipes) {
-        const allRecipes = JSON.parse(savedRecipes)
-        const foundRecipe = allRecipes.find(
-          recipe => recipe.id === parseInt(recipeId)
-        )
+      // First, try to find the recipe in the JSON file
+      const allRecipes = recipesData.recipes || []
+      let foundRecipe = allRecipes.find(
+        recipe => recipe.id === parseInt(recipeId)
+      )
 
-        if (foundRecipe) {
-          return foundRecipe
-        } else {
-          error.value = 'Recipe not found'
-          return null
+      // If not found in JSON, check localStorage (for user-created recipes)
+      if (!foundRecipe) {
+        const savedRecipes = localStorage.getItem('createdRecipes')
+        if (savedRecipes) {
+          const localStorageRecipes = JSON.parse(savedRecipes)
+          foundRecipe = localStorageRecipes.find(
+            recipe => recipe.id === parseInt(recipeId)
+          )
         }
+      }
+
+      if (foundRecipe) {
+        return foundRecipe
       } else {
-        error.value = 'No recipes found'
+        error.value = 'Recipe not found'
         return null
       }
     } catch (err) {
       error.value = 'Failed to load recipe'
-      console.error('Error loading recipe from localStorage:', err)
+      console.error('Error loading recipe:', err)
       return null
     } finally {
       loading.value = false
@@ -219,6 +222,15 @@ export function useRecipes() {
     } catch (err) {
       console.error('Error toggling recipe favorite:', err)
       return false
+    }
+  }
+
+  // Listener to stream data
+  const streamDataListener = () => {
+    const eventSource = new EventSource('/api/recipes/stream')
+    eventSource.onmessage = event => {
+      const data = JSON.parse(event.data)
+      console.log('Received data:', data)
     }
   }
 

@@ -1,17 +1,26 @@
 <script setup>
-  import { ref, onMounted } from 'vue'
-  import { useRecipes } from '../../composables/useRecipes'
+  import { computed } from 'vue'
 
-  const { loadRecipeById } = useRecipes()
+  const props = defineProps({
+    recipe: {
+      type: Object,
+      required: true,
+    },
+  })
 
-  const recipe = ref(null)
+  const recipeNameFontSize = computed(() => {
+    if (!props.recipe?.name) return 36
+    const length = props.recipe.name.length
 
-  onMounted(() => {
-    recipe = loadRecipe()
+    if (length <= 15) return 36
+    if (length <= 25) return 32
+    if (length <= 35) return 28
+    if (length <= 45) return 24
+    return 20
   })
 </script>
 <template>
-  <div class="large-card">
+  <div class="large-card" v-if="recipe">
     <img
       v-if="recipe.image"
       :src="recipe.image"
@@ -21,10 +30,27 @@
     <div v-else class="recipe-image">
       <FontAwesomeIcon icon="fa-solid fa-image" />
     </div>
+    <div class="recipe-header">
+      <div class="recipe-name">
+        <h1 :style="{ fontSize: recipeNameFontSize + 'px' }">
+          {{ recipe.name }}
+        </h1>
+      </div>
+      <div class="recipe-rating">
+        <p>🔥{{ recipe.likes }}</p>
+      </div>
+    </div>
   </div>
 </template>
 
 <style scoped>
+  .large-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 330px;
+  }
+
   .recipe-image {
     display: flex;
     background-color: #ffffff;
@@ -33,5 +59,43 @@
     width: 330px;
     height: 250px;
     aspect-ratio: 33/25;
+  }
+
+  .recipe-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 330px;
+    margin-top: 12px;
+  }
+
+  .recipe-name {
+    flex: 1;
+    margin-right: 12px;
+  }
+
+  .recipe-name h1 {
+    color: #fff;
+    font-family: var(--font-primary);
+    font-style: normal;
+    font-weight: 400;
+    line-height: 1.2;
+    margin: 0;
+    word-wrap: break-word;
+    hyphens: auto;
+  }
+
+  .recipe-rating {
+    flex-shrink: 0;
+  }
+
+  .recipe-rating p {
+    color: var(--color-primary);
+    font-family: var(--font-secondary);
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 125.725%;
+    margin: 0;
   }
 </style>
