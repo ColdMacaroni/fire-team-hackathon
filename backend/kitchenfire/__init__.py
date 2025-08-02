@@ -32,18 +32,21 @@ def ingredients_by_recipe_id(recipe_id: int) -> list[Ingredient]:
         c = db.cursor()
         ingredients = c.execute(
             """
-            SELECT IngredientId, IngredientName, Amount, AmountUnit
+            SELECT IngredientId, IngredientName, TypeName, Amount, AmountUnit
             FROM Ingredients NATURAL JOIN (
-                SELECT IngredientId, Amount,  AmountUnit
+                SELECT IngredientId, Amount, AmountUnit
                 FROM Requires
                 WHERE RecipeId = ?
-            ) AS RequiredIngredients;
+            )
+            NATURAL JOIN IngredientTypes
+            AS RequiredIngredients;
             """,
             (recipe_id,),
         ).fetchall()
+        print(ingredients)
 
     # TODO: Ask ryan about ingredient types in the database......
-    return [Ingredient(t[0], t[1], "unknown", t[2], t[3]) for t in ingredients]  # wip
+    return [Ingredient(*t) for t in ingredients]  # wip
 
 
 def create_post_by_row(post_id: int) -> Post:
