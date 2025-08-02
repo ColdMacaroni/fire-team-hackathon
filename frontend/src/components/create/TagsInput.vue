@@ -34,33 +34,15 @@ const updateTag = (index, value) => {
 </script>
 
 <template>
-  <div class="tags-container">
-    <div 
-      v-for="(tag, index) in modelValue" 
-      :key="index" 
-      class="tag-input-group"
-    >
-      <input 
-        type="text" 
-        :value="tag"
-        @input="updateTag(index, $event.target.value)"
-        placeholder="Enter tag"
-        class="tag-input"
-      />
-      <button 
-        type="button" 
-        @click="removeTag(index)" 
-        class="remove-btn"
-        v-if="modelValue.length > 1"
-      >
+  <div class="tags-container" data-v-inspector="src/components/create/TagsInput.vue:37:3">
+    <div v-for="(tag, index) in modelValue" :key="index" class="tag-input-group" data-v-inspector="src/components/create/TagsInput.vue:38:5">
+      <input type="text" :value="tag" @input="updateTag(index, $event.target.value)" placeholder="Enter tag"
+        class="tag-input" data-v-inspector="src/components/create/TagsInput.vue:39:7" />
+      <button type="button" @click="removeTag(index)" class="remove-btn" v-if="modelValue.length > 1" data-v-inspector="src/components/create/TagsInput.vue:41:7">
         ×
       </button>
     </div>
-    <button 
-      type="button" 
-      @click="addTag" 
-      class="add-btn"
-    >
+    <button type="button" @click="addTag" class="add-btn" data-v-inspector="src/components/create/TagsInput.vue:45:5">
       + Add Tag
     </button>
   </div>
@@ -102,12 +84,12 @@ const updateTag = (index, value) => {
 
 .tag-input:focus {
   outline: none;
-  border-color: #4CAF50;
+  border-color: var(--color-accent);
   background: #505050;
 }
 
 .add-btn {
-  background: #4CAF50;
+  background: var(--color-accent);
   color: white;
   border: none;
   padding: 10px 20px;
@@ -121,7 +103,7 @@ const updateTag = (index, value) => {
 }
 
 .add-btn:hover {
-  background: #45a049;
+  background: var(--color-accent);
 }
 
 .remove-btn {
@@ -150,16 +132,16 @@ const updateTag = (index, value) => {
     font-size: 0.85rem;
     padding: 8px 10px;
   }
-  
+
   .add-btn {
     font-size: 0.85rem;
     padding: 8px 16px;
   }
-  
+
   .remove-btn {
     width: 26px;
     height: 26px;
     font-size: 1.1rem;
   }
 }
-</style> 
+</style>

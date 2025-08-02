@@ -12,14 +12,8 @@ const emit = defineEmits(['update:modelValue'])
 </script>
 
 <template>
-  <textarea 
-    :value="modelValue"
-    @input="emit('update:modelValue', $event.target.value)"
-    placeholder="Enter cooking instructions step by step..."
-    class="instructions-textarea"
-    rows="8"
-    required
-  ></textarea>
+  <textarea :value="modelValue" @input="emit('update:modelValue', $event.target.value)"
+    placeholder="Enter cooking instructions step by step..." class="instructions-textarea" rows="8" required data-v-inspector="src/components/create/InstructionsInput.vue:15:3"></textarea>
 </template>
 
 <style scoped>
@@ -44,7 +38,7 @@ const emit = defineEmits(['update:modelValue'])
 
 .instructions-textarea:focus {
   outline: none;
-  border-color: #4CAF50;
+  border-color: var(--color-accent);
   background: #505050;
 }
 
@@ -55,4 +49,4 @@ const emit = defineEmits(['update:modelValue'])
     min-height: 120px;
   }
 }
-</style> 
+</style>

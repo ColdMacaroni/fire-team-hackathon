@@ -1,29 +1,35 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import HomePage from '../views/HomePage.vue'
-import RecipePage from '../views/RecipePage.vue'
-import CreatePage from '../views/CreatePage.vue'
+import HomeView from '../views/HomeView.vue'
+import SavedView from '../views/SavedView.vue'
+import ExploreView from '../views/ExploreView.vue'
+import CreateView from '../views/CreateView.vue'
 
 const routes = [
   {
     path: '/',
     name: 'Home',
-    component: HomePage
+    component: HomeView,
   },
   {
-    path: '/recipe',
-    name: 'Recipe',
-    component: RecipePage
+    path: '/saved',
+    name: 'Saved',
+    component: SavedView,
   },
   {
     path: '/create',
     name: 'Create',
-    component: CreatePage 
-  }
+    component: CreateView,
+  },
+  {
+    path: '/explore',
+    name: 'Explore',
+    component: ExploreView,
+  },
 ]
 
 const router = createRouter({
   history: createWebHistory(),
-  routes
+  routes,
 })
 
-export default router 
+export default router

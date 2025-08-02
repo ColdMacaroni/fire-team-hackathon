@@ -12,14 +12,8 @@ const emit = defineEmits(['update:modelValue'])
 </script>
 
 <template>
-  <input 
-    type="text" 
-    :value="modelValue"
-    @input="emit('update:modelValue', $event.target.value)"
-    placeholder="Enter recipe name"
-    class="recipe-name-input"
-    required
-  />
+  <input type="text" :value="modelValue" @input="emit('update:modelValue', $event.target.value)"
+    placeholder="Enter recipe name" class="recipe-name-input" required data-v-inspector="src/components/create/RecipeNameInput.vue:15:3" />
 </template>
 
 <style scoped>
@@ -42,7 +36,7 @@ const emit = defineEmits(['update:modelValue'])
 
 .recipe-name-input:focus {
   outline: none;
-  border-color: #4CAF50;
+  border-color: var(--color-accent);
   background: #505050;
 }
 
@@ -52,4 +46,4 @@ const emit = defineEmits(['update:modelValue'])
     padding: 10px 14px;
   }
 }
-</style> 
+</style>

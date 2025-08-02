@@ -20,23 +20,23 @@ const handleImageUpload = (event) => {
       img.onload = () => {
         const canvas = document.createElement('canvas')
         const ctx = canvas.getContext('2d')
-        
+
         // Set canvas size to target aspect ratio
         canvas.width = 1320
         canvas.height = 1000
-        
+
         // Calculate scaling to maintain aspect ratio
         const scale = Math.min(1320 / img.width, 1000 / img.height)
         const scaledWidth = img.width * scale
         const scaledHeight = img.height * scale
-        
+
         // Center the image
         const x = (1320 - scaledWidth) / 2
         const y = (1000 - scaledHeight) / 2
-        
+
         // Draw the image
         ctx.drawImage(img, x, y, scaledWidth, scaledHeight)
-        
+
         // Convert to blob and emit the image URL
         canvas.toBlob((blob) => {
           const imageUrl = URL.createObjectURL(blob)
@@ -51,27 +51,21 @@ const handleImageUpload = (event) => {
 </script>
 
 <template>
-  <div class="image-upload-container">
-    <div class="image-preview" v-if="image">
-      <img :src="image" alt="Recipe preview" />
+  <div class="image-upload-container" data-v-inspector="src/components/create/ImageUpload.vue:54:3">
+    <div class="image-preview" v-if="image" data-v-inspector="src/components/create/ImageUpload.vue:55:5">
+      <img :src="image" alt="Recipe preview" data-v-inspector="src/components/create/ImageUpload.vue:56:7" />
     </div>
-    <div class="upload-area" v-else>
-      <input 
-        type="file" 
-        id="image-upload" 
-        accept="image/*" 
-        @change="handleImageUpload"
-        class="file-input"
-      />
-      <label for="image-upload" class="upload-label">
-        <div class="upload-content">
-          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-            <polyline points="7,10 12,15 17,10"/>
-            <line x1="12" y1="15" x2="12" y2="3"/>
+    <div class="upload-area" v-else data-v-inspector="src/components/create/ImageUpload.vue:58:5">
+      <input type="file" id="image-upload" accept="image/*" @change="handleImageUpload" class="file-input" data-v-inspector="src/components/create/ImageUpload.vue:59:7" />
+      <label for="image-upload" class="upload-label" data-v-inspector="src/components/create/ImageUpload.vue:60:7">
+        <div class="upload-content" data-v-inspector="src/components/create/ImageUpload.vue:61:9">
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" data-v-inspector="src/components/create/ImageUpload.vue:62:11">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" data-v-inspector="src/components/create/ImageUpload.vue:63:13" />
+            <polyline points="7,10 12,15 17,10" data-v-inspector="src/components/create/ImageUpload.vue:64:13" />
+            <line x1="12" y1="15" x2="12" y2="3" data-v-inspector="src/components/create/ImageUpload.vue:65:13" />
           </svg>
-          <p>Click to upload image</p>
-          <p class="upload-hint">Image will be converted to 1320x1000 aspect ratio</p>
+          <p data-v-inspector="src/components/create/ImageUpload.vue:67:11">Click to upload image</p>
+          <p class="upload-hint" data-v-inspector="src/components/create/ImageUpload.vue:68:11">Image will be converted to 1320x1000 aspect ratio</p>
         </div>
       </label>
     </div>
@@ -123,7 +117,7 @@ const handleImageUpload = (event) => {
 }
 
 .upload-label:hover {
-  border-color: #4CAF50;
+  border-color: var(--color-accent);
   background: #505050;
 }
 
@@ -144,4 +138,4 @@ const handleImageUpload = (event) => {
   color: #b0b0b0;
   text-align: center;
 }
-</style> 
+</style>

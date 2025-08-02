@@ -50,67 +50,41 @@ const updateIngredient = (index, field, value) => {
 </script>
 
 <template>
-  <div class="ingredients-section">
-    <div class="ingredients-table">
-      <div class="table-header">
-        <div class="header-cell">Ingredient</div>
-        <div class="header-cell">Amount</div>
-        <div class="header-cell">Unit</div>
-        <div class="header-cell">Action</div>
+  <div class="ingredients-section" data-v-inspector="src/components/create/IngredientsTable.vue:53:3">
+    <div class="ingredients-table" data-v-inspector="src/components/create/IngredientsTable.vue:54:5">
+      <div class="table-header" data-v-inspector="src/components/create/IngredientsTable.vue:55:7">
+        <div class="header-cell" data-v-inspector="src/components/create/IngredientsTable.vue:56:9">Ingredient</div>
+        <div class="header-cell" data-v-inspector="src/components/create/IngredientsTable.vue:57:9">Amount</div>
+        <div class="header-cell" data-v-inspector="src/components/create/IngredientsTable.vue:58:9">Unit</div>
+        <div class="header-cell" data-v-inspector="src/components/create/IngredientsTable.vue:59:9">Action</div>
       </div>
-      <div 
-        v-for="(ingredient, index) in modelValue" 
-        :key="index" 
-        class="table-row"
-      >
-        <div class="table-cell">
-          <input 
-            type="text" 
-            :value="ingredient.ingredient"
-            @input="updateIngredient(index, 'ingredient', $event.target.value)"
-            placeholder="Ingredient name"
-            class="ingredient-input"
-          />
+      <div v-for="(ingredient, index) in modelValue" :key="index" class="table-row" data-v-inspector="src/components/create/IngredientsTable.vue:61:7">
+        <div class="table-cell" data-v-inspector="src/components/create/IngredientsTable.vue:62:9">
+          <input type="text" :value="ingredient.ingredient"
+            @input="updateIngredient(index, 'ingredient', $event.target.value)" placeholder="Ingredient name"
+            class="ingredient-input" data-v-inspector="src/components/create/IngredientsTable.vue:63:11" />
         </div>
-        <div class="table-cell">
-          <input 
-            type="number" 
-            :value="ingredient.amount"
-            @input="updateIngredient(index, 'amount', $event.target.value)"
-            placeholder="Amount"
-            class="amount-input"
-            step="0.1"
-            min="0"
-          />
+        <div class="table-cell" data-v-inspector="src/components/create/IngredientsTable.vue:67:9">
+          <input type="number" :value="ingredient.amount"
+            @input="updateIngredient(index, 'amount', $event.target.value)" placeholder="Amount" class="amount-input"
+            step="0.1" min="0" data-v-inspector="src/components/create/IngredientsTable.vue:68:11" />
         </div>
-        <div class="table-cell">
-          <select 
-            :value="ingredient.unit"
-            @change="updateIngredient(index, 'unit', $event.target.value)"
-            class="unit-select"
-          >
-            <option v-for="unit in units" :key="unit" :value="unit">
+        <div class="table-cell" data-v-inspector="src/components/create/IngredientsTable.vue:72:9">
+          <select :value="ingredient.unit" @change="updateIngredient(index, 'unit', $event.target.value)"
+            class="unit-select" data-v-inspector="src/components/create/IngredientsTable.vue:73:11">
+            <option v-for="unit in units" :key="unit" :value="unit" data-v-inspector="src/components/create/IngredientsTable.vue:75:13">
               {{ unit }}
             </option>
           </select>
         </div>
-        <div class="table-cell">
-          <button 
-            type="button" 
-            @click="removeIngredient(index)" 
-            class="remove-btn"
-            v-if="modelValue.length > 1"
-          >
+        <div class="table-cell" data-v-inspector="src/components/create/IngredientsTable.vue:80:9">
+          <button type="button" @click="removeIngredient(index)" class="remove-btn" v-if="modelValue.length > 1" data-v-inspector="src/components/create/IngredientsTable.vue:81:11">
             ×
           </button>
         </div>
       </div>
     </div>
-    <button 
-      type="button" 
-      @click="addIngredient" 
-      class="add-btn"
-    >
+    <button type="button" @click="addIngredient" class="add-btn" data-v-inspector="src/components/create/IngredientsTable.vue:87:5">
       + Add Ingredient
     </button>
   </div>
@@ -217,7 +191,7 @@ const updateIngredient = (index, field, value) => {
 }
 
 .add-btn {
-  background: #4CAF50;
+  background: var(--color-accent);
   color: white;
   border: none;
   padding: 10px 20px;
@@ -231,7 +205,7 @@ const updateIngredient = (index, field, value) => {
 }
 
 .add-btn:hover {
-  background: #45a049;
+  background: var(--color-accent);
 }
 
 .remove-btn {
@@ -257,28 +231,29 @@ const updateIngredient = (index, field, value) => {
 
 /* Responsive Design */
 @media (max-width: 480px) {
+
   .table-header,
   .table-row {
     grid-template-columns: 1fr 70px 70px 50px;
   }
-  
+
   .header-cell,
   .table-cell {
     padding: 6px 2px;
     font-size: 0.75rem;
   }
-  
+
   .ingredient-input,
   .amount-input,
   .unit-select {
     font-size: 0.75rem;
     padding: 4px 6px;
   }
-  
+
   .remove-btn {
     width: 20px;
     height: 20px;
     font-size: 0.9rem;
   }
 }
-</style> 
+</style>
