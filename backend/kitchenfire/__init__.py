@@ -180,3 +180,25 @@ def get_tag_by_id(tag_id):
         tag = {"name": tag_name, "id": tag_id}
 
     return Response(json.dumps(tag), content_type="application/json")
+
+@app.get("/api/v1/ingredient/all")
+def get_all_ingredients():
+    ingredients = []
+    with sqlite3.connect("data/fire.db") as db:
+        c = db.cursor()
+        c.execute("SELECT IngredientId, IngredientName FROM Ingredients")
+        for ingredient_id, ingredient_name in c.fetchall():
+            ingredients.append({"name": ingredient_name, "id": ingredient_id})
+
+    return Response(json.dumps(ingredients), content_type="application/json")
+
+
+@app.get("/api/v1/ingredient/by-id/<ingredient_id>")
+def get_tag_by_id2(ingredient_id):
+    with sqlite3.connect("data/fire.db") as db:
+        c = db.cursor()
+        c.execute("SELECT IngredientId, IngredientName FROM Ingredients WHERE IngredientId = ?", (ingredient_id,))
+        (ingredient_id, ingredient_name) = c.fetchone()
+        ingredient = {"name": ingredient_name, "id": ingredient_id}
+
+    return Response(json.dumps(ingredient), content_type="application/json")
