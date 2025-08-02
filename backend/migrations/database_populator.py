@@ -12,7 +12,7 @@ if __name__ == "__main__":
     database = sqlite3.connect("../data/fire.db")
     cursor = database.cursor()
 
-    with open("1-schema.sql") as setup:
+    with open("schema.sql") as setup:
         cursor.executescript(setup.read())
         database.commit()
 
