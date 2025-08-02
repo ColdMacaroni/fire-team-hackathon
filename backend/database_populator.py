@@ -11,7 +11,6 @@ from kitchenfire.recipe import Recipe
 if __name__ == "__main__":
     if not os.getcwd().endswith("migrations"):
         os.chdir("migrations")
-    os.remove("../data/fire.db")
     database = sqlite3.connect("../data/fire.db")
     cursor = database.cursor()
 
