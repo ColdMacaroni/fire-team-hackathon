@@ -13,6 +13,7 @@ class Ingredient:
     def to_json(self):
         return json.dumps(
             {
+                "id": self.ingredient_id,
                 "ingredient": self.name,
                 "amount": self.amount,
                 "unit": self.amount_unit,
