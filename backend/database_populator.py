@@ -9,7 +9,8 @@ from kitchenfire.post import Post
 from kitchenfire.recipe import Recipe
 
 if __name__ == "__main__":
-    os.remove("../data/fire.db")
+    if not os.getcwd().endswith("migrations"):
+        os.chdir("migrations")
     database = sqlite3.connect("../data/fire.db")
     cursor = database.cursor()
 
