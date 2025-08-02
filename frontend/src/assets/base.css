@@ -3,7 +3,12 @@
   --color-text: #ffffff;
   --color-background-secondary: #393939;
   --color-accent: #007aff;
+  --color-Ant-secondary: #1c1d21;
   --section-gap: 160px;
+
+  /* Font families */
+  --font-primary: 'Merriweather', serif;
+  --font-secondary: 'Merriweather Sans', sans-serif;
 }
 
 *,

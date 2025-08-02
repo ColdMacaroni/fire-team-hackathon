@@ -3,6 +3,7 @@ import HomeView from '../views/HomeView.vue'
 import SavedView from '../views/SavedView.vue'
 import ExploreView from '../views/ExploreView.vue'
 import CreateView from '../views/CreateView.vue'
+import RecipeView from '../views/RecipeView.vue'
 
 const routes = [
   {
@@ -24,6 +25,12 @@ const routes = [
     path: '/explore',
     name: 'Explore',
     component: ExploreView,
+  },
+  {
+    path: '/recipe/:id',
+    name: 'Recipe',
+    component: RecipeView,
+    props: true,
   },
 ]
 

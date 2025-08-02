@@ -1,11 +1,11 @@
-<script setup>
-</script>
+<script setup></script>
 
 <template>
-    <div>
-        <h1>Explore</h1>
+  <div class="page-container">
+    <div class="content-wrapper">
+      <h1 class="section-title">Explore</h1>
     </div>
+  </div>
 </template>
 
-<style scoped>
-</style>
+<style scoped></style>

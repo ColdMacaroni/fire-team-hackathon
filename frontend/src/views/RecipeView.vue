@@ -1,0 +1,432 @@
+<script setup>
+  import { ref, onMounted, computed, onUnmounted } from 'vue'
+  import { useRoute, useRouter } from 'vue-router'
+
+  const route = useRoute()
+  const router = useRouter()
+  const recipe = ref(null)
+  const loading = ref(true)
+  const error = ref(null)
+  const checkedIngredients = ref(new Set())
+  const isLiked = ref(false)
+
+  const recipeId = computed(() => route.params.id)
+
+  const recipeNameFontSize = computed(() => {
+    if (!recipe.value?.name) return 36
+    const length = recipe.value.name.length
+
+    if (length <= 15) return 36
+    if (length <= 25) return 32
+    if (length <= 35) return 28
+    if (length <= 45) return 24
+    return 20
+  })
+
+  onMounted(() => {
+    loadRecipe()
+    loadCheckedIngredients()
+    loadLikeStatus()
+  })
+
+  const loadRecipe = async () => {
+    try {
+      loading.value = true
+      error.value = null
+      const inLocalStorageRecipe = localStorage.getItem('createdRecipes')
+      if (inLocalStorageRecipe) {
+        const recipes = JSON.parse(inLocalStorageRecipe)
+        const foundRecipe = recipes.find(
+          recipe => recipe.id === parseInt(recipeId.value)
+        )
+        if (foundRecipe) {
+          recipe.value = foundRecipe
+        } else {
+          error.value = 'Recipe not found'
+        }
+      } else {
+        error.value = 'No recipes found'
+      }
+    } catch (err) {
+      error.value = 'Failed to load recipe'
+      console.error('Error loading recipes from localStorage:', err)
+    } finally {
+      loading.value = false
+    }
+  }
+
+  const loadCheckedIngredients = () => {
+    const saved = localStorage.getItem(`checkedIngredients_${recipeId.value}`)
+    if (saved) {
+      checkedIngredients.value = new Set(JSON.parse(saved))
+    }
+  }
+
+  const toggleIngredient = ingredientText => {
+    if (checkedIngredients.value.has(ingredientText)) {
+      checkedIngredients.value.delete(ingredientText)
+    } else {
+      checkedIngredients.value.add(ingredientText)
+    }
+
+    // Save to localStorage
+    localStorage.setItem(
+      `checkedIngredients_${recipeId.value}`,
+      JSON.stringify([...checkedIngredients.value])
+    )
+  }
+
+  const isIngredientChecked = ingredientText => {
+    return checkedIngredients.value.has(ingredientText)
+  }
+
+  const loadLikeStatus = () => {
+    const saved = localStorage.getItem(`liked_${recipeId.value}`)
+    if (saved) {
+      isLiked.value = JSON.parse(saved)
+    }
+  }
+
+  const toggleLike = () => {
+    isLiked.value = !isLiked.value
+
+    // Save to localStorage
+    localStorage.setItem(
+      `liked_${recipeId.value}`,
+      JSON.stringify(isLiked.value)
+    )
+
+    // Update recipe likes count
+    if (recipe.value) {
+      if (isLiked.value) {
+        recipe.value.likes = (recipe.value.likes || 0) + 1
+      } else {
+        recipe.value.likes = Math.max(0, (recipe.value.likes || 0) - 1)
+      }
+
+      // Update localStorage with new likes count
+      const savedRecipes = localStorage.getItem('createdRecipes')
+      if (savedRecipes) {
+        const recipes = JSON.parse(savedRecipes)
+        const recipeIndex = recipes.findIndex(
+          r => r.id === parseInt(recipeId.value)
+        )
+        if (recipeIndex !== -1) {
+          recipes[recipeIndex].likes = recipe.value.likes
+          localStorage.setItem('createdRecipes', JSON.stringify(recipes))
+        }
+      }
+    }
+  }
+
+  const goBack = () => {
+    router.back()
+  }
+</script>
+<template>
+  <div class="recipe-view">
+    <!-- Loading State -->
+    <div v-if="loading" class="loading-container">
+      <div class="loading-spinner"></div>
+      <p>Loading recipe...</p>
+    </div>
+
+    <!-- Error State -->
+    <div v-else-if="error" class="error-container">
+      <h2>Oops!</h2>
+      <p>{{ error }}</p>
+      <button @click="goBack" class="back-button">Go Back</button>
+    </div>
+
+    <!-- Recipe Content -->
+    <div v-else-if="recipe" class="recipe-container">
+      <div class="recipe-header">
+        <img
+          v-if="recipe.image"
+          :src="recipe.image"
+          alt="Recipe Image"
+          class="recipe-image"
+        />
+        <div v-else class="recipe-image"></div>
+      </div>
+      <div class="recipe-content">
+        <div class="recipe-name">
+          <h1 :style="{ fontSize: recipeNameFontSize + 'px' }">
+            {{ recipe.name }}
+          </h1>
+          <p>🔥{{ recipe.likes }}</p>
+        </div>
+        <div class="recipe-rating">
+          <div class="stars-container">
+            <span
+              v-for="star in 5"
+              :key="star"
+              class="star"
+              :class="{ filled: star <= recipe.rating }"
+            >
+              ★
+            </span>
+            <p>({{ recipe.reviews }})</p>
+          </div>
+          <button
+            @click="toggleLike"
+            class="like-button"
+            :class="{ liked: isLiked }"
+          >
+            🔥
+          </button>
+        </div>
+        <div class="recipe-tags">
+          <p>Tags: {{ recipe.tags.join(', ') }}</p>
+        </div>
+        <div class="recipe-ingredients">
+          <h2>Ingredients</h2>
+          <ul>
+            <li
+              v-for="ingredient in recipe.ingredients"
+              :key="ingredient.ingredient"
+              class="ingredient-item"
+              :class="{ checked: isIngredientChecked(ingredient.ingredient) }"
+              @click="toggleIngredient(ingredient.ingredient)"
+            >
+              <div class="ingredient-icon">
+                <FontAwesomeIcon
+                  v-if="isIngredientChecked(ingredient.ingredient)"
+                  icon="fa-times"
+                  class="cross-icon"
+                />
+                <FontAwesomeIcon v-else icon="fa-check" class="check-icon" />
+              </div>
+              <p>{{ ingredient.ingredient }}</p>
+            </li>
+          </ul>
+        </div>
+        <div class="recipe-instructions">
+          <h2>Instructions</h2>
+          <p>{{ recipe.instructions }}</p>
+        </div>
+      </div>
+
+      <div class="recipe-footer"></div>
+    </div>
+  </div>
+</template>
+<style scoped>
+  .recipe-image {
+    display: flex;
+    background-color: #ffffff;
+    justify-content: center;
+    align-items: center;
+    width: 330px;
+    height: 250px;
+    aspect-ratio: 33/25;
+  }
+
+  .recipe-content {
+    width: 92%;
+  }
+
+  .recipe-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    position: relative;
+  }
+
+  .like-button {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: none;
+    background-color: #666;
+    color: #fff;
+    font-size: 18px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .like-button.liked {
+    background-color: #ff6b6b;
+    animation: pulse 0.3s ease;
+  }
+
+  .recipe-name {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .recipe-name p {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #fff;
+    text-align: center;
+    font-family: var(--font-secondary);
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+  }
+  .recipe-name h1 {
+    color: #fff;
+    font-family: var(--font-primary);
+    font-style: normal;
+    font-weight: 400;
+    line-height: 1.2;
+    margin: 0;
+    word-wrap: break-word;
+    hyphens: auto;
+  }
+
+  .recipe-rating {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  .recipe-rating p {
+    color: #616060;
+    font-family: var(--font-secondary);
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 125.725%; /* 20.116px */
+  }
+
+  .recipe-tags {
+    display: flex;
+    gap: 4px;
+  }
+  .recipe-tags p {
+    color: #fff;
+    font-family: 'Merriweather Sans';
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 125.725%; /* 22.631px */
+  }
+
+  .stars {
+    display: flex;
+    gap: 2px;
+  }
+
+  .star {
+    font-size: 20px;
+    color: #666;
+    transition: color 0.2s ease;
+  }
+
+  .star.filled {
+    color: #ffd700;
+  }
+
+  .rating-text {
+    color: #fff;
+    font-size: 14px;
+    font-weight: 500;
+  }
+
+  .recipe-ingredients {
+    width: 336px;
+  }
+
+  .recipe-ingredients h2 {
+    color: #fff;
+    font-family: var(--font-secondary);
+    font-size: 20px;
+    font-weight: 600;
+    margin-top: 15px;
+  }
+
+  .recipe-ingredients ul {
+    list-style: none;
+  }
+
+  .ingredient-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    transition: all 0.2s ease;
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+
+  .ingredient-item.checked p {
+    color: #ff6b6b;
+    text-decoration: line-through;
+  }
+
+  .ingredient-item:not(.checked) p {
+    color: #26b360;
+  }
+
+  .ingredient-icon {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: all 0.2s ease;
+  }
+
+  .ingredient-item.checked .ingredient-icon {
+    background-color: #ff6b6b;
+  }
+
+  .ingredient-item:not(.checked) .ingredient-icon {
+    background-color: #26b360;
+  }
+
+  .check-icon {
+    color: #fff;
+    font-size: 12px;
+  }
+
+  .stars-container {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .cross-icon {
+    color: #fff;
+    font-size: 12px;
+  }
+
+  .ingredient-item p {
+    margin: 0;
+    transition: all 0.2s ease;
+  }
+  .recipe-instructions {
+    margin-top: 10px;
+  }
+  p {
+    color: var(--color-primary);
+    font-size: 16px;
+    font-family: var(--font-secondary);
+    text-align: justify;
+  }
+  h2 {
+    color: #fff;
+    font-family: var(--font-secondary);
+    font-size: 20px;
+    font-weight: 600;
+  }
+
+  @keyframes spin {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+</style>

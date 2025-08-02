@@ -1,0 +1,10 @@
+node_modules
+dist
+.git
+*.log
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+.DS_Store
+*.min.js
+*.min.css 

@@ -7,9 +7,16 @@ import './assets/base.css'
 // FontAwesome configuration
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-import { faPlus, faHome, faCompass, faBookmark } from '@fortawesome/free-solid-svg-icons'
+import {
+  faPlus,
+  faHome,
+  faCompass,
+  faBookmark,
+  faCheck,
+  faTimes,
+} from '@fortawesome/free-solid-svg-icons'
 
-library.add(faPlus, faHome, faCompass, faBookmark)
+library.add(faPlus, faHome, faCompass, faBookmark, faCheck, faTimes)
 
 const app = createApp(App)
 
