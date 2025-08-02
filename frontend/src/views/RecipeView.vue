@@ -28,6 +28,8 @@
     loadRecipe()
     loadCheckedIngredients()
     loadLikeStatus()
+    // Scroll to top when recipe page loads
+    window.scrollTo(0, 0)
   })
 
   const loadRecipe = async () => {
@@ -104,9 +106,18 @@
   const goBack = () => {
     router.back()
   }
+
+  const goToHome = () => {
+    router.push('/')
+  }
 </script>
 <template>
   <div class="recipe-view">
+    <!-- Floating Back Button -->
+    <button @click="goBack" class="back-button-floating" title="Go back">
+      <FontAwesomeIcon icon="fa-arrow-left" />
+    </button>
+
     <!-- Loading State -->
     <div v-if="loading" class="loading-container">
       <div class="loading-spinner"></div>
@@ -117,7 +128,7 @@
     <div v-else-if="error" class="error-container">
       <h2>Oops!</h2>
       <p>{{ error }}</p>
-      <button @click="goBack" class="back-button">Go Back</button>
+      <button @click="goToHome" class="back-button">Go Home</button>
     </div>
 
     <!-- Recipe Content -->
@@ -189,6 +200,9 @@
         </div>
       </div>
 
+      <!-- Spacer to prevent navbar overlap -->
+      <div class="navbar-spacer"></div>
+
       <div class="recipe-footer"></div>
     </div>
   </div>
@@ -199,9 +213,12 @@
     background-color: #ffffff;
     justify-content: center;
     align-items: center;
-    width: 330px;
+    width: 100%; /* Use full width of parent */
+    max-width: 330px; /* But cap at 330px */
     height: 250px;
     aspect-ratio: 33/25;
+    object-fit: cover; /* Ensure image fits properly */
+    border-radius: 12px;
   }
 
   .recipe-content {
@@ -268,7 +285,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    width: 100%;
+    width: 98%; /* Makes the like button align with the number */
   }
 
   .recipe-rating p {
@@ -410,5 +427,46 @@
     100% {
       transform: rotate(360deg);
     }
+  }
+
+  .recipe-view {
+    min-height: 100vh;
+    padding: 20px;
+    position: relative;
+  }
+
+  .back-button-floating {
+    position: fixed;
+    top: 20px;
+    left: 30px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: none;
+    background-color: rgba(255, 255, 255, 0.9);
+    color: #333;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  }
+
+  .back-button-floating:hover {
+    background-color: rgba(255, 255, 255, 1);
+    transform: scale(1.05);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+  }
+
+  .back-button-floating:active {
+    transform: scale(0.95);
+  }
+
+  .navbar-spacer {
+    height: 100px; /* Height to account for navbar */
+    width: 100%;
   }
 </style>

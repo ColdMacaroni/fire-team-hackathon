@@ -355,7 +355,7 @@
   }
 
   .navbar-spacer {
-    height: 100px; /* Height to account for navbar */
+    height: 200px; /* Increased height to account for navbar + extra space */
     width: 100%;
     grid-column: 1 / -1; /* Span all columns */
   }

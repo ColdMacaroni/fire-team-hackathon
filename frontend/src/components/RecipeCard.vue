@@ -12,6 +12,8 @@
 
   function navigateToRecipe(id) {
     router.push(`/recipe/${id}`)
+    // Scroll to top of the new page
+    window.scrollTo(0, 0)
   }
 </script>
 

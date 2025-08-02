@@ -1,6 +1,8 @@
 <script setup>
   import { computed } from 'vue'
+  import { useRouter } from 'vue-router'
 
+  const router = useRouter()
   const props = defineProps({
     recipe: {
       type: Object,
@@ -18,16 +20,20 @@
     if (length <= 45) return 24
     return 20
   })
+  function navigateToRecipe(id) {
+    router.push(`/recipe/${id}`)
+  }
 </script>
 <template>
   <div class="large-card" v-if="recipe">
     <img
       v-if="recipe.image"
       :src="recipe.image"
+      @click="navigateToRecipe(recipe.id)"
       alt="Image couldn't be loaded."
       class="recipe-image"
     />
-    <div v-else class="recipe-image">
+    <div v-else class="recipe-image" @click="navigateToRecipe(recipe.id)">
       <FontAwesomeIcon icon="fa-solid fa-image" />
     </div>
     <div class="recipe-header">
