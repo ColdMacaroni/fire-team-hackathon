@@ -1,17 +1,28 @@
+from dataclasses import dataclass
+from recipe import Recipe
+import json
+
+@dataclass
 class Post:
-    recipe_id: int
-    number_of_likes: int
+    recipe: Recipe
+    likes: int
     rating: float
     reviews: int
 
-    def __init__(
-            self,
-            recipe_id: int,
-            number_of_likes: int,
-            rating: float,
-            reviews: int
-    ):
-        self.recipe_id = recipe_id
-        self.number_of_likes = number_of_likes
-        self.rating = rating
-        self.reviews = reviews
+    def to_json(self) -> str:
+        out = {
+                "id": self.recipe.recipe_id,
+                "name": self.recipe.name,
+                "image": self.recipe.photo_url,
+                "rank": self.likes,
+                "rating": self.rating,
+                "reviews": self.reviews,
+                "tags": self.recipe.tags,
+                "ingredients": [ i.to_json() for i in self.recipe.ingredients],
+                "instructions": self.recipe.instructions,
+                "isFavorited": not not self.recipe.recipe_id % 2,  # TODO: Favourites?
+                "likes": self.likes,
+                "comments": self.reviews
+        }
+
+        return json.dumps(out)
