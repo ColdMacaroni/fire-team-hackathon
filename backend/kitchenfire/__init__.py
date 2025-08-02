@@ -2,6 +2,8 @@ from flask import Flask, Response
 import sqlite3
 import json
 
+from .tag import Tag
+
 from .Ingredient import Ingredient
 from .post import Post
 from .recipe import Recipe
@@ -10,12 +12,12 @@ from .recipe import Recipe
 app = Flask(__name__)
 
 
-def tags_by_recipe_id(recipe_id: int) -> list[str]:
+def tags_by_recipe_id(recipe_id: int) -> list[Tag]:
     with sqlite3.connect("data/fire.db") as db:
         c = db.cursor()
         tags = c.execute(
             """
-            SELECT TagName
+            SELECT TagId, TagName
             FROM Tags NATURAL JOIN (
                 SELECT TagId
                 FROM HasTag
@@ -24,7 +26,7 @@ def tags_by_recipe_id(recipe_id: int) -> list[str]:
             """,
             (recipe_id,),
         ).fetchall()
-    return [t[0] for t in tags]
+    return [Tag(*t) for t in tags]
 
 
 def ingredients_by_recipe_id(recipe_id: int) -> list[Ingredient]:
@@ -137,7 +139,35 @@ def get_recipe_filtered_by_ingredient(without: str, with_="-"):
 
 @app.get("/api/v1/recipe/filter/tag/<without>/<with_>")
 def get_recipe_filtered_by_tag(without, with_="-"):
-    return "todo!tag"
+    # Safety: ids are cast to int, so no sql injection
+    exclude_ids = transform_ids(without) if without != "-" else "(null)"
+    include_ids = transform_ids(with_)  if with_ != "-" else "(null)"
+    print("without", exclude_ids, "", "with", include_ids)
+
+    query = f"""
+        WITH
+            ExcludeIds(IngredientId) AS (VALUES {exclude_ids}),
+            IncludeIds(IngredientId) AS (VALUES {include_ids})
+        SELECT DISTINCT RecipeId, RecipeName
+        FROM Requires r
+        {"JOIN IncludeIds i ON r.IngredientId = i.IngredientId" if with_ != "-" else ""}
+        NATURAL JOIN Recipes
+        WHERE RecipeId
+            NOT IN (
+                SELECT DISTINCT r2.RecipeId
+                FROM ExcludeIds e
+                JOIN Requires r2
+                ON r2.IngredientId = e.IngredientId
+            )
+        """
+
+    with sqlite3.connect("data/fire.db") as db:
+        c = db.cursor()
+        result = c.execute(query).fetchall()
+
+    return Response(
+            json.dumps([{"id": t[0], "name": t[1]} for t in result]),
+            content_type="application/json")
 
 
 @app.get("/api/v1/tag/all")

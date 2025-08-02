@@ -19,7 +19,7 @@ class Post:
             "rank": self.number_of_likes,
             "rating": self.rating,
             "reviews": self.reviews,
-            "tags": self.recipe.tags,
+            "tags": [ t.to_json() for t in self.recipe.tags ],
             "ingredients": [i.to_json() for i in self.recipe.ingredients],
             "instructions": self.recipe.instructions,
             "isFavorited": not not self.recipe.recipe_id % 2,  # TODO: Favourites?

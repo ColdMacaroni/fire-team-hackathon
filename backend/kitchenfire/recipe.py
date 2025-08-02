@@ -1,7 +1,7 @@
 from kitchenfire.Ingredient import Ingredient
 from typing import List
-import json
 from dataclasses import dataclass
+from kitchenfire.tag import Tag
 
 
 @dataclass
@@ -14,4 +14,4 @@ class Recipe:
     difficulty: int
     photo_url: str
     ingredients: List[Ingredient]
-    tags: List[str]
+    tags: List[Tag]
