@@ -113,16 +113,12 @@ def get_recipe_filtered_by_ingredient(without: str, with_="-"):
         WITH
             ExcludeIds(IngredientId) AS (VALUES {exclude_ids}),
             IncludeIds(IngredientId) AS (VALUES {include_ids})
-        SELECT DISTINCT RecipeId, RecipeName
-        FROM Requires r
-        {"NATURAL JOIN IncludeIds" if with_ != "-" else ""}
-        NATURAL JOIN Recipes
-        WHERE RecipeId
-            NOT IN (
-                SELECT DISTINCT r2.RecipeId
-                FROM ExcludeIds
-                NATURAL JOIN Requires r2
-            )
+        SELECT RecipeId, RecipeName
+        FROM Recipes {"NATURAL JOIN Requires WHERE IngredientId IN IncludeIds" if with_ != "-" else ""}
+            EXCEPT
+        SELECT RecipeId, RecipeName
+        FROM Recipes NATURAL JOIN Requires
+        WHERE IngredientId IN ExcludeIds;
         """
 
     with sqlite3.connect("data/fire.db") as db:
