@@ -5,6 +5,7 @@ import RecipeNameInput from '../components/RecipeNameInput.vue'
 import TagsInput from '../components/TagsInput.vue'
 import IngredientsTable from '../components/IngredientsTable.vue'
 import InstructionsInput from '../components/InstructionsInput.vue'
+import TikTokLinkInput from '../components/TikTokLinkInput.vue'
 
 // Reactive data for the form
 const recipeData = reactive({
@@ -16,7 +17,8 @@ const recipeData = reactive({
     amount: '',
     unit: 'g'
   }],
-  instructions: ''
+  instructions: '',
+  tiktokLink: ''
 })
 
 // Loading and error states
@@ -52,6 +54,7 @@ const submitRecipe = async () => {
     formData.append('tags', JSON.stringify(recipeData.tags.filter(tag => tag.trim() !== '')))
     formData.append('ingredients', JSON.stringify(recipeData.ingredients.filter(ing => ing.ingredient.trim() !== '')))
     formData.append('instructions', recipeData.instructions)
+    formData.append('tiktokLink', recipeData.tiktokLink)
     
     // Send to Flask backend
     const response = await fetch('http://localhost:5000/api/recipes', {
@@ -89,6 +92,7 @@ const resetForm = () => {
     unit: 'g'
   }]
   recipeData.instructions = ''
+  recipeData.tiktokLink = ''
 }
 </script>
 
@@ -143,6 +147,14 @@ const resetForm = () => {
           <h2>Instructions</h2>
           <InstructionsInput 
             v-model="recipeData.instructions"
+          />
+        </div>
+
+        <!-- TikTok Link Section -->
+        <div class="form-section">
+          <h2>TikTok Link</h2>
+          <TikTokLinkInput 
+            v-model="recipeData.tiktokLink"
           />
         </div>
 
