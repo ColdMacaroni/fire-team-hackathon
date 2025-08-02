@@ -108,7 +108,6 @@ def get_recipe_filtered_by_ingredient(without: str, with_="-"):
     # Safety: ids are cast to int, so no sql injection
     exclude_ids = transform_ids(without) if without != "-" else "(null)"
     include_ids = transform_ids(with_)  if with_ != "-" else "(null)"
-    print("without", exclude_ids, "", "with", include_ids)
 
     query = f"""
         WITH
