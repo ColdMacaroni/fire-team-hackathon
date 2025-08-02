@@ -1,26 +1,6 @@
 {
   "recipes": [
     {
-      "id": 1,
-      "name": "Spaghetti Carbonara",
-      "image": "https://images.unsplash.com/photo-1621996346565-e3dbc353d2e5?w=400&h=300&fit=crop",
-      "rank": 4,
-      "rating": 4.5,
-      "reviews": 12,
-      "tags": ["Italian", "Pasta", "Quick"],
-      "ingredients": [
-        { "ingredient": "Spaghetti", "amount": "400", "unit": "g" },
-        { "ingredient": "Eggs", "amount": "4", "unit": "piece" },
-        { "ingredient": "Parmesan", "amount": "100", "unit": "g" },
-        { "ingredient": "Bacon", "amount": "200", "unit": "g" }
-      ],
-      "instructions": "1. Cook pasta according to package instructions\n2. Fry bacon until crispy\n3. Beat eggs with parmesan\n4. Mix hot pasta with egg mixture\n5. Add bacon and serve immediately",
-      "isFavorited": false,
-      "likes": 128,
-      "dislikes": 3,
-      "comments": 24
-    },
-    {
       "id": 2,
       "name": "Chicken Tikka Masala",
       "image": "https://images.unsplash.com/photo-1565557623262-b51c2513a641?w=400&h=300&fit=crop",
@@ -250,4 +230,4 @@
       "comments": 22
     }
   ]
-} 
+}

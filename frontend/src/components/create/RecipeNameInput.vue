@@ -1,0 +1,56 @@
+<script setup>
+  import { defineProps, defineEmits } from 'vue'
+
+  const props = defineProps({
+    modelValue: {
+      type: String,
+      default: '',
+    },
+  })
+
+  const emit = defineEmits(['update:modelValue'])
+</script>
+
+<template>
+  <input
+    type="text"
+    :value="modelValue"
+    @input="emit('update:modelValue', $event.target.value)"
+    placeholder="Enter recipe name"
+    class="recipe-name-input"
+    required
+    data-v-inspector="src/components/create/RecipeNameInput.vue:15:3"
+  />
+</template>
+
+<style scoped>
+  .recipe-name-input {
+    width: 100%;
+    max-width: 100%;
+    padding: 12px 16px;
+    border: 2px solid #404040;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
+    box-sizing: border-box;
+    background: #404040;
+    color: #ffffff;
+  }
+
+  .recipe-name-input::placeholder {
+    color: #b0b0b0;
+  }
+
+  .recipe-name-input:focus {
+    outline: none;
+    border-color: var(--color-accent);
+    background: #505050;
+  }
+
+  @media (max-width: 480px) {
+    .recipe-name-input {
+      font-size: 0.95rem;
+      padding: 10px 14px;
+    }
+  }
+</style>

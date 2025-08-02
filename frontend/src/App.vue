@@ -1,103 +1,101 @@
 <script setup>
-import { useBreakpoint } from './composables/useBreakpoint'
-import Navigation from './components/Navigation.vue'
-const { isDesktop, isMobile } = useBreakpoint()
+  import { RouterLink, RouterView } from 'vue-router'
+  import { useBreakpoint } from './composables/useBreakpoint.js'
+  import NavigationBar from './components/NavigationBar.vue'
+  const { isDesktop, isMobile } = useBreakpoint()
 </script>
 
 <template>
-  <div id="app">
+  <div id="app" data-v-inspector="src/App.vue:9:3">
     <!-- Desktop Warning Message -->
-    <div v-if="isDesktop" class="desktop-warning">
-      <div class="warning-content">
-        <div class="warning-icon"></div>
-        <h1>Mobile Only</h1>
-        <p>This application is designed for mobile use only.</p>
-        <p>Please switch to a smaller screen to continue.</p>
+    <div
+      v-if="isDesktop"
+      class="desktop-warning"
+      data-v-inspector="src/App.vue:11:5"
+    >
+      <div class="warning-content" data-v-inspector="src/App.vue:12:7">
+        <div class="warning-icon" data-v-inspector="src/App.vue:13:9"></div>
+        <h1 data-v-inspector="src/App.vue:14:9">Mobile Only</h1>
+        <p data-v-inspector="src/App.vue:15:9">
+          This application is designed for mobile use only.
+        </p>
+        <p data-v-inspector="src/App.vue:16:9">
+          Please switch to a smaller screen to continue.
+        </p>
       </div>
     </div>
 
     <!-- Mobile Content -->
-    <div v-else-if="isMobile" class="mobile-content">
-      <div class="mobile-nav">
+    <div
+      v-else-if="isMobile"
+      class="mobile-content"
+      data-v-inspector="src/App.vue:21:5"
+    >
+      <div class="mobile-body" data-v-inspector="src/App.vue:22:7">
+        <RouterView data-v-inspector="src/App.vue:23:9" />
       </div>
-      <div class="mobile-body">
-        <RouterView />
+      <div class="mobile-nav" data-v-inspector="src/App.vue:25:7">
+        <NavigationBar data-v-inspector="src/App.vue:26:9" />
       </div>
-        <Navigation />
     </div>
   </div>
 </template>
 
 <style scoped>
-#app {
-  padding: 0;
-  margin: 0;
-  height: 100vh;
-  width: 100vw;
-  overflow: hidden;
-  background: #212020;
-  color: #ffffff;
-}
+  @import './assets/base.css';
 
-.mobile-content {
-  height: 100vh;
-  width: 100vw;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  background: #1a1a1a;
-}
+  #app {
+    background-color: var(--color-background);
+    color: var(--color-text);
+    height: 100vh;
+    width: 100vw;
+    overflow: hidden;
+    /* iOS Safari momentum scrolling fix */
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: none;
+    position: relative;
+  }
 
-.mobile-nav {
-  position: sticky;
-  top: 0;
-  z-index: 10;
-  flex-shrink: 0;
-  background: #2d2d2d;
-}
+  .mobile-content {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    overflow: hidden;
+    box-sizing: border-box;
+    /* iOS Safari momentum scrolling fix */
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: none;
+    position: relative;
+  }
 
-.mobile-body {
-  flex: 1;
-  overflow-y: auto;
-  overflow-x: hidden;
-  min-height: 0;
-  background: #2d2d2d;
-}
+  .mobile-body {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px 20px calc(80px + env(safe-area-inset-bottom, 0)) 20px;
+    /* Space for the bottom navbar plus safe area */
+    box-sizing: border-box;
+    /* iOS Safari momentum scrolling improvements */
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+    /* Prevent momentum scrolling from affecting parent containers */
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+  }
 
-.desktop-warning {
-  height: 100vh;
-  width: 100vw;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: #1a1a1a;
-  color: #ffffff;
-}
-
-.warning-content {
-  text-align: center;
-  padding: 2rem;
-  background: #2d2d2d;
-  border-radius: 12px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-}
-
-.warning-icon {
-  width: 64px;
-  height: 64px;
-  margin: 0 auto 1rem;
-  background: #dc3545;
-  border-radius: 50%;
-  position: relative;
-}
-
-.warning-icon::before {
-  content: "⚠";
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  font-size: 2rem;
-  color: white;
-}
+  .mobile-nav {
+    position: fixed;
+    bottom: env(safe-area-inset-bottom, 0);
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+    /* iOS Safari momentum scrolling fix */
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    -webkit-perspective: 1000;
+    perspective: 1000;
+    /* Prevent momentum scrolling from affecting fixed elements */
+    -webkit-overflow-scrolling: auto;
+  }
 </style>

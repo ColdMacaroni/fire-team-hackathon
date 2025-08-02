@@ -15,7 +15,7 @@ export function useBreakpoint() {
   onMounted(() => {
     // Set initial values
     checkBreakpoint()
-    
+
     // Add event listener for window resize
     window.addEventListener('resize', checkBreakpoint)
   })
@@ -28,6 +28,6 @@ export function useBreakpoint() {
   return {
     isDesktop,
     isMobile,
-    screenWidth
+    screenWidth,
   }
-} 
+}

@@ -1,0 +1,108 @@
+:root {
+  --color-background: #212020;
+  --color-text: #ffffff;
+  --color-background-secondary: #393939;
+  --color-accent: #007aff;
+  --color-Ant-secondary: #1c1d21;
+  --section-gap: 160px;
+
+  /* Font families */
+  --font-primary: 'Merriweather', serif;
+  --font-secondary: 'Merriweather Sans', sans-serif;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-weight: normal;
+}
+
+body {
+  min-height: 100vh;
+  color: var(--color-text);
+  background: var(--color-background);
+  transition:
+    color 0.5s,
+    background-color 0.5s;
+  line-height: 1.6;
+  font-family:
+    Inter,
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    Roboto,
+    Oxygen,
+    Ubuntu,
+    Cantarell,
+    'Fira Sans',
+    'Droid Sans',
+    'Helvetica Neue',
+    sans-serif;
+  font-size: 15px;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  /* Safe area support for mobile browsers */
+  /* Removed body padding to prevent double padding issues */
+  /* iOS Safari momentum scrolling fix */
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: none;
+  position: relative;
+}
+
+/* Global utility classes */
+.page-container {
+  padding: 20px;
+  min-height: 100%;
+  box-sizing: border-box;
+}
+
+.content-wrapper {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.recipes-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 16px;
+  padding: 0;
+}
+
+.section-title {
+  color: var(--color-text);
+  margin-bottom: 20px;
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--color-text);
+}
+
+.empty-state h1 {
+  margin-bottom: 16px;
+  font-size: 20px;
+}
+
+.empty-state p {
+  opacity: 0.7;
+  font-size: 16px;
+}
+
+/* iOS Safari momentum scrolling fixes for fixed elements */
+[style*='position: fixed'],
+[class*='fixed'] {
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  -webkit-perspective: 1000;
+  perspective: 1000;
+  -webkit-overflow-scrolling: auto;
+}
