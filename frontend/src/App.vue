@@ -1,8 +1,6 @@
 <script setup>
-import { computed } from 'vue'
-import HelloWorld from './components/HelloWorld.vue'
 import { useBreakpoint } from './composables/useBreakpoint'
-
+import Navigation from './components/Navigation.vue'
 const { isDesktop, isMobile } = useBreakpoint()
 </script>
 
@@ -20,13 +18,29 @@ const { isDesktop, isMobile } = useBreakpoint()
 
     <!-- Mobile Content -->
     <div v-else-if="isMobile" class="mobile-content">
+      <div class="mobile-nav">
+        <Navigation />
+      </div>
       <div class="mobile-header">
         <h1>Mobile App</h1>
-        <p>Welcome to your mobile experience!</p>
+      </div>
+      <div class="mobile-body">
+        <RouterView />
       </div>
     </div>
   </div>
 </template>
 
 <style scoped>
+#app{
+  padding: 0;
+}
+.mobile-content {
+  height: 100vh;
+  width: 100vw;
+}
+.mobile-nav {
+  position: sticky;
+  top: 0;
+}
 </style>
