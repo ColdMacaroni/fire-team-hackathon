@@ -59,7 +59,7 @@ def create_post_by_row(post_id: int) -> Post:
         (likes, rating, reviews) = c.fetchone()
         tags = tags_by_recipe_id(post_id)
         ingredients = ingredients_by_recipe_id(post_id)
-        recipe_tuple: tuple = c.execute(
+        recipe_tuple: tuple[str, str, str, int, int, str] = c.execute(
             "SELECT RecipeName, Description, Instructions, CookTime, Difficulty, PhotoURL FROM Recipes WHERE RecipeId = ?",
             (post_id,),
         ).fetchone()
