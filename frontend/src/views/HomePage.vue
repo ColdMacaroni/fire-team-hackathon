@@ -31,10 +31,10 @@ const dislikeRecipe = (recipe) => {
 const showComments = (recipe) => {
   console.log(`Show comments for ${recipe.name}`)
 }
+
 onMounted(() => {
   loadRecipes()
 })
-
 </script>
 
 <template>
@@ -58,12 +58,12 @@ onMounted(() => {
 <style scoped>
 .home-page {
   width: 100%;
-  background: #1a1a1a;
+  background: #212020;
   overflow: hidden;
 }
 
 .scroller-container {
-  height: 100%;
+  height: 100vh;
   overflow-x: auto;
   overflow-y: hidden;
   scroll-snap-type: x mandatory;
