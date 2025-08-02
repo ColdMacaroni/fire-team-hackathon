@@ -112,9 +112,10 @@ def get_recipe_filtered_by_ingredient(without: str, with_="-"):
         WITH
             ExcludeIds(IngredientId) AS (VALUES {exclude_ids}),
             IncludeIds(IngredientId) AS (VALUES {include_ids})
-        SELECT DISTINCT RecipeId
+        SELECT DISTINCT RecipeId, RecipeName
         FROM Requires r
         {"JOIN IncludeIds i ON r.IngredientId = i.IngredientId" if with_ != "-" else ""}
+        NATURAL JOIN Recipes
         WHERE RecipeId
             NOT IN (
                 SELECT DISTINCT r2.RecipeId
@@ -129,7 +130,7 @@ def get_recipe_filtered_by_ingredient(without: str, with_="-"):
         result = c.execute(query).fetchall()
 
     return Response(
-            json.dumps([{"id": t[0]} for t in result]),
+            json.dumps([{"id": t[0], "name": t[1]} for t in result]),
             content_type="application/json")
 
 
