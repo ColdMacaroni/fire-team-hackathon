@@ -3,7 +3,7 @@ from typing import Optional
 class Ingredient:
     ingredient_id: int
     name: str
-    type: str
+    ingredient_type: str
     amount: Optional[float]
     amount_unit: Optional[str]
 

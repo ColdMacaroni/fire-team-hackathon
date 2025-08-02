@@ -1,18 +1,18 @@
 CREATE TABLE IF NOT EXISTS Tags (
 	TagId INTEGER,
-	TagName TEXT NOT NULL,
+	TagName TEXT NOT NULL UNIQUE,
 	PRIMARY KEY (TagId)
 );
 
 CREATE TABLE IF NOT EXISTS IngredientTypes (
 	TypeId INTEGER,
-	TypeName TEXT NOT NULL,
+	TypeName TEXT NOT NULL UNIQUE,
 	PRIMARY KEY (TypeId)
 );
 
 CREATE TABLE IF NOT EXISTS Ingredients (
 	IngredientId INTEGER,
-	IngredientName TEXT NOT NULL,
+	IngredientName TEXT NOT NULL UNIQUE,
 	TypeId INTEGER,
 	PRIMARY KEY (IngredientId),
 	FOREIGN KEY (TypeId) REFERENCES IngredientTypes (TypeId)
@@ -21,7 +21,7 @@ CREATE TABLE IF NOT EXISTS Ingredients (
 
 CREATE TABLE IF NOT EXISTS Recipes (
 	RecipeId INTEGER,
-	RecipeName TEXT NOT NULL,
+	RecipeName TEXT NOT NULL UNIQUE,
 	Description TEXT NOT NULL,
 	Instructions TEXT NOT NULL,
 	CookTime INTEGER NOT NULL,
