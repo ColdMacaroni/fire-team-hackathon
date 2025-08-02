@@ -29,12 +29,92 @@ watch(recipeData, (newValue) => {
   console.log('Recipe data updated:', newValue)
 }, { deep: true })
 
+// Function to export recipe data to JSON file
+const exportRecipeToJSON = async (recipeData) => {
+  try {
+    // Generate a unique ID (you might want to implement a better ID generation system)
+    const newId = Date.now()
+    
+    // Format the recipe data according to recipes.json structure
+    const formattedRecipe = {
+      id: newId,
+      name: recipeData.name,
+      image: recipeData.image || "https://images.unsplash.com/photo-1565299624946-b28f40a0ca4b?w=400&h=300&fit=crop", // Default image if none provided
+      rank: Math.floor(Math.random() * 3) + 3, // Random rank between 3-5
+      rating: (Math.random() * 1.5 + 3.5).toFixed(1), // Random rating between 3.5-5.0
+      reviews: Math.floor(Math.random() * 20) + 5, // Random reviews between 5-25
+      tags: recipeData.tags.filter(tag => tag.trim() !== ''),
+      ingredients: recipeData.ingredients
+        .filter(ing => ing.ingredient.trim() !== '')
+        .map(ing => ({
+          ingredient: ing.ingredient,
+          amount: ing.amount,
+          unit: ing.unit
+        })),
+      instructions: recipeData.instructions,
+      isFavorited: false,
+      likes: Math.floor(Math.random() * 100) + 50, // Random likes between 50-150
+      dislikes: Math.floor(Math.random() * 10) + 1, // Random dislikes between 1-11
+      comments: Math.floor(Math.random() * 30) + 10 // Random comments between 10-40
+    }
+    
+    // Try to read existing recipes.json file
+    let existingRecipes = []
+    try {
+      const response = await fetch('/src/data/recipes.json')
+      if (response.ok) {
+        const data = await response.json()
+        existingRecipes = data.recipes || []
+      }
+    } catch (error) {
+      console.log('Could not read existing recipes.json, starting fresh')
+    }
+    
+    // Add the new recipe to existing recipes
+    const updatedRecipes = [...existingRecipes, formattedRecipe]
+    
+    // Create the JSON structure with all recipes
+    const jsonData = {
+      recipes: updatedRecipes
+    }
+    
+    // Convert to JSON string with proper formatting
+    const jsonString = JSON.stringify(jsonData, null, 2)
+    
+    // Create a blob and download link for the updated recipes.json
+    const blob = new Blob([jsonString], { type: 'application/json' })
+    const url = URL.createObjectURL(blob)
+    
+    // Create download link
+    const link = document.createElement('a')
+    link.href = url
+    link.download = 'recipes.json'
+    document.body.appendChild(link)
+    link.click()
+    
+    // Clean up
+    document.body.removeChild(link)
+    URL.revokeObjectURL(url)
+    
+    console.log('Recipe added to recipes.json:', formattedRecipe)
+    console.log('Total recipes in file:', updatedRecipes.length)
+    return formattedRecipe
+    
+  } catch (error) {
+    console.error('Error exporting recipe to JSON:', error)
+    throw error
+  }
+}
+
 // Handle form submission to Flask backend
 const submitRecipe = async () => {
   try {
     isSubmitting.value = true
     submitError.value = ''
     submitSuccess.value = ''
+    
+    // Export recipe to JSON file
+    const exportedRecipe = await exportRecipeToJSON(recipeData)
     
     // Create FormData for multipart/form-data upload
     const formData = new FormData()
@@ -64,7 +144,7 @@ const submitRecipe = async () => {
     
     if (response.ok && result.success) {
       console.log('Recipe saved successfully:', result)
-      submitSuccess.value = 'Recipe created successfully!'
+      submitSuccess.value = 'Recipe created successfully and exported to JSON!'
       resetForm()
     } else {
       throw new Error(result.error || `HTTP error! status: ${response.status}`)

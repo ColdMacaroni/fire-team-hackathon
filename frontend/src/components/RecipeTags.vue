@@ -11,13 +11,14 @@ const props = defineProps({
 
 <template>
   <div class="recipe-tags">
-    <p>Tags:</p>
-    <p 
+    <p>Tags:
+    <span 
       v-for="tag in tags" 
       :key="tag" 
       class="tag"
     >
       {{ tag }}
+  </span>
   </p>
   </div>
 </template>
@@ -36,14 +37,14 @@ line-height: 125.725%; /* 22.631px */
 }
 
 .tag {
-  display: flex;
 padding: 0 3px;
-justify-content: center;
-align-items: center;
 background: #472D2D;
 color: #FFF;
 font-family: "Merriweather Sans";
 font-size: 14px;
-
+height: fit-content;
+}
+p{
+  height: fit-content;
 }
 </style> 
