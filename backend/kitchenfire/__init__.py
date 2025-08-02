@@ -34,4 +34,11 @@ def get_all_tags():
 
 @app.get("/api/v1/tag/by-id/<tag_id>")
 def get_tag_by_id(tag_id):
-    return "todo!tag_id"
+    with sqlite3.connect("data/fire.db") as db:
+        print(tag_id)
+        c = db.cursor()
+        c.execute("SELECT TagId, TagName FROM Tags WHERE TagId = ?", (tag_id,))
+        (tag_id, tag_name) = c.fetchone()
+        tag = ({"name": tag_name, "id": tag_id})
+
+    return Response(json.dumps(tag), content_type="application/json")
