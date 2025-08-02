@@ -94,10 +94,44 @@ def get_trending_recipe_by_offset(offset):
             content_type="application/json")
 
 
+# Takes smth like 123,1234,345
+# returns (123),(1234),(345)
+def transform_ids(ids: str) -> str:
+    return ','.join(map(lambda i: f"({int(i)})", ids.replace(" ", "").split(",")))
 
+
+@app.get("/api/v1/recipe/filter/ingredient/<without>")
 @app.get("/api/v1/recipe/filter/ingredient/<without>/<with_>")
-def get_recipe_filtered_by_ingredient(without, with_="-"):
-    return "todo!ingredient"
+def get_recipe_filtered_by_ingredient(without: str, with_="-"):
+    # Safety: ids are cast to int, so no sql injection
+    exclude_ids = transform_ids(without) if without != "-" else "(null)"
+    include_ids = transform_ids(with_)  if with_ != "-" else "(null)"
+    print("without", exclude_ids, "", "with", include_ids)
+
+    query = f"""
+        WITH
+            ExcludeIds(IngredientId) AS (VALUES {exclude_ids}),
+            IncludeIds(IngredientId) AS (VALUES {include_ids})
+        SELECT DISTINCT RecipeId
+        FROM Requires r
+        {"JOIN IncludeIds i ON r.IngredientId = i.IngredientId" if with_ != "-" else ""}
+        WHERE RecipeId
+            NOT IN (
+                SELECT DISTINCT r2.RecipeId
+                FROM ExcludeIds e
+                JOIN Requires r2
+                ON r2.IngredientId = e.IngredientId
+            )
+        """
+
+    with sqlite3.connect("data/fire.db") as db:
+        c = db.cursor()
+        result = c.execute(query).fetchall()
+
+    return Response(
+            json.dumps([{"id": t[0]} for t in result]),
+            content_type="application/json")
+
 
 
 @app.get("/api/v1/recipe/filter/tag/<without>/<with_>")
