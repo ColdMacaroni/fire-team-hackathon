@@ -89,7 +89,7 @@ if __name__ == "__main__":
 
             rowNumber += 1
 
-    posts: Set[Post] = set()
+    posts: Dict[str, Post] = {}
 
     with open("../static/PostInfo.csv") as raw_post_info:
         reader = csv.reader(raw_post_info)
@@ -97,7 +97,8 @@ if __name__ == "__main__":
 
         for row in reader:
             if rowNumber != 0:
-
+                recipe_name, no_likes, rating, reviews = row
+                posts[recipe_name] = Post(-1, int(no_likes), float(rating), int(reviews))
 
             rowNumber += 1
 
@@ -139,7 +140,19 @@ VALUES ("{recipe.name}", "{recipe.description}", "{recipe.instructions}", {recip
 
         database.commit()
 
-    # TODO: Populate Trending table
+    for recipe, recent_likes in trending.items():
+        recipe_id = cursor.execute(f"""
+SELECT RecipeId
+FROM Recipes
+WHERE RecipeName = "{recipe}";
+""").fetchall()[0][0]
+
+        cursor.execute(f"""
+INSERT INTO Trending (RecipeId, NumberOfRecentLikes)
+VALUES ({recipe_id}, {recent_likes});
+""")
+
+        database.commit()
 
     for r, t in recipe_tags.items():
         recipe_id = cursor.execute(f"""
@@ -188,4 +201,16 @@ VALUES ({recipe_id}, {ingredient_id}, {ingredient.amount}, "{ingredient.amount_u
 
             database.commit()
 
-    # TODO: Populate Post table
+    for recipe, post in posts.items():
+        recipe_id = cursor.execute(f"""
+SELECT RecipeId
+FROM Recipes
+WHERE RecipeName = "{recipe}";
+""").fetchall()[0][0]
+
+        cursor.execute(f"""
+INSERT INTO Posts (RecipeId, NumberOfLikes, Rating, Reviews)
+VALUES ({recipe_id}, {post.number_of_likes}, {post.rating}, {post.reviews});
+""")
+
+        database.commit()
