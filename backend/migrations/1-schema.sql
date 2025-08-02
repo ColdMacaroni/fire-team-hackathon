@@ -50,8 +50,8 @@ CREATE TABLE HasTag (
 CREATE TABLE Requires (
 	RecipeId INTEGER,
 	IngredientId INTEGER,
-	Amount INTEGER NOT NULL,
-	AmountUnit TEXT NOT NULL,
+	Amount DOUBLE,
+	AmountUnit TEXT,
 	PRIMARY KEY (RecipeId, IngredientId),
 	FOREIGN KEY (RecipeId) REFERENCES Recipes (RecipeId)
 		ON DELETE RESTRICT ON UPDATE CASCADE
