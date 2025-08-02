@@ -72,8 +72,12 @@ def create_post_by_row(post_id: int) -> Post:
 
 @app.get("/api/v1/recipe/by-id/<recipe_id>")
 def get_recipe_by_id(recipe_id):
+    posts = []
+    for id_ in map(lambda x: int(x), recipe_id.replace(" ", ",").split(",")):
+        posts.append(create_post_by_row(id_).to_json())
     return Response(
-        create_post_by_row(int(recipe_id)).to_json(), content_type="application/json"
+        f"[{','.join(posts)}]",
+        content_type="application/json",
     )
 
 
@@ -173,12 +177,18 @@ def get_all_tags():
 
 @app.get("/api/v1/tag/by-id/<tag_id>")
 def get_tag_by_id(tag_id):
+    ids = transform_ids(tag_id)
     with sqlite3.connect("data/fire.db") as db:
         c = db.cursor()
-        c.execute("SELECT TagId, TagName FROM Tags WHERE TagId = ?", (tag_id,))
-        (tag_id, tag_name) = c.fetchone()
-        tag = {"name": tag_name, "id": tag_id}
+        c.execute(f"""
+                  WITH GetIds(TagId)
+                  AS (VALUES {ids})
+                  SELECT TagId, TagName
+                  FROM Tags
+                  WHERE TagId IN GetIds
+                  """)
 
+        tag = [{"name": tag_name, "id": tag_id} for (tag_id, tag_name) in c.fetchall()]
     return Response(json.dumps(tag), content_type="application/json")
 
 @app.get("/api/v1/ingredient/all")
@@ -195,10 +205,17 @@ def get_all_ingredients():
 
 @app.get("/api/v1/ingredient/by-id/<ingredient_id>")
 def get_tag_by_id2(ingredient_id):
+    ids = transform_ids(ingredient_id)
     with sqlite3.connect("data/fire.db") as db:
         c = db.cursor()
-        c.execute("SELECT IngredientId, IngredientName FROM Ingredients WHERE IngredientId = ?", (ingredient_id,))
-        (ingredient_id, ingredient_name) = c.fetchone()
-        ingredient = {"name": ingredient_name, "id": ingredient_id}
+        c.execute(f"""
+                  WITH GetIds(IngredientId)
+                  AS (VALUES {ids})
+                  SELECT IngredientId, IngredientName
+                  FROM Ingredients
+                  WHERE IngredientId IN GetIds
+                  """)
 
-    return Response(json.dumps(ingredient), content_type="application/json")
+        ingredients = [{"name": ingredient_name, "id": ingredient_id} for (ingredient_id, ingredient_name) in c.fetchall()]
+
+    return Response(json.dumps(ingredients), content_type="application/json")
