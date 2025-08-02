@@ -141,23 +141,17 @@ def get_recipe_filtered_by_tag(without, with_="-"):
     # Safety: ids are cast to int, so no sql injection
     exclude_ids = transform_ids(without) if without != "-" else "(null)"
     include_ids = transform_ids(with_)  if with_ != "-" else "(null)"
-    print("without", exclude_ids, "", "with", include_ids)
 
-    #FIXME: Will ALWAYS filter out items without tags
     query = f"""
         WITH
             ExcludeIds(TagId) AS (VALUES {exclude_ids}),
             IncludeIds(TagId) AS (VALUES {include_ids})
-        SELECT DISTINCT RecipeId, RecipeName
-        FROM HasTag r
-        {"NATURAL JOIN IncludeIds" if with_ != "-" else ""}
-        NATURAL JOIN Recipes
-        WHERE RecipeId
-            NOT IN (
-                SELECT DISTINCT r2.RecipeId
-                FROM ExcludeIds
-                NATURAL JOIN HasTag r2
-            )
+        SELECT RecipeId, RecipeName
+        FROM Recipes {"NATURAL JOIN HasTag WHERE TagId IN IncludeIds" if with_ != "-" else ""}
+            EXCEPT
+        SELECT RecipeId, RecipeName
+        FROM Recipes NATURAL JOIN HasTag
+        WHERE TagId IN ExcludeIds;
         """
 
     with sqlite3.connect("data/fire.db") as db:
