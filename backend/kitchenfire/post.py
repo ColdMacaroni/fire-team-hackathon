@@ -1,17 +1,17 @@
-from kitchenfire.recipe import Recipe
-
-
 class Post:
-    post_id: int
-    no_likes: int
-    recipe: Recipe
+    recipe_id: int
+    number_of_likes: int
+    rating: float
+    reviews: int
 
     def __init__(
             self,
-            post_id: int,
-            no_likes: int,
-            recipe: Recipe
+            recipe_id: int,
+            number_of_likes: int,
+            rating: float,
+            reviews: int
     ):
-        self.post_id = post_id
-        self.no_likes = no_likes
-        self.recipe = recipe
+        self.recipe_id = recipe_id
+        self.number_of_likes = number_of_likes
+        self.rating = rating
+        self.reviews = reviews

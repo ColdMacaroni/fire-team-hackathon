@@ -5,6 +5,7 @@ from typing import Dict
 from typing import Set
 
 from kitchenfire.Ingredient import Ingredient
+from kitchenfire.post import Post
 from kitchenfire.recipe import Recipe
 
 if __name__ == "__main__":
@@ -74,6 +75,30 @@ if __name__ == "__main__":
 
                 recipe = Recipe(-1, name, description, method, int(cook_time), int(difficulty), photo_url, [], [])
                 recipes[name] = recipe
+            rowNumber += 1
+
+    trending: Dict[str, int] = {}
+
+    with open("../static/TrendingInfo.csv") as raw_trending_info:
+        reader = csv.reader(raw_trending_info)
+        rowNumber = 0
+
+        for row in reader:
+            if rowNumber != 0:
+                trending[row[0]] = int(row[1])
+
+            rowNumber += 1
+
+    posts: Set[Post] = set()
+
+    with open("../static/PostInfo.csv") as raw_post_info:
+        reader = csv.reader(raw_post_info)
+        rowNumber = 0
+
+        for row in reader:
+            if rowNumber != 0:
+
+
             rowNumber += 1
 
     for tag in tags:
