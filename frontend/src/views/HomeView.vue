@@ -1,24 +1,18 @@
 <script setup>
-  import { ref, onMounted } from 'vue'
+  import { onMounted } from 'vue'
   import RecipeCard from '../components/RecipeCard.vue'
+  import { useRecipes } from '../composables/useRecipes'
 
-  const createdRecipes = ref([])
-  const favouritedRecipes = ref([])
+  const {
+    recipes: createdRecipes,
+    loading,
+    error,
+    loadCreatedRecipes,
+  } = useRecipes()
 
   onMounted(() => {
-    loadRecipes()
+    loadCreatedRecipes()
   })
-
-  const loadRecipes = () => {
-    try {
-      const savedRecipes = localStorage.getItem('createdRecipes')
-      if (savedRecipes) {
-        createdRecipes.value = JSON.parse(savedRecipes)
-      }
-    } catch (error) {
-      console.error('Error loading recipes from localStorage:', error)
-    }
-  }
 </script>
 
 <template>

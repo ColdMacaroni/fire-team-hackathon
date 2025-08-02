@@ -204,7 +204,6 @@
     grid-template-columns: 1fr 80px 80px 60px;
     background: #404040;
     border-bottom: 1px solid #505050;
-    width: 100%;
   }
 
   .header-cell {
@@ -224,6 +223,7 @@
     border-bottom: 1px solid #404040;
     width: 100%;
     background: #2d2d2d;
+    height: 130%;
   }
 
   .table-row:last-child {

@@ -1,9 +1,11 @@
-<script setup></script>
+<script setup>
+  import LargeCard from '../components/explore/LargeCard.vue'
+</script>
 
 <template>
   <div class="page-container">
     <div class="content-wrapper">
-      <h1 class="section-title">Explore</h1>
+      <LargeCard />
     </div>
   </div>
 </template>

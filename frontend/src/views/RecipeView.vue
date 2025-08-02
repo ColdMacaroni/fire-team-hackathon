@@ -1,14 +1,15 @@
 <script setup>
   import { ref, onMounted, computed, onUnmounted } from 'vue'
   import { useRoute, useRouter } from 'vue-router'
+  import { useRecipes } from '../composables/useRecipes'
 
   const route = useRoute()
   const router = useRouter()
   const recipe = ref(null)
-  const loading = ref(true)
-  const error = ref(null)
   const checkedIngredients = ref(new Set())
   const isLiked = ref(false)
+
+  const { loading, error, loadRecipeById, updateRecipeLikes } = useRecipes()
 
   const recipeId = computed(() => route.params.id)
 
@@ -30,28 +31,9 @@
   })
 
   const loadRecipe = async () => {
-    try {
-      loading.value = true
-      error.value = null
-      const inLocalStorageRecipe = localStorage.getItem('createdRecipes')
-      if (inLocalStorageRecipe) {
-        const recipes = JSON.parse(inLocalStorageRecipe)
-        const foundRecipe = recipes.find(
-          recipe => recipe.id === parseInt(recipeId.value)
-        )
-        if (foundRecipe) {
-          recipe.value = foundRecipe
-        } else {
-          error.value = 'Recipe not found'
-        }
-      } else {
-        error.value = 'No recipes found'
-      }
-    } catch (err) {
-      error.value = 'Failed to load recipe'
-      console.error('Error loading recipes from localStorage:', err)
-    } finally {
-      loading.value = false
+    const foundRecipe = await loadRecipeById(recipeId.value)
+    if (foundRecipe) {
+      recipe.value = foundRecipe
     }
   }
 

@@ -1,6 +1,6 @@
 <script setup>
   import { RouterLink, RouterView } from 'vue-router'
-  import { useBreakpoint } from './components/useBreakpoint.js'
+  import { useBreakpoint } from './composables/useBreakpoint.js'
   import NavigationBar from './components/NavigationBar.vue'
   const { isDesktop, isMobile } = useBreakpoint()
 </script>
