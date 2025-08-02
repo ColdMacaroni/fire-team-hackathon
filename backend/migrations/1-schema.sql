@@ -1,0 +1,68 @@
+CREATE TABLE Tags (
+	TagId INTEGER,
+	TagName TEXT NOT NULL,
+	PRIMARY KEY (Id)
+);
+
+CREATE TABLE IngredientTypes (
+	TypeId INTEGER,
+	TypeName TEXT NOT NULL,
+	PRIMARY KEY (Id)
+);
+
+CREATE TABLE Ingredients (
+	IngredientId INTEGER,
+	IngredientName TEXT NOT NULL,
+	TypeId INTEGER,
+	PRIMARY KEY (Id),
+	FOREIGN KEY (TypeId) REFERENCES IngredientTypes (TypeId)
+		ON DELETE RESTRICT ON UPDATE CASCADE
+);
+
+CREATE TABLE Recipes (
+	RecipeId INTEGER,
+	RecipeName TEXT NOT NULL,
+	Instructions TEXT NOT NULL,
+	CookTime INTEGER NOT NULL,
+	Difficulty INTEGER NOT NULL CHECK (Difficulty >= 1 AND Difficulty <= 5),
+	PhotoURL TEXT,
+	PRIMARY KEY (RecipeId)
+);
+
+CREATE TABLE Trending (
+	RecipeId INTEGER,
+	NumberOfRecentLikes INTEGER NOT NULL,
+	PRIMARY KEY (RecipeId),
+	FOREIGN KEY (RecipeId) REFERENCES Recipes (RecipeId)
+		ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+CREATE TABLE HasTag (
+	RecipeId INTEGER,
+	TagId INTEGER,
+	PRIMARY KEY (RecipeId, TagId),
+	FOREIGN KEY (RecipeId) REFERENCES Recipes (RecipeId)
+		ON DELETE RESTRICT ON UPDATE CASCADE,
+	FOREIGN KEY (TagId) REFERENCES Tags (TagId)
+		ON DELETE RESTRICT ON UPDATE CASCADE
+);
+
+CREATE TABLE Requires (
+	RecipeId INTEGER,
+	IngredientId INTEGER,
+	Amount INTEGER NOT NULL,
+	AmountUnit TEXT NOT NULL,
+	PRIMARY KEY (RecipeId, IngredientId),
+	FOREIGN KEY (RecipeId) REFERENCES Recipes (RecipeId)
+		ON DELETE RESTRICT ON UPDATE CASCADE
+	FOREIGN KEY (IngredientId) REFERENCES Ingredients (IngredientId)
+		ON DELETE RESTRICT ON UPDATE CASCADE
+);
+
+CREATE TABLE Post (
+	RecipeId INTEGER,
+	NumberOfLikes INTEGER NOT NULL,
+	PRIMARY KEY RecipeId,
+	FOREIGN KEY (RecipeId) REFERENCES Recipes (RecipeId)
+		ON DELETE RESTRICT ON UPDATE CASCADE
+);

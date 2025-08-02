@@ -1,9 +1,0 @@
-#IntelliJ files
-.idea/
-*.iml
-
-# Release
-target/
-
-# vue
-**/node_modules/
