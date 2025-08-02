@@ -3,6 +3,7 @@
   import LargeCard from '../components/explore/LargeCard.vue'
   import SmallCard from '../components/explore/SmallCard.vue'
   import { useRecipes } from '../composables/useRecipes'
+  import RecipeCard from '../components/RecipeCard.vue'
 
   const { recipes, loading, error, loadAllRecipes } = useRecipes()
 
@@ -92,79 +93,102 @@
 </script>
 
 <template>
-  <div class="page-swiper">
-    <!-- Loading State -->
-    <div v-if="loading" class="loading-container">
-      <div class="loading-spinner"></div>
-      <p>Loading recipes...</p>
-    </div>
-
-    <!-- Error State -->
-    <div v-else-if="error" class="error-container">
-      <h2>Oops!</h2>
-      <p>{{ error }}</p>
-    </div>
-
-    <!-- Swipe Container -->
-    <div
-      v-else-if="recipes.length > 0"
-      class="swipe-container"
-      @touchstart="handleTouchStart"
-      @touchmove="handleTouchMove"
-      @touchend="handleTouchEnd"
-    >
-      <!-- Previous Recipe (Small Card) -->
-      <div
-        v-if="prevRecipe"
-        class="card-wrapper prev-card"
-        :class="{ visible: canSwipeLeft }"
-      >
-        <SmallCard :recipe="prevRecipe" />
+  <div class="explore-container">
+    <div class="page-swiper">
+      <!-- Loading State -->
+      <div v-if="loading" class="loading-container">
+        <div class="loading-spinner"></div>
+        <p>Loading recipes...</p>
       </div>
 
-      <!-- Current Recipe (Large Card) -->
-      <div
-        class="card-wrapper current-card"
-        :style="{ transform: `translateX(${translateX}px)` }"
-      >
-        <LargeCard :recipe="currentRecipe" />
+      <!-- Error State -->
+      <div v-else-if="error" class="error-container">
+        <h2>Oops!</h2>
+        <p>{{ error }}</p>
       </div>
 
-      <!-- Next Recipe (Small Card) -->
+      <!-- Swipe Container -->
       <div
-        v-if="nextRecipe"
-        class="card-wrapper next-card"
-        :class="{ visible: canSwipeRight }"
+        v-else-if="recipes.length > 0"
+        class="swipe-container"
+        @touchstart="handleTouchStart"
+        @touchmove="handleTouchMove"
+        @touchend="handleTouchEnd"
       >
-        <SmallCard :recipe="nextRecipe" />
-      </div>
-
-      <!-- Navigation Indicators -->
-      <div class="navigation-indicators">
+        <!-- Previous Recipe (Small Card) -->
         <div
-          v-for="(recipe, index) in recipes"
-          :key="recipe.id"
-          class="indicator"
-          :class="{ active: index === currentIndex }"
-          @click="currentIndex = index"
-        ></div>
+          v-if="prevRecipe"
+          class="card-wrapper prev-card"
+          :class="{ visible: canSwipeLeft }"
+        >
+          <SmallCard :recipe="prevRecipe" />
+        </div>
+
+        <!-- Current Recipe (Large Card) -->
+        <div
+          class="card-wrapper current-card"
+          :style="{ transform: `translateX(${translateX}px)` }"
+        >
+          <LargeCard :recipe="currentRecipe" />
+        </div>
+
+        <!-- Next Recipe (Small Card) -->
+        <div
+          v-if="nextRecipe"
+          class="card-wrapper next-card"
+          :class="{ visible: canSwipeRight }"
+        >
+          <SmallCard :recipe="nextRecipe" />
+        </div>
+      </div>
+
+      <!-- Empty State -->
+      <div v-else class="empty-state">
+        <h2>No recipes found</h2>
+        <p>Try refreshing the page or check back later.</p>
       </div>
     </div>
 
-    <!-- Empty State -->
-    <div v-else class="empty-state">
-      <h2>No recipes found</h2>
-      <p>Try refreshing the page or check back later.</p>
+    <!-- Pinterest-style Grid Section -->
+    <div class="recipe-grid-section">
+      <div v-if="loading" class="grid-loading">
+        <div class="loading-spinner"></div>
+        <p>Loading recipes...</p>
+      </div>
+
+      <div v-else-if="recipes.length > 0" class="recipe-grid">
+        <RecipeCard
+          v-for="recipe in recipes"
+          :key="recipe.id"
+          :recipe="recipe"
+          class="grid-recipe-card"
+        />
+        <!-- Spacer to prevent cards from going under navbar -->
+        <div class="navbar-spacer"></div>
+      </div>
+
+      <div v-else class="grid-empty">
+        <h3>No recipes available</h3>
+        <p>Check back later for new recipes!</p>
+      </div>
     </div>
   </div>
 </template>
 
 <style scoped>
+  .explore-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100vh;
+    width: 100%;
+  }
+
   .page-swiper {
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 100vh;
+    height: 40%;
     width: 100%;
     overflow: hidden;
     position: relative;
@@ -174,7 +198,7 @@
   .swipe-container {
     position: relative;
     width: 100%;
-    height: 100%;
+    height: 40%;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -273,7 +297,7 @@
   /* Mobile-specific styles */
   @media (max-width: 768px) {
     .page-swiper {
-      height: 100vh;
+      height: 50vh;
       width: 100vw;
     }
 
@@ -288,5 +312,70 @@
     -webkit-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
+  }
+
+  .recipe-grid-section {
+    display: flex;
+    flex-direction: column;
+    height: 60%;
+    width: 100%;
+    padding: 20px;
+    /* Hide scrollbar for webkit browsers */
+    scrollbar-width: none; /* Firefox */
+  }
+
+  /* Hide scrollbar for webkit browsers (Chrome, Safari, Edge) */
+  .recipe-grid-section::-webkit-scrollbar {
+    display: none;
+  }
+
+  .recipe-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto 100px auto; /* Added bottom margin for navbar */
+  }
+
+  .grid-loading,
+  .grid-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    text-align: center;
+    color: var(--color-text);
+  }
+
+  .grid-recipe-card {
+    width: 100%;
+    height: auto;
+  }
+
+  .navbar-spacer {
+    height: 100px; /* Height to account for navbar */
+    width: 100%;
+    grid-column: 1 / -1; /* Span all columns */
+  }
+
+  /* Responsive grid adjustments */
+  @media (max-width: 768px) {
+    .recipe-grid {
+      gap: 12px;
+      padding: 0 10px;
+    }
+
+    .recipe-grid-section {
+      padding: 15px 10px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .recipe-grid {
+      gap: 10px;
+      padding: 0 5px;
+    }
   }
 </style>

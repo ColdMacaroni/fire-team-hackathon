@@ -50,7 +50,6 @@
     display: flex;
     width: 336px;
     padding: 0 15px;
-    justify-content: space-between;
     align-items: center;
   }
   .recipe-name h1 {
