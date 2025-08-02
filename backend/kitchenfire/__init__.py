@@ -23,12 +23,12 @@ def get_recipe_filtered_by_tag(without, with_="-"):
 
 @app.get("/api/v1/tag/all")
 def get_all_tags():
-    db = sqlite3.connect("data/fire.db")
-    c = db.cursor()
-    c.execute("SELECT TagId, TagName FROM Tags")
     tags = []
-    for (tag_id, tag_name) in c.fetchall():
-        tags.append({"name": tag_name, "id": tag_id})
+    with sqlite3.connect("data/fire.db") as db:
+        c = db.cursor()
+        c.execute("SELECT TagId, TagName FROM Tags")
+        for (tag_id, tag_name) in c.fetchall():
+            tags.append({"name": tag_name, "id": tag_id})
 
     return Response(json.dumps(tags), content_type="application/json")
 
