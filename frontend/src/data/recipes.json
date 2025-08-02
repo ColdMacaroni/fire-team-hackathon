@@ -1,0 +1,253 @@
+{
+  "recipes": [
+    {
+      "id": 1,
+      "name": "Spaghetti Carbonara",
+      "image": "https://images.unsplash.com/photo-1621996346565-e3dbc353d2e5?w=400&h=300&fit=crop",
+      "rank": 4,
+      "rating": 4.5,
+      "reviews": 12,
+      "tags": ["Italian", "Pasta", "Quick"],
+      "ingredients": [
+        { "ingredient": "Spaghetti", "amount": "400", "unit": "g" },
+        { "ingredient": "Eggs", "amount": "4", "unit": "piece" },
+        { "ingredient": "Parmesan", "amount": "100", "unit": "g" },
+        { "ingredient": "Bacon", "amount": "200", "unit": "g" }
+      ],
+      "instructions": "1. Cook pasta according to package instructions\n2. Fry bacon until crispy\n3. Beat eggs with parmesan\n4. Mix hot pasta with egg mixture\n5. Add bacon and serve immediately",
+      "isFavorited": false,
+      "likes": 128,
+      "dislikes": 3,
+      "comments": 24
+    },
+    {
+      "id": 2,
+      "name": "Chicken Tikka Masala",
+      "image": "https://images.unsplash.com/photo-1565557623262-b51c2513a641?w=400&h=300&fit=crop",
+      "rank": 5,
+      "rating": 4.8,
+      "reviews": 28,
+      "tags": ["Indian", "Spicy", "Creamy"],
+      "ingredients": [
+        { "ingredient": "Chicken", "amount": "500", "unit": "g" },
+        { "ingredient": "Yogurt", "amount": "200", "unit": "ml" },
+        { "ingredient": "Tomato sauce", "amount": "400", "unit": "ml" },
+        { "ingredient": "Cream", "amount": "200", "unit": "ml" }
+      ],
+      "instructions": "1. Marinate chicken in yogurt and spices\n2. Grill chicken until charred\n3. Make sauce with tomatoes and cream\n4. Simmer chicken in sauce\n5. Garnish with cilantro",
+      "isFavorited": true,
+      "likes": 256,
+      "dislikes": 8,
+      "comments": 45
+    },
+    {
+      "id": 3,
+      "name": "Caesar Salad",
+      "image": "https://images.unsplash.com/photo-1546793665-c74683f339c1?w=400&h=300&fit=crop",
+      "rank": 3,
+      "rating": 4.2,
+      "reviews": 8,
+      "tags": ["Salad", "Healthy", "Fresh"],
+      "ingredients": [
+        { "ingredient": "Romaine lettuce", "amount": "1", "unit": "head" },
+        { "ingredient": "Parmesan", "amount": "50", "unit": "g" },
+        { "ingredient": "Croutons", "amount": "100", "unit": "g" },
+        { "ingredient": "Caesar dressing", "amount": "100", "unit": "ml" }
+      ],
+      "instructions": "1. Wash and chop lettuce\n2. Make caesar dressing\n3. Toss lettuce with dressing\n4. Add croutons and parmesan\n5. Serve immediately",
+      "isFavorited": false,
+      "likes": 89,
+      "dislikes": 2,
+      "comments": 12
+    },
+    {
+      "id": 4,
+      "name": "Beef Tacos",
+      "image": "https://images.unsplash.com/photo-1565299585323-38d6b0865b47?w=400&h=300&fit=crop",
+      "rank": 4,
+      "rating": 4.6,
+      "reviews": 19,
+      "tags": ["Mexican", "Spicy", "Quick"],
+      "ingredients": [
+        { "ingredient": "Ground beef", "amount": "500", "unit": "g" },
+        { "ingredient": "Taco shells", "amount": "12", "unit": "piece" },
+        { "ingredient": "Tomatoes", "amount": "2", "unit": "piece" },
+        { "ingredient": "Onion", "amount": "1", "unit": "piece" },
+        { "ingredient": "Cheese", "amount": "200", "unit": "g" }
+      ],
+      "instructions": "1. Brown ground beef with taco seasoning\n2. Chop tomatoes and onion\n3. Warm taco shells\n4. Fill shells with beef mixture\n5. Top with vegetables and cheese",
+      "isFavorited": true,
+      "likes": 187,
+      "dislikes": 5,
+      "comments": 31
+    },
+    {
+      "id": 5,
+      "name": "Sushi Roll",
+      "image": "https://images.unsplash.com/photo-1579584425555-c3ce17fd4351?w=400&h=300&fit=crop",
+      "rank": 5,
+      "rating": 4.9,
+      "reviews": 42,
+      "tags": ["Japanese", "Seafood", "Healthy"],
+      "ingredients": [
+        { "ingredient": "Sushi rice", "amount": "300", "unit": "g" },
+        { "ingredient": "Nori sheets", "amount": "4", "unit": "piece" },
+        { "ingredient": "Salmon", "amount": "200", "unit": "g" },
+        { "ingredient": "Cucumber", "amount": "1", "unit": "piece" },
+        { "ingredient": "Avocado", "amount": "1", "unit": "piece" }
+      ],
+      "instructions": "1. Cook and season sushi rice\n2. Place nori on bamboo mat\n3. Spread rice evenly\n4. Add fish and vegetables\n5. Roll tightly and slice",
+      "isFavorited": false,
+      "likes": 342,
+      "dislikes": 12,
+      "comments": 67
+    },
+    {
+      "id": 6,
+      "name": "Chocolate Cake",
+      "image": "https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=400&h=300&fit=crop",
+      "rank": 4,
+      "rating": 4.7,
+      "reviews": 35,
+      "tags": ["Dessert", "Chocolate", "Baking"],
+      "ingredients": [
+        { "ingredient": "Flour", "amount": "200", "unit": "g" },
+        { "ingredient": "Cocoa powder", "amount": "50", "unit": "g" },
+        { "ingredient": "Sugar", "amount": "200", "unit": "g" },
+        { "ingredient": "Eggs", "amount": "3", "unit": "piece" },
+        { "ingredient": "Milk", "amount": "250", "unit": "ml" }
+      ],
+      "instructions": "1. Mix dry ingredients\n2. Beat eggs and sugar\n3. Combine wet and dry ingredients\n4. Bake at 180°C for 25 minutes\n5. Cool and frost",
+      "isFavorited": true,
+      "likes": 298,
+      "dislikes": 7,
+      "comments": 53
+    },
+    {
+      "id": 7,
+      "name": "Pad Thai",
+      "image": "https://images.unsplash.com/photo-1559314809-0d155014e29e?w=400&h=300&fit=crop",
+      "rank": 4,
+      "rating": 4.4,
+      "reviews": 15,
+      "tags": ["Thai", "Noodles", "Spicy"],
+      "ingredients": [
+        { "ingredient": "Rice noodles", "amount": "300", "unit": "g" },
+        { "ingredient": "Shrimp", "amount": "300", "unit": "g" },
+        { "ingredient": "Bean sprouts", "amount": "200", "unit": "g" },
+        { "ingredient": "Peanuts", "amount": "100", "unit": "g" },
+        { "ingredient": "Tamarind paste", "amount": "50", "unit": "ml" }
+      ],
+      "instructions": "1. Soak rice noodles\n2. Stir-fry shrimp\n3. Add noodles and sauce\n4. Toss with vegetables\n5. Garnish with peanuts",
+      "isFavorited": false,
+      "likes": 156,
+      "dislikes": 4,
+      "comments": 28
+    },
+    {
+      "id": 8,
+      "name": "Greek Salad",
+      "image": "https://images.unsplash.com/photo-1540420773420-3366772f4999?w=400&h=300&fit=crop",
+      "rank": 3,
+      "rating": 4.3,
+      "reviews": 11,
+      "tags": ["Greek", "Salad", "Healthy"],
+      "ingredients": [
+        { "ingredient": "Cucumber", "amount": "1", "unit": "piece" },
+        { "ingredient": "Tomatoes", "amount": "3", "unit": "piece" },
+        { "ingredient": "Feta cheese", "amount": "150", "unit": "g" },
+        { "ingredient": "Olives", "amount": "100", "unit": "g" },
+        { "ingredient": "Red onion", "amount": "1", "unit": "piece" }
+      ],
+      "instructions": "1. Chop cucumber and tomatoes\n2. Slice red onion thinly\n3. Combine all vegetables\n4. Add feta and olives\n5. Dress with olive oil and oregano",
+      "isFavorited": false,
+      "likes": 134,
+      "dislikes": 3,
+      "comments": 19
+    },
+    {
+      "id": 9,
+      "name": "Beef Burger",
+      "image": "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=400&h=300&fit=crop",
+      "rank": 4,
+      "rating": 4.5,
+      "reviews": 26,
+      "tags": ["American", "Beef", "Quick"],
+      "ingredients": [
+        { "ingredient": "Ground beef", "amount": "400", "unit": "g" },
+        { "ingredient": "Burger buns", "amount": "4", "unit": "piece" },
+        { "ingredient": "Lettuce", "amount": "1", "unit": "head" },
+        { "ingredient": "Tomato", "amount": "1", "unit": "piece" },
+        { "ingredient": "Cheese", "amount": "4", "unit": "slices" }
+      ],
+      "instructions": "1. Form beef into patties\n2. Season with salt and pepper\n3. Grill for 4-5 minutes each side\n4. Add cheese to melt\n5. Assemble with vegetables",
+      "isFavorited": true,
+      "likes": 223,
+      "dislikes": 6,
+      "comments": 41
+    },
+    {
+      "id": 10,
+      "name": "Pizza Margherita",
+      "image": "https://images.unsplash.com/photo-1604382354936-07c5d9983bd3?w=400&h=300&fit=crop",
+      "rank": 5,
+      "rating": 4.8,
+      "reviews": 38,
+      "tags": ["Italian", "Pizza", "Vegetarian"],
+      "ingredients": [
+        { "ingredient": "Pizza dough", "amount": "1", "unit": "piece" },
+        { "ingredient": "Tomato sauce", "amount": "200", "unit": "ml" },
+        { "ingredient": "Mozzarella", "amount": "200", "unit": "g" },
+        { "ingredient": "Basil", "amount": "1", "unit": "bunch" },
+        { "ingredient": "Olive oil", "amount": "30", "unit": "ml" }
+      ],
+      "instructions": "1. Stretch pizza dough\n2. Spread tomato sauce\n3. Add mozzarella cheese\n4. Bake at 250°C for 12 minutes\n5. Garnish with fresh basil",
+      "isFavorited": false,
+      "likes": 312,
+      "dislikes": 9,
+      "comments": 58
+    },
+    {
+      "id": 11,
+      "name": "Chicken Curry",
+      "image": "https://images.unsplash.com/photo-1455619452474-d2be8b1e70cd?w=400&h=300&fit=crop",
+      "rank": 4,
+      "rating": 4.6,
+      "reviews": 22,
+      "tags": ["Indian", "Spicy", "Creamy"],
+      "ingredients": [
+        { "ingredient": "Chicken", "amount": "600", "unit": "g" },
+        { "ingredient": "Coconut milk", "amount": "400", "unit": "ml" },
+        { "ingredient": "Curry powder", "amount": "30", "unit": "g" },
+        { "ingredient": "Onion", "amount": "2", "unit": "piece" },
+        { "ingredient": "Garlic", "amount": "4", "unit": "cloves" }
+      ],
+      "instructions": "1. Sauté onions and garlic\n2. Add chicken and brown\n3. Stir in curry powder\n4. Pour in coconut milk\n5. Simmer until thickened",
+      "isFavorited": true,
+      "likes": 198,
+      "dislikes": 5,
+      "comments": 35
+    },
+    {
+      "id": 12,
+      "name": "French Toast",
+      "image": "https://images.unsplash.com/photo-1484723091739-30a097e8f929?w=400&h=300&fit=crop",
+      "rank": 3,
+      "rating": 4.1,
+      "reviews": 7,
+      "tags": ["Breakfast", "Sweet", "Quick"],
+      "ingredients": [
+        { "ingredient": "Bread", "amount": "8", "unit": "slices" },
+        { "ingredient": "Eggs", "amount": "4", "unit": "piece" },
+        { "ingredient": "Milk", "amount": "200", "unit": "ml" },
+        { "ingredient": "Cinnamon", "amount": "5", "unit": "g" },
+        { "ingredient": "Maple syrup", "amount": "100", "unit": "ml" }
+      ],
+      "instructions": "1. Beat eggs with milk and cinnamon\n2. Dip bread slices in mixture\n3. Cook on griddle until golden\n4. Flip and cook other side\n5. Serve with maple syrup",
+      "isFavorited": false,
+      "likes": 145,
+      "dislikes": 2,
+      "comments": 22
+    }
+  ]
+} 
