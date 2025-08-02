@@ -41,7 +41,7 @@
       <p data-v-inspector="src/components/NavigationBar.vue:17:13">Explore</p>
     </RouterLink>
     <RouterLink
-      to="/saved"
+      to="/generate"
       class="nav-link"
       data-v-inspector="src/components/NavigationBar.vue:19:9"
     >
@@ -49,7 +49,7 @@
         icon="fa-bookmark"
         data-v-inspector="src/components/NavigationBar.vue:20:13"
       />
-      <p data-v-inspector="src/components/NavigationBar.vue:21:13">Saved</p>
+      <p data-v-inspector="src/components/NavigationBar.vue:21:13">Generate</p>
     </RouterLink>
   </nav>
 </template>
