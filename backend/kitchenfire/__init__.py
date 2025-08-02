@@ -99,7 +99,7 @@ def get_trending_recipe_by_offset(offset):
 # Takes smth like 123,1234,345
 # returns (123),(1234),(345)
 def transform_ids(ids: str) -> str:
-    return ','.join(map(lambda i: f"({int(i)})", ids.replace(" ", "").split(",")))
+    return ','.join(map(lambda i: f"({int(i)})", ids.replace(" ", ",").split(",")))
 
 
 @app.get("/api/v1/recipe/filter/ingredient/<without>")
