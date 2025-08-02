@@ -19,7 +19,7 @@ FROM Tags NATURAL JOIN (
 HasTag NATURAL JOIN (
 SELECT RecipeId
 FROM Recipes
-WHERE RecipeName = ?
+WHERE RecipeId = ?
 )
 ) AS AssociatedTags;
 """, (recipe_id,)
@@ -36,13 +36,14 @@ FROM Ingredients NATURAL JOIN (
 Requires NATURAL JOIN (
 SELECT RecipeId
 FROM Recipes
-WHERE RecipeName = ?
+WHERE RecipeId = ?
 )
 ) AS RequiredIngredients;
 """, (recipe_id,)
 ).fetchall()
-    print(ingredients)
-    return [Ingredient(*t) for t in ingredients] # wip
+
+    # TODO: Ask ryan about ingredient types in the database......
+    return [Ingredient(t[0], t[1], "unknown", t[2], t[3]) for t in ingredients] # wip
 
 
 def create_post_by_row(post_id: int) -> Post:
