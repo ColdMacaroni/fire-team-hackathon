@@ -18,22 +18,33 @@ const props = defineProps({
 
 <style scoped>
 .recipe-instructions {
-  margin-bottom: 2rem;
+  display: flex;
+flex-direction: column;
+align-items: flex-start;
+gap: 10px;
+align-self: stretch;
 }
 
 .recipe-instructions h3 {
-  color: #4CAF50;
-  margin-bottom: 1rem;
-  font-size: 1.2rem;
+  color: #FFF;
+font-family: Merriweather;
+font-size: 24px;
+font-style: normal;
+font-weight: 400;
+line-height: 125.725%; /* 30.174px */
+height: fit-content;
+margin: 0;
+padding: 0;
 }
 
 .instructions-text {
-  margin-right: 2rem;
+  color: #FFF;
+  font-family: "Merriweather Sans";
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 125.725%; /* 25.145px */
+  text-align: justify;
 }
 
-.recipe-instructions p {
-  color: #e0e0e0;
-  line-height: 1.6;
-  white-space: pre-line;
-}
 </style> 

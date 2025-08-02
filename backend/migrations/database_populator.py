@@ -5,6 +5,7 @@ from typing import Dict
 from typing import Set
 
 from kitchenfire.Ingredient import Ingredient
+from kitchenfire.post import Post
 from kitchenfire.recipe import Recipe
 
 if __name__ == "__main__":
@@ -12,7 +13,7 @@ if __name__ == "__main__":
     database = sqlite3.connect("../data/fire.db")
     cursor = database.cursor()
 
-    with open("1-schema.sql") as setup:
+    with open("schema.sql") as setup:
         cursor.executescript(setup.read())
         database.commit()
 
@@ -76,6 +77,31 @@ if __name__ == "__main__":
                 recipes[name] = recipe
             rowNumber += 1
 
+    trending: Dict[str, int] = {}
+
+    with open("../static/TrendingInfo.csv") as raw_trending_info:
+        reader = csv.reader(raw_trending_info)
+        rowNumber = 0
+
+        for row in reader:
+            if rowNumber != 0:
+                trending[row[0]] = int(row[1])
+
+            rowNumber += 1
+
+    posts: Dict[str, Post] = {}
+
+    with open("../static/PostInfo.csv") as raw_post_info:
+        reader = csv.reader(raw_post_info)
+        rowNumber = 0
+
+        for row in reader:
+            if rowNumber != 0:
+                recipe_name, no_likes, rating, reviews = row
+                posts[recipe_name] = Post(-1, int(no_likes), float(rating), int(reviews))
+
+            rowNumber += 1
+
     for tag in tags:
         cursor.execute(f"""
 INSERT INTO Tags (TagName)
@@ -114,7 +140,19 @@ VALUES ("{recipe.name}", "{recipe.description}", "{recipe.instructions}", {recip
 
         database.commit()
 
-    # TODO: Populate Trending table
+    for recipe, recent_likes in trending.items():
+        recipe_id = cursor.execute(f"""
+SELECT RecipeId
+FROM Recipes
+WHERE RecipeName = "{recipe}";
+""").fetchall()[0][0]
+
+        cursor.execute(f"""
+INSERT INTO Trending (RecipeId, NumberOfRecentLikes)
+VALUES ({recipe_id}, {recent_likes});
+""")
+
+        database.commit()
 
     for r, t in recipe_tags.items():
         recipe_id = cursor.execute(f"""
@@ -163,4 +201,16 @@ VALUES ({recipe_id}, {ingredient_id}, {ingredient.amount}, "{ingredient.amount_u
 
             database.commit()
 
-    # TODO: Populate Post table
+    for recipe, post in posts.items():
+        recipe_id = cursor.execute(f"""
+SELECT RecipeId
+FROM Recipes
+WHERE RecipeName = "{recipe}";
+""").fetchall()[0][0]
+
+        cursor.execute(f"""
+INSERT INTO Posts (RecipeId, NumberOfLikes, Rating, Reviews)
+VALUES ({recipe_id}, {post.number_of_likes}, {post.rating}, {post.reviews});
+""")
+
+        database.commit()

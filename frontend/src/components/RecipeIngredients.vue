@@ -25,24 +25,41 @@ const props = defineProps({
 
 <style scoped>
 .recipe-ingredients {
-  margin-bottom: 2rem;
+  display: flex;
+flex-direction: column;
+align-items: flex-start;
+gap: 10px;
+align-self: stretch;
 }
 
 .recipe-ingredients h3 {
-  color: #4CAF50;
-  margin-bottom: 1rem;
-  font-size: 1.2rem;
+  color: #FFF;
+font-family: Merriweather;
+font-size: 24px;
+font-style: normal;
+font-weight: 400;
+line-height: 125.725%; /* 30.174px */
+height: fit-content;
+margin: 0;
+padding: 0;
 }
 
 .recipe-ingredients ul {
-  list-style: none;
-  padding: 0;
-  margin: 0;
+  display: flex;
+  padding-left: 20px;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 10px;
+  align-self: stretch;
 }
 
 .recipe-ingredients li {
-  color: #e0e0e0;
-  padding: 0.25rem 0;
-  font-size: 0.95rem;
+  color: #FFF;
+  font-family: "Merriweather Sans";
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 125.725%; /* 25.145px */
 }
 </style> 
