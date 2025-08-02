@@ -1,0 +1,5 @@
+:8080
+
+root frontend/dist
+reverse_proxy /api/* 127.0.0.1:5123
+file_server
