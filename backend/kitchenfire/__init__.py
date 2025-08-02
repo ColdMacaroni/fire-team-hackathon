@@ -81,22 +81,26 @@ def get_recipe_by_id(recipe_id):
     )
 
 
+@app.get("/api/v1/recipe/trending/<offset>/<count>")
 @app.get("/api/v1/recipe/trending/<offset>")
-def get_trending_recipe_by_offset(offset):
-
+def get_trending_recipe_by_offset(offset, count=1):
+    if offset == "-":
+        offset = 0
     with sqlite3.connect("data/fire.db") as db:
         c = db.cursor()
-        recipe_id = c.execute(
+        recipe_ids = c.execute(
             """
             SELECT RecipeId
             FROM Trending
             ORDER BY NumberOfRecentLikes DESC
-            LIMIT 1 OFFSET ?
+            LIMIT ? OFFSET ?
             """,
-            (offset,)).fetchone()[0]
+            (int(count), int(offset))).fetchall()
+
+    json = [create_post_by_row(int(*recipe_id)).to_json() for recipe_id in recipe_ids]
 
     return Response(
-            create_post_by_row(int(recipe_id)).to_json(),
+            f"[{','.join(json)}]",
             content_type="application/json")
 
 
