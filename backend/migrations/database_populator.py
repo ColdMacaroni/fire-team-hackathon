@@ -117,14 +117,14 @@ VALUES ("{recipe.name}", "{recipe.description}", "{recipe.instructions}", {recip
     # TODO: Populate Trending table
 
     for r, t in recipe_tags.items():
-        recipe_id: int = cursor.execute(f"""
+        recipe_id = cursor.execute(f"""
 SELECT RecipeId
 FROM Recipes
 WHERE RecipeName = "{r}";
 """).fetchall()[0][0]
 
         for tag in t:
-            tag_id: int = cursor.execute(f"""
+            tag_id = cursor.execute(f"""
 SELECT TagId
 FROM Tags
 WHERE TagName = "{tag}";
@@ -138,14 +138,14 @@ VALUES ("{recipe_id}", "{tag_id}");
             database.commit()
 
     for r, i in recipe_ingredients.items():
-        recipe_id: int = cursor.execute(f"""
+        recipe_id = cursor.execute(f"""
 SELECT RecipeId
 FROM Recipes
 WHERE RecipeName = "{r}";
 """).fetchall()[0][0]
 
         for ingredient in i:
-            ingredient_id: int = cursor.execute(f"""
+            ingredient_id = cursor.execute(f"""
 SELECT IngredientId
 FROM Ingredients
 WHERE IngredientName = "{ingredient.name}";
