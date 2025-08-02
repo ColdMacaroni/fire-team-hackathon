@@ -61,7 +61,6 @@
   width: 100%;
   display: flex;
   flex-direction: column;
-  background: #1a1a1a;
 }
 
 .recipe-content {

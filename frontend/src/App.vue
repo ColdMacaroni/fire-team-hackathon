@@ -35,7 +35,7 @@ const { isDesktop, isMobile } = useBreakpoint()
   height: 100vh;
   width: 100vw;
   overflow: hidden;
-  background: #1a1a1a;
+  background: #212020;
   color: #ffffff;
 }
 
@@ -61,7 +61,7 @@ const { isDesktop, isMobile } = useBreakpoint()
   overflow-y: auto;
   overflow-x: hidden;
   min-height: 0;
-  background: #1a1a1a;
+  background: #2d2d2d;
 }
 
 .desktop-warning {

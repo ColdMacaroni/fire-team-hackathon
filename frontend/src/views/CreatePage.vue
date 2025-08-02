@@ -247,7 +247,6 @@ const resetForm = () => {
   width: 100vw;
   display: flex;
   flex-direction: column;
-  background: #1a1a1a;
   overflow-x: hidden;
 }
 
