@@ -82,10 +82,9 @@
   .recipe-header {
     display: flex;
     justify-content: space-between;
-    align-items: center;
     width: 100%; /* Use full width of parent */
     max-width: 330px; /* But cap at 330px */
-    margin-top: 12px;
+    margin-top: 5px;
   }
 
   .recipe-name {
