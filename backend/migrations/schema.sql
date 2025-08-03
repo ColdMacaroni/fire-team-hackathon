@@ -74,8 +74,8 @@ CREATE TABLE IF NOT EXISTS Reviews (
     ReviewId INTEGER,
     PostId INTEGER NOT NULL,
     Author TEXT DEFAULT "Anonymous",
-    Title TEXT NOT NULL,
     Body TEXT NOT NULL,
+    NumberOfLikes INTEGER NOT NULL CHECK (NumberOfLikes >= 0) DEFAULT 0,
     PRIMARY KEY (ReviewId),
     FOREIGN KEY (PostId) REFERENCES Posts (PostId)
         ON DELETE CASCADE ON UPDATE CASCADE
