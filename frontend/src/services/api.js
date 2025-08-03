@@ -88,6 +88,14 @@ class ApiService {
     return this.request(`/recipe/by-id/${idsString}`)
   }
 
+  // Save a new recipe
+  async saveRecipe(recipeData) {
+    return this.request('/recipe/save', {
+      method: 'PUT',
+      body: JSON.stringify(recipeData),
+    })
+  }
+
   // Get all available recipes (you might want to add this endpoint to your Flask backend)
   async getAllRecipes() {
     // This would require adding a new endpoint to your Flask backend

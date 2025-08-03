@@ -12,16 +12,68 @@ export function useRecipes() {
       loading.value = true
       error.value = null
 
-      // Load recipes from Flask backend using trending endpoint
-      const backendRecipes = await apiService.getTrendingRecipes(0, 12) // Get first 12 trending recipes
-      recipes.value = backendRecipes || []
+      // First, get recipe IDs from ingredient filter endpoint
+      const recipeIdsResponse = await apiService.getRecipesByIngredients('-') // Get recipes without any ingredient filter
+      console.log('Recipe IDs response:', recipeIdsResponse)
+
+      if (recipeIdsResponse && Array.isArray(recipeIdsResponse)) {
+        // Extract all recipe IDs and convert to comma-separated string
+        const recipeIds = recipeIdsResponse.map(recipe => recipe.id)
+        const recipeIdsString = recipeIds.join(',')
+        console.log('Recipe IDs string:', recipeIdsString)
+
+        if (recipeIdsString) {
+          // Get full recipe details using the comma-separated string of IDs
+          const fullRecipes = await apiService.getRecipesByIds(recipeIdsString)
+          console.log('Full recipes response:', fullRecipes)
+          recipes.value = fullRecipes || []
+          return fullRecipes || []
+        } else {
+          recipes.value = []
+          return []
+        }
+      } else {
+        recipes.value = []
+        return []
+      }
     } catch (err) {
       error.value = 'Failed to load recipes from backend'
       console.error('Error loading recipes from backend:', err)
       // Set empty array instead of falling back to JSON
       recipes.value = []
+      return []
     } finally {
       loading.value = false
+    }
+  }
+
+  // Load all recipes and return the data (for use in other components)
+  const getAllRecipes = async () => {
+    try {
+      // First, get recipe IDs from ingredient filter endpoint
+      const recipeIdsResponse = await apiService.getRecipesByIngredients('-') // Get recipes without any ingredient filter
+      console.log('Recipe IDs response:', recipeIdsResponse)
+
+      if (recipeIdsResponse && Array.isArray(recipeIdsResponse)) {
+        // Extract all recipe IDs and convert to comma-separated string
+        const recipeIds = recipeIdsResponse.map(recipe => recipe.id)
+        const recipeIdsString = recipeIds.join(',')
+        console.log('Recipe IDs string:', recipeIdsString)
+
+        if (recipeIdsString) {
+          // Get full recipe details using the comma-separated string of IDs
+          const fullRecipes = await apiService.getRecipesByIds(recipeIdsString)
+          console.log('Full recipes response:', fullRecipes)
+          return fullRecipes || []
+        } else {
+          return []
+        }
+      } else {
+        return []
+      }
+    } catch (err) {
+      console.error('Error loading recipes from backend:', err)
+      return []
     }
   }
 
@@ -69,11 +121,26 @@ export function useRecipes() {
       // Get trending recipes from backend
       const trendingRecipes = await apiService.getTrendingRecipes(0, limit)
       recipes.value = trendingRecipes || []
+      return trendingRecipes || []
     } catch (err) {
       error.value = 'Failed to load trending recipes'
       console.error('Error loading trending recipes:', err)
+      return []
     } finally {
       loading.value = false
+    }
+  }
+
+  // Get trending recipes and return the data (for use in other components)
+  const getTrendingRecipes = async (limit = 10) => {
+    try {
+      // Get trending recipes from backend
+      const trendingRecipes = await apiService.getTrendingRecipes(0, limit)
+      console.log('Trending recipes response:', trendingRecipes)
+      return trendingRecipes || []
+    } catch (err) {
+      console.error('Error loading trending recipes:', err)
+      return []
     }
   }
 
@@ -125,7 +192,7 @@ export function useRecipes() {
       loading.value = true
       error.value = null
 
-      // Format the recipe data
+      // Format the recipe data (without ID - backend will generate it)
       const formattedRecipe = {
         name: recipeData.name,
         image: recipeData.image || '',
@@ -143,21 +210,42 @@ export function useRecipes() {
         difficulty: parseInt(recipeData.difficulty) || 1,
       }
 
-      // Get existing recipes
-      const existingRecipes = JSON.parse(
-        localStorage.getItem('createdRecipes') || '[]'
-      )
+      // Send recipe to backend and get the response with generated ID
+      const backendResponse = await apiService.saveRecipe(formattedRecipe)
+      console.log('Backend response:', backendResponse)
 
-      // Add new recipe
-      const updatedRecipes = [...existingRecipes, formattedRecipe]
+      // Extract the ID from the backend response
+      if (backendResponse && backendResponse.id) {
+        // Add the backend-generated ID to the recipe
+        const recipeWithId = {
+          ...formattedRecipe,
+          id: backendResponse.id,
+          rating: 0,
+          reviews: 0,
+          isFavorited: false,
+          likes: 0,
+          dislikes: 0,
+          comments: 0,
+        }
 
-      // Save to localStorage
-      localStorage.setItem('createdRecipes', JSON.stringify(updatedRecipes))
+        // Get existing recipes from localStorage
+        const existingRecipes = JSON.parse(
+          localStorage.getItem('createdRecipes') || '[]'
+        )
 
-      // Update local recipes array
-      recipes.value = updatedRecipes
+        // Add new recipe with backend-generated ID
+        const updatedRecipes = [...existingRecipes, recipeWithId]
 
-      return formattedRecipe
+        // Save to localStorage
+        localStorage.setItem('createdRecipes', JSON.stringify(updatedRecipes))
+
+        // Update local recipes array
+        recipes.value = updatedRecipes
+
+        return recipeWithId
+      } else {
+        throw new Error('Backend did not return a valid ID')
+      }
     } catch (err) {
       error.value = 'Failed to save recipe'
       console.error('Error saving recipe:', err)
@@ -260,8 +348,10 @@ export function useRecipes() {
 
     // Methods
     loadAllRecipes,
+    getAllRecipes,
     loadRecipeById,
     loadTrendingRecipes,
+    getTrendingRecipes,
     loadFavoritedRecipes,
     loadCreatedRecipes,
     saveRecipe,

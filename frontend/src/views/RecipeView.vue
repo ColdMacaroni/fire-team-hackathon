@@ -116,19 +116,19 @@
   }
 
   const viewComments = () => {
-    alert("Comments are not supported at the moment");
+    alert('Comments are not supported at the moment')
   }
 
   const doDislike = () => {
     isLiked.value = !isLiked.value
 
     if (isLiked.value) {
-      fetch( "/api/v1/post/dislike/" + recipeId.value,  {
-          method: "POST",
+      fetch('/api/v1/post/dislike/' + recipeId.value, {
+        method: 'POST',
       })
     } else {
-      fetch( "/api/v1/post/like/" + recipeId.value,  {
-          method: "POST",
+      fetch('/api/v1/post/like/' + recipeId.value, {
+        method: 'POST',
       })
     }
   }
@@ -137,12 +137,12 @@
     isLiked.value = !isLiked.value
 
     if (isLiked.value) {
-      fetch( "/api/v1/post/like/" + recipeId.value,  {
-          method: "POST",
+      fetch('/api/v1/post/like/' + recipeId.value, {
+        method: 'POST',
       })
     } else {
-      fetch( "/api/v1/post/dislike/" + recipeId.value,  {
-          method: "POST",
+      fetch('/api/v1/post/dislike/' + recipeId.value, {
+        method: 'POST',
       })
     }
   }
@@ -240,14 +240,6 @@
           <h1 :style="{ fontSize: recipeNameFontSize + 'px' }">
             {{ recipe.name }}
           </h1>
-          <button
-            class="like-button"
-            :class="{ liked: isLiked }"
-            @click="toggleLike"
-          >
-            <p class="like-icon">🔥</p>
-            <p class="like-count">{{ formattedLikes }}</p>
-          </button>
         </div>
         <div class="recipe-rating">
           <div class="stars-container">
@@ -267,13 +259,6 @@
             :class="{ liked: isLiked }"
           >
             🔥
-          </button>
-          <button
-            @click="viewComments"
-            class="like-button"
-            :class="{ liked: isLiked }"
-          >
-            🗨️
           </button>
           <button
             @click="doDislike"
@@ -366,8 +351,8 @@
   }
 
   .like-button {
-    width: 80px;
-    height: 80px;
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
     border: none;
     background-color: #666;
@@ -376,7 +361,6 @@
     cursor: pointer;
     transition: all 0.3s ease;
     display: flex;
-    flex-direction: column;
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
@@ -390,7 +374,7 @@
     display: flex;
     justify-content: space-between;
     align-items: flex-start; /* Changed from center to allow for multi-line text */
-    min-height: 80px; /* Increased height for better text wrapping */
+    min-height: 40px; /* Increased height for better text wrapping */
     gap: 16px; /* Add gap between title and like button */
   }
 

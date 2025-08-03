@@ -5,7 +5,16 @@
   import { useRecipes } from '../composables/useRecipes'
   import RecipeCard from '../components/RecipeCard.vue'
 
-  const { recipes, loading, error, loadAllRecipes } = useRecipes()
+  const { recipes, loading, error, getTrendingRecipes, getAllRecipes } =
+    useRecipes()
+
+  // Separate state for trending recipes (page-swiper) and all recipes (grid)
+  const trendingRecipes = ref([])
+  const allRecipes = ref([])
+  const trendingLoading = ref(false)
+  const allRecipesLoading = ref(false)
+  const trendingError = ref(null)
+  const allRecipesError = ref(null)
 
   const currentIndex = ref(0)
   const isDragging = ref(false)
@@ -13,28 +22,65 @@
   const currentX = ref(0)
   const translateX = ref(0)
 
+  // Load trending recipes for page-swiper
+  const loadTrendingRecipesForSwiper = async () => {
+    try {
+      trendingLoading.value = true
+      trendingError.value = null
+      const result = await getTrendingRecipes(6)
+      console.log('Trending recipes result:', result)
+      trendingRecipes.value = result || []
+      console.log('Trending recipes value:', trendingRecipes.value)
+    } catch (err) {
+      trendingError.value = 'Failed to load trending recipes'
+      console.error('Error loading trending recipes:', err)
+    } finally {
+      trendingLoading.value = false
+    }
+  }
+
+  // Load all recipes for recipe grid
+  const loadAllRecipesForGrid = async () => {
+    try {
+      allRecipesLoading.value = true
+      allRecipesError.value = null
+      const result = await getAllRecipes()
+      console.log('GetAllRecipes result:', result)
+      allRecipes.value = result || []
+      console.log('All recipes value:', allRecipes.value)
+    } catch (err) {
+      allRecipesError.value = 'Failed to load recipes'
+      console.error('Error loading all recipes:', err)
+    } finally {
+      allRecipesLoading.value = false
+    }
+  }
+
   onMounted(() => {
-    loadAllRecipes()
+    loadTrendingRecipesForSwiper()
+    loadAllRecipesForGrid()
   })
 
   // Computed properties for swipe logic
   const currentRecipe = computed(() => {
-    return recipes.value[currentIndex.value] || null
+    return trendingRecipes.value[currentIndex.value] || null
   })
 
   const prevRecipe = computed(() => {
     const index = currentIndex.value - 1
-    return index >= 0 ? recipes.value[index] : null
+    return index >= 0 ? trendingRecipes.value[index] : null
   })
 
   const nextRecipe = computed(() => {
     const index = currentIndex.value + 1
-    return index < recipes.value.length ? recipes.value[index] : null
+    return index < trendingRecipes.value.length
+      ? trendingRecipes.value[index]
+      : null
   })
 
   const canSwipeLeft = computed(() => currentIndex.value > 0)
   const canSwipeRight = computed(
-    () => currentIndex.value < recipes.value.length - 1
+    () => currentIndex.value < trendingRecipes.value.length - 1
   )
 
   // Touch event handlers
@@ -86,7 +132,8 @@
   }
 
   onMounted(() => {
-    loadAllRecipes()
+    loadTrendingRecipesForSwiper()
+    loadAllRecipesForGrid()
     // Add keyboard listener for testing
     window.addEventListener('keydown', handleKeyDown)
   })
@@ -97,20 +144,20 @@
   <div class="explore-container">
     <div class="page-swiper">
       <!-- Loading State -->
-      <div v-if="loading" class="loading-container">
+      <div v-if="trendingLoading" class="loading-container">
         <div class="loading-spinner"></div>
-        <p>Loading recipes...</p>
+        <p>Loading trending recipes...</p>
       </div>
 
       <!-- Error State -->
-      <div v-else-if="error" class="error-container">
+      <div v-else-if="trendingError" class="error-container">
         <h2>Oops!</h2>
-        <p>{{ error }}</p>
+        <p>{{ trendingError }}</p>
       </div>
 
       <!-- Swipe Container -->
       <div
-        v-else-if="recipes.length > 0"
+        v-else-if="trendingRecipes.length > 0"
         class="swipe-container"
         @touchstart="handleTouchStart"
         @touchmove="handleTouchMove"
@@ -151,14 +198,14 @@
     </div>
 
     <div class="recipe-grid-section">
-      <div v-if="loading" class="grid-loading">
+      <div v-if="allRecipesLoading" class="grid-loading">
         <div class="loading-spinner"></div>
         <p>Loading recipes...</p>
       </div>
 
-      <div v-else-if="recipes.length > 0" class="recipe-grid">
+      <div v-else-if="allRecipes.length > 0" class="recipe-grid">
         <RecipeCard
-          v-for="recipe in recipes"
+          v-for="recipe in allRecipes"
           :key="recipe.id"
           :recipe="recipe"
           class="grid-recipe-card"
