@@ -445,7 +445,7 @@ def dislike_post(post_id):
 
         c.execute(f"""
                   UPDATE Trending
-                  SET NumberOfRecentLikes = NumberOfRecentLikes - 1
+                  SET NumberOfRecentLikes = NumberOfRecentLikes - 0.2
                   WHERE RecipeId = {post_id} AND NumberOfRecentLikes > 0;
                   """)
 
