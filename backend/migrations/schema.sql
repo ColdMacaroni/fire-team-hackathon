@@ -69,3 +69,15 @@ CREATE TABLE IF NOT EXISTS Trending (
 	FOREIGN KEY (RecipeId) REFERENCES Posts (RecipeId)
 		ON DELETE CASCADE ON UPDATE CASCADE
 );
+
+CREATE TABLE IF NOT EXISTS Comments (
+    CommentId INTEGER,
+    PostId INTEGER NOT NULL,
+    Author TEXT DEFAULT "Anonymous",
+    Body TEXT NOT NULL,
+    NumberOfLikes INTEGER NOT NULL CHECK (NumberOfLikes >= 0) DEFAULT 0,
+    Rating INTEGER CHECK (Rating >= 0 AND Rating <= 5),
+    PRIMARY KEY (CommentId),
+    FOREIGN KEY (PostId) REFERENCES Posts (PostId)
+        ON DELETE CASCADE ON UPDATE CASCADE
+);

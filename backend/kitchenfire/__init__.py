@@ -14,6 +14,8 @@ app = Flask(__name__)
 DB_URL = "data/fire.db"
 
 
+
+
 def tags_by_recipe_id(recipe_id: int) -> list[Tag]:
     with sqlite3.connect(DB_URL) as db:
         c = db.cursor()
@@ -157,7 +159,7 @@ VALUES (?, ?, ?, ?, ?, ?);
             ),
         )
 
-        db.commit();
+        db.commit()
 
         recipe_id = c.execute("""
                   SELECT RecipeId FROM Recipes
@@ -381,7 +383,7 @@ def get_all_ingredients():
 
 
 @app.get("/api/v1/ingredient/by-id/<ingredient_id>")
-def get_tag_by_id2(ingredient_id):
+def get_ingredient_by_id(ingredient_id):
     ids = transform_ids(ingredient_id)
     with sqlite3.connect(DB_URL) as db:
         c = db.cursor()
@@ -402,6 +404,41 @@ def get_tag_by_id2(ingredient_id):
 
     return Response(json.dumps(ingredients), content_type="application/json")
 
+
+@app.get("/api/v1/post/<post_id>/comment/all")
+def get_all_comments(post_id):
+    comments = []
+    with sqlite3.connect(DB_URL) as db:
+        c = db.cursor()
+        c.execute(f"""
+                  SELECT Author, Body, NumberOfLikes, Rating
+                  FROM Comments
+                  WHERE PostId = {post_id};
+                  """)
+        for author, body, number_of_likes, rating in c.fetchall():
+            comments.append({"author": author, "body": body, "likes": number_of_likes, "rating": rating})
+
+    return Response(json.dumps(comments), content_type="application/json")
+
+
+@app.get("/api/v1/post/<post_id>/comment/by-id/<comment_id>")
+def get_comment_by_id(post_id, comment_id):
+    ids = transform_ids(comment_id)
+    with sqlite3.connect(DB_URL) as db:
+        c = db.cursor()
+        c.execute(f"""
+                  WITH GetIds(CommentId)
+                  AS (VALUES {ids})
+                  SELECT Author, Body, NumberOfLikes, Rating
+                  FROM Comments
+                  WHERE CommentId IN GetIds
+                  AND PostId = {post_id};
+                  """)
+
+        comment = [{"author": author, "body": body, "likes": number_of_likes, "rating": rating} for (author, body, number_of_likes, rating) in c.fetchall()]
+    return Response(json.dumps(comment), content_type="application/json")
+
+
 @app.put("/api/v1/recipe/save")
 def save_recipe():
     # Assumes it's in the json post form
@@ -413,9 +450,40 @@ def save_recipe():
         return Response(status=409)
 
 
+@app.post("/api/v1/post/<post_id>/create_comment")
+def create_comment(post_id):
+    comment = request.json
+    with sqlite3.connect(DB_URL) as db:
+        c = db.cursor()
+        c.execute(f"""
+                  INSERT INTO Comments (PostId, Author, Body, Rating)
+                  VALUES ({post_id, comment['author'], comment['body'], comment['rating']});
+                  """)
+        db.commit()
+    update_rating_for_post(post_id)
+    return Response(status=201)
+
+
+def update_rating_for_post(post_id):
+    with sqlite3.connect(DB_URL) as db:
+        c = db.cursor()
+        ratings = c.execute(f"""
+                            SELECT Rating
+                            FROM Comments
+                            WHERE PostId = {post_id};
+                            """).fetchall()
+        overall_rating = sum(ratings) / len(ratings)
+        c.execute(f"""
+                  INSERT INTO Posts (Rating)
+                  VALUES ({overall_rating})
+                  WHERE PostId = {post_id};
+                  """)
+        db.commit()
+
+
 @app.post("/api/v1/post/like/<post_id>")
 def like_post(post_id):
-    with sqlite3.connect("data/fire.db") as db:
+    with sqlite3.connect(DB_URL) as db:
         c = db.cursor()
         c.execute(f"""
                   UPDATE Posts
@@ -432,9 +500,10 @@ def like_post(post_id):
         db.commit()
     return Response(status=201)
 
+
 @app.post("/api/v1/post/dislike/<post_id>")
 def dislike_post(post_id):
-    with sqlite3.connect("data/fire.db") as db:
+    with sqlite3.connect(DB_URL) as db:
         c = db.cursor()
         c.execute(f"""
                   UPDATE Posts
@@ -444,9 +513,37 @@ def dislike_post(post_id):
 
         c.execute(f"""
                   UPDATE Trending
-                  SET NumberOfRecentLikes = NumberOfRecentLikes - 1
+                  SET NumberOfRecentLikes = NumberOfRecentLikes - 0.2
                   WHERE RecipeId = {post_id} AND NumberOfRecentLikes > 0;
                   """)
 
+        db.commit()
+    return Response(status=201)
+
+
+@app.post("/api/v1/post/<post_id>/<comment_id>/like")
+def like_comment(post_id, comment_id):
+    with sqlite3.connect(DB_URL) as db:
+        c = db.cursor()
+        c.execute(f"""
+                  UPDATE Comments
+                  SET NumberOfLikes = NumberOfLikes + 1
+                  WHERE CommentId = {comment_id} AND PostId = {post_id};
+                  """)
+        db.commit()
+    return Response(status=201)
+
+
+@app.post("/api/v1/post/<post_id>/<comment_id>/dislike")
+def dislike_comment(post_id, comment_id):
+    with sqlite3.connect(DB_URL) as db:
+        c = db.cursor()
+        c.execute(f"""
+                  UPDATE Comments
+                  SET NumberOfLikes = NumberOfLikes - 1
+                  WHERE CommentId = {comment_id}
+                  AND PostId = {post_id}
+                  AND NumberOfLikes > 0;
+                  """)
         db.commit()
     return Response(status=201)
