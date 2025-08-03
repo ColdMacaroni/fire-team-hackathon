@@ -223,3 +223,42 @@ def get_tag_by_id2(ingredient_id):
         ingredients = [{"name": ingredient_name, "id": ingredient_id} for (ingredient_id, ingredient_name) in c.fetchall()]
 
     return Response(json.dumps(ingredients), content_type="application/json")
+
+
+@app.post("/api/v1/post/like/<post_id>")
+def like_post(post_id):
+    with sqlite3.connect("data/fire.db") as db:
+        c = db.cursor()
+        c.execute(f"""
+                  UPDATE Posts
+                  SET NumberOfLikes = NumberOfLikes + 1
+                  WHERE RecipeId = {post_id};
+                  """)
+
+        c.execute(f"""
+                  UPDATE Trending
+                  SET NumberOfRecentLikes = NumberOfRecentLikes + 1
+                  WHERE RecipeId = {post_id};
+                  """)
+
+        db.commit()
+    return Response(status=201)
+
+@app.post("/api/v1/post/dislike/<post_id>")
+def dislike_post(post_id):
+    with sqlite3.connect("data/fire.db") as db:
+        c = db.cursor()
+        c.execute(f"""
+                  UPDATE Posts
+                  SET NumberOfLikes = NumberOfLikes - 1
+                  WHERE RecipeId = {post_id} AND NumberOfLikes > 0;
+                  """)
+
+        c.execute(f"""
+                  UPDATE Trending
+                  SET NumberOfRecentLikes = NumberOfRecentLikes - 1
+                  WHERE RecipeId = {post_id} AND NumberOfRecentLikes > 0;
+                  """)
+
+        db.commit()
+    return Response(status=201)
