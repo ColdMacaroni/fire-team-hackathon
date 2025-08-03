@@ -24,7 +24,7 @@ CREATE TABLE IF NOT EXISTS Recipes (
 	RecipeName TEXT NOT NULL UNIQUE,
 	Description TEXT NOT NULL,
 	Instructions TEXT NOT NULL,
-	CookTime INTEGER NOT NULL,
+	CookTime INTEGER NOT NULL CHECK (CookTime >= 0),
 	Difficulty INTEGER NOT NULL CHECK (Difficulty >= 1 AND Difficulty <= 5),
 	PhotoURL TEXT,
 	PRIMARY KEY (RecipeId)
@@ -54,8 +54,8 @@ CREATE TABLE IF NOT EXISTS Requires (
 
 CREATE TABLE IF NOT EXISTS Posts (
 	RecipeId INTEGER,
-	NumberOfLikes INTEGER NOT NULL,
-	Rating DOUBLE NOT NULL,
+	NumberOfLikes INTEGER NOT NULL CHECK (NumberOfLikes >= 0) DEFAULT 0,
+	Rating DOUBLE NOT NULL CHECK (Rating >= 0 AND Rating <= 5),
 	Reviews INTEGER NOT NULL DEFAULT 0,
 	PRIMARY KEY (RecipeId),
 	FOREIGN KEY (RecipeId) REFERENCES Recipes (RecipeId)
@@ -64,7 +64,7 @@ CREATE TABLE IF NOT EXISTS Posts (
 
 CREATE TABLE IF NOT EXISTS Trending (
 	RecipeId INTEGER,
-	NumberOfRecentLikes INTEGER NOT NULL,
+	NumberOfRecentLikes DOUBLE NOT NULL CHECK (NumberOfRecentLikes >= 0),
 	PRIMARY KEY (RecipeId),
 	FOREIGN KEY (RecipeId) REFERENCES Posts (RecipeId)
 		ON DELETE CASCADE ON UPDATE CASCADE
