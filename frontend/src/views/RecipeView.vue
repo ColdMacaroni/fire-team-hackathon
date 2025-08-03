@@ -131,6 +131,15 @@
         method: 'POST',
       })
     }
+
+    fetch("/api/v1/recipe/by-id/" + recipeId.value, {
+      method: "GET",
+    })
+      .then(response => response.json())
+      .then(data => {
+        recipe.value.likes = data[0].likes
+      })
+      .catch(() => {})
   }
 
   const doLike = () => {
@@ -145,6 +154,16 @@
         method: 'POST',
       })
     }
+
+    // Update likes after like/dislike (sync version)
+    fetch("/api/v1/recipe/by-id/" + recipeId.value, {
+      method: "GET",
+    })
+      .then(response => response.json())
+      .then(data => {
+        recipe.value.likes = data[0].likes
+      })
+      .catch(() => {})
   }
 
   const goBack = () => {
