@@ -215,3 +215,4 @@ VALUES ({recipe_id}, {post.number_of_likes}, {post.rating}, {post.reviews});
 """)
 
         database.commit()
+    database.close()
