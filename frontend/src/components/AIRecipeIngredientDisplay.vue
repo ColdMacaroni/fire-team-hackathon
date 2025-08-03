@@ -22,7 +22,7 @@
 </script>
 
 <template>
-  <div>
+  <div class="ingredients-block">
     <h2>Ingredients:</h2>
     <ul>
       <li v-for="(ingredient, i) in ingredients" :key="i">
@@ -50,5 +50,14 @@
   }
   li {
     margin-bottom: 0.2rem;
+  }
+  .ingredients-block {
+    background: #232323;
+    color: #fff;
+    border-radius: 16px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.12);
+    padding: 1.5rem 1.2rem 1.2rem 1.2rem;
+    margin-bottom: 1.5rem;
+    width: 100%;
   }
 </style>
