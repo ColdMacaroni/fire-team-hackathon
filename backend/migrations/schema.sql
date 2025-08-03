@@ -54,7 +54,7 @@ CREATE TABLE IF NOT EXISTS Requires (
 
 CREATE TABLE IF NOT EXISTS Posts (
 	RecipeId INTEGER,
-	NumberOfLikes INTEGER NOT NULL CHECK (NumberOfLikes >= 0),
+	NumberOfLikes INTEGER NOT NULL CHECK (NumberOfLikes >= 0) DEFAULT 0,
 	Rating DOUBLE NOT NULL CHECK (Rating >= 0 AND Rating <= 5),
 	Reviews INTEGER NOT NULL DEFAULT 0,
 	PRIMARY KEY (RecipeId),
