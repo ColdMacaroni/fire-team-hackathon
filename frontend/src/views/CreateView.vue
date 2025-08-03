@@ -103,9 +103,9 @@
       // Send the recipe to the backend to save to recipes.json
       try {
         const saveResponse = await fetch(
-          'http://localhost:5000/api/save-recipe',
+          "/api/v1/recipe/save",
           {
-            method: 'POST',
+            method: 'PUT',
             headers: {
               'Content-Type': 'application/json',
             },
