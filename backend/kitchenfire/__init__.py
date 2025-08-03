@@ -157,7 +157,7 @@ VALUES (?, ?, ?, ?, ?, ?);
             ),
         )
 
-        db.commit();
+        db.commit()
 
         recipe_id = c.execute("""
                   SELECT RecipeId FROM Recipes
@@ -409,12 +409,12 @@ def get_all_comments(post_id):
     with sqlite3.connect(DB_URL) as db:
         c = db.cursor()
         c.execute(f"""
-                  SELECT Author, Body, NumberOfLikes
+                  SELECT Author, Body, NumberOfLikes, Rating
                   FROM Comments
                   WHERE PostId = {post_id};
                   """)
-        for author, body, number_of_likes in c.fetchall():
-            comments.append({"author": author, "body": body, "likes": number_of_likes})
+        for author, body, number_of_likes, rating in c.fetchall():
+            comments.append({"author": author, "body": body, "likes": number_of_likes, "rating": rating})
 
     return Response(json.dumps(comments), content_type="application/json")
 
@@ -427,13 +427,13 @@ def get_comment_by_id(post_id, comment_id):
         c.execute(f"""
                   WITH GetIds(CommentId)
                   AS (VALUES {ids})
-                  SELECT Author, Body, NumberOfLikes
+                  SELECT Author, Body, NumberOfLikes, Rating
                   FROM Comments
                   WHERE CommentId IN GetIds
                   AND PostId = {post_id};
                   """)
 
-        comment = [{"author": author, "body": body, "likes": number_of_likes} for (author, body, number_of_likes) in c.fetchall()]
+        comment = [{"author": author, "body": body, "likes": number_of_likes, "rating": rating} for (author, body, number_of_likes, rating) in c.fetchall()]
     return Response(json.dumps(comment), content_type="application/json")
 
 
