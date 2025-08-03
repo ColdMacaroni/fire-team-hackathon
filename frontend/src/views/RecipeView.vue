@@ -103,6 +103,38 @@
     }
   }
 
+  const viewComments = () => {
+    alert("Comments are not supported at the moment");
+  }
+
+  const doDislike = () => {
+    isLiked.value = !isLiked.value
+
+    if (isLiked.value) {
+      fetch( "/api/v1/post/dislike/" + recipeId.value,  {
+          method: "POST",
+      })
+    } else {
+      fetch( "/api/v1/post/like/" + recipeId.value,  {
+          method: "POST",
+      })
+    }
+  }
+
+  const doLike = () => {
+    isLiked.value = !isLiked.value
+
+    if (isLiked.value) {
+      fetch( "/api/v1/post/like/" + recipeId.value,  {
+          method: "POST",
+      })
+    } else {
+      fetch( "/api/v1/post/dislike/" + recipeId.value,  {
+          method: "POST",
+      })
+    }
+  }
+
   const goBack = () => {
     router.back()
   }
@@ -162,11 +194,25 @@
             <p>({{ recipe.reviews }})</p>
           </div>
           <button
-            @click="toggleLike"
+            @click="doLike"
             class="like-button"
             :class="{ liked: isLiked }"
           >
             🔥
+          </button>
+          <button
+            @click="viewComments"
+            class="like-button"
+            :class="{ liked: isLiked }"
+          >
+            🗨️
+          </button>
+          <button
+            @click="doDislike"
+            class="like-button"
+            :class="{ liked: isLiked }"
+          >
+            🧯
           </button>
         </div>
         <div class="recipe-tags">
