@@ -111,11 +111,11 @@
     isLiked.value = !isLiked.value
 
     if (isLiked.value) {
-      fetch( "/api/v1/post/dislike/" + recipeId,  {
+      fetch( "/api/v1/post/dislike/" + recipeId.value,  {
           method: "POST",
       })
     } else {
-      fetch( "/api/v1/post/like/" + recipeId,  {
+      fetch( "/api/v1/post/like/" + recipeId.value,  {
           method: "POST",
       })
     }
@@ -125,11 +125,11 @@
     isLiked.value = !isLiked.value
 
     if (isLiked.value) {
-      fetch( "/api/v1/post/like/" + recipeId,  {
+      fetch( "/api/v1/post/like/" + recipeId.value,  {
           method: "POST",
       })
     } else {
-      fetch( "/api/v1/post/dislike/" + recipeId,  {
+      fetch( "/api/v1/post/dislike/" + recipeId.value,  {
           method: "POST",
       })
     }
