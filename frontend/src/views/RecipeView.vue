@@ -7,7 +7,9 @@
   const router = useRouter()
   const recipe = ref(null)
   const checkedIngredients = ref(new Set())
-  const isLiked = ref(false)
+  const isLiked1 = ref(false)
+  const isLiked2 = ref(false)
+  const isLiked3 = ref(false)
 
   const { loading, error, loadRecipeById, updateRecipeLikes } = useRecipes()
 
@@ -120,9 +122,9 @@
   }
 
   const doDislike = () => {
-    isLiked.value = !isLiked.value
+    isLiked3.value = !isLiked3.value
 
-    if (isLiked.value) {
+    if (isLiked3.value) {
       fetch('/api/v1/post/dislike/' + recipeId.value, {
         method: 'POST',
       })
@@ -143,9 +145,9 @@
   }
 
   const doLike = () => {
-    isLiked.value = !isLiked.value
+    isLiked1.value = !isLiked1.value
 
-    if (isLiked.value) {
+    if (isLiked1.value) {
       fetch('/api/v1/post/like/' + recipeId.value, {
         method: 'POST',
       })
@@ -276,21 +278,21 @@
           <button
             @click="doLike"
             class="like-button"
-            :class="{ liked: isLiked }"
+            :class="{ liked: isLiked1 }"
           >
             🔥
           </button>
           <button
             @click="viewComments"
             class="like-button"
-            :class="{ liked: isLiked }"
+            :class="{ liked: isLiked2 }"
           >
             🗨️
           </button>
           <button
             @click="doDislike"
             class="like-button"
-            :class="{ liked: isLiked }"
+            :class="{ liked: isLiked3 }"
           >
             🧯
           </button>
