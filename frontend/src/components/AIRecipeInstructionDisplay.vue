@@ -31,9 +31,9 @@
 </script>
 
 <template>
-  <div>
-    <h2>Instructions:</h2>
-    <ol>
+  <div class="ai-card">
+    <h2 class="ai-section-title">Instructions</h2>
+    <ol class="ai-list-ol">
       <li v-for="(step, i) in instructions" :key="i">{{ step }}</li>
     </ol>
   </div>
@@ -50,4 +50,31 @@
   li {
     margin-bottom: 0.2rem;
   }
+</style>
+<style scoped>
+.ai-card {
+  background: #232323;
+  color: #fff;
+  border-radius: 16px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.12);
+  padding: 1.5rem 1.2rem 1.2rem 1.2rem;
+  margin-bottom: 1.5rem;
+  width: 100%;
+}
+.ai-section-title {
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin-bottom: 0.7rem;
+  letter-spacing: 0.5px;
+}
+.ai-list-ol {
+  margin: 0;
+  padding-left: 1.2rem;
+  list-style-type: decimal;
+}
+.ai-list-ol li {
+  margin-bottom: 0.3rem;
+  font-size: 1.05rem;
+  line-height: 1.5;
+}
 </style>

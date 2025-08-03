@@ -160,11 +160,7 @@
   }
   .recipe-container {
     border-radius: 8px;
-    padding: 2rem;
     margin-top: 2rem;
-    max-width: 800px;
-    margin-left: auto;
-    margin-right: auto;
   }
 
   .transcript-result {
