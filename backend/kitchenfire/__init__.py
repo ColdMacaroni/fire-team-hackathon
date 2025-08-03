@@ -30,7 +30,7 @@ def tags_by_recipe_id(recipe_id: int) -> list[Tag]:
         ).fetchall()
     return [Tag(*t) for t in tags]
 
-def create_post_to_database(json_post):
+def create_post_to_database(json_post) -> int:
     print(json_post)
     # const formattedRecipe = {
     #   id: newId,
@@ -86,7 +86,6 @@ def create_post_to_database(json_post):
 
         # Ingredients
 
-        ing_to_id = {}
         c.execute("""
             CREATE TEMPORARY TABLE NewPostIngredients(IngredientName, TypeId);
         """)
@@ -105,18 +104,35 @@ def create_post_to_database(json_post):
         db.commit()
 
         ing_ids = c.execute("""
-            SELECT IngredientId FROM Ingredients
+            SELECT IngredientName, IngredientId FROM Ingredients
             NATURAL JOIN NewPostIngredients;
         """).fetchall()
-        ing_ids = [t[0] for t in ing_ids]
+        ing_to_id = {name: id_ for name, id_ in ing_ids}
 
         c.execute("""
             DROP TABLE NewPostIngredients;
         """)
 
+        # -- create recipe
+        exists = not not c.execute("SELECT COUNT(*) FROM Recipes WHERE RecipeName = ?", (json_post['name'],)).fetchone()[0]
+        if exists:
+            return -1
 
-        print(tag_ids, ing_ids)
+        c.execute("""
+INSERT INTO Recipes (RecipeName, Description, Instructions, CookTime, Difficulty, PhotoURL)
+VALUES (?, ?, ?, ?, ?, ?);
+                  """, 
+                  (
+                      json_post['name'],
+                      json_post.get('description', "No Description"),
+                      json_post['instructions'],
+                      json_post.get('cooktime', 0),
+                      json_post.get('difficulty', 3),
+                      json_post.get('image',  "/recipe_not_found.png" ),
+                      ))
 
+
+    return 232
 
 
 def ingredients_by_recipe_id(recipe_id: int) -> list[Ingredient]:
@@ -319,4 +335,7 @@ def save_recipe():
     # Assumes it's in the json post form
     post_id = create_post_to_database(request.json)
 
-    return Response(json.dumps({"id": post_id}), status=201)
+    if post_id > 0:
+        return Response(json.dumps({"id": post_id}), status=201)
+    else:
+        return Response(status=409)
