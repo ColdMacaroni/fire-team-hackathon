@@ -30,6 +30,94 @@ def tags_by_recipe_id(recipe_id: int) -> list[Tag]:
         ).fetchall()
     return [Tag(*t) for t in tags]
 
+def create_post_to_database(json_post):
+    print(json_post)
+    # const formattedRecipe = {
+    #   id: newId,
+    #   name: recipeData.name,
+    #   image: recipeData.image || '', // Default image if none provided
+    #   rank: 0, // Random rank between 3-5
+    #   rating: 0, // Random rating between 3.5-5.0
+    #   reviews: 0, // Random reviews between 5-25
+    #   tags: recipeData.tags.filter(tag => tag.trim() !== ''),
+    #   ingredients: recipeData.ingredients
+    #     .filter(ing => ing.ingredient.trim() !== '')
+    #     .map(ing => ({
+    #       ingredient: ing.ingredient,
+    #       amount: ing.amount,
+    #       unit: ing.unit,
+    #     })),
+    #   instructions: recipeData.instructions,
+    #   isFavorited: false,
+    #   likes: 0, // Random likes between 50-150
+    #   dislikes: 0, // Random dislikes between 1-11
+    #   comments: 0, // Random comments between 10-40
+    # }
+    tags: list[str] = json_post['tags']
+    with sqlite3.connect(DB_URL) as db:
+        c = db.cursor()
+        c.execute("""
+            CREATE TEMPORARY TABLE NewPostTags(TagName);
+        """)
+
+        c.executemany("""
+            INSERT OR IGNORE INTO NewPostTags (TagName)
+            VALUES (?)
+        """, ((t,) for t in tags))
+        db.commit()
+
+
+        # insert tags
+        c.execute("""
+            INSERT OR IGNORE INTO Tags (TagName)
+            SELECT * FROM NewPostTags
+        """)
+        db.commit()
+
+        tag_ids = c.execute("""
+            SELECT TagId FROM Tags
+            NATURAL JOIN NewPostTags
+        """).fetchall()
+        tag_ids = [t[0] for t in tag_ids]
+
+        c.execute("""
+            DROP TABLE NewPostTags;
+        """)
+
+        # Ingredients
+
+        ing_to_id = {}
+        c.execute("""
+            CREATE TEMPORARY TABLE NewPostIngredients(IngredientName, TypeId);
+        """)
+
+        c.executemany("""
+            INSERT OR IGNORE INTO NewPostIngredients (IngredientName, TypeId)
+            VALUES (?, ?)
+        """, ((i['ingredient'], 1) for i in json_post['ingredients']))
+        db.commit()
+
+        # insert ings
+        c.execute("""
+            INSERT OR IGNORE INTO Ingredients (IngredientName, TypeId)
+            SELECT * FROM NewPostIngredients
+        """)
+        db.commit()
+
+        ing_ids = c.execute("""
+            SELECT IngredientId FROM Ingredients
+            NATURAL JOIN NewPostIngredients;
+        """).fetchall()
+        ing_ids = [t[0] for t in ing_ids]
+
+        c.execute("""
+            DROP TABLE NewPostIngredients;
+        """)
+
+
+        print(tag_ids, ing_ids)
+
+
 
 def ingredients_by_recipe_id(recipe_id: int) -> list[Ingredient]:
     with sqlite3.connect(DB_URL) as db:
@@ -228,4 +316,7 @@ def get_tag_by_id2(ingredient_id):
 
 @app.put("/api/v1/recipe/save")
 def save_recipe():
-    return "nil"
+    # Assumes it's in the json post form
+    post_id = create_post_to_database(request.json)
+
+    return Response(json.dumps({"id": post_id}), status=201)
