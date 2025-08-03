@@ -11,9 +11,11 @@ from .recipe import Recipe
 
 app = Flask(__name__)
 
+DB_URL = "data/fire.db"
+
 
 def tags_by_recipe_id(recipe_id: int) -> list[Tag]:
-    with sqlite3.connect("data/fire.db") as db:
+    with sqlite3.connect(DB_URL) as db:
         c = db.cursor()
         tags = c.execute(
             """
@@ -30,7 +32,7 @@ def tags_by_recipe_id(recipe_id: int) -> list[Tag]:
 
 
 def ingredients_by_recipe_id(recipe_id: int) -> list[Ingredient]:
-    with sqlite3.connect("data/fire.db") as db:
+    with sqlite3.connect(DB_URL) as db:
         c = db.cursor()
         ingredients = c.execute(
             """
@@ -52,7 +54,7 @@ def ingredients_by_recipe_id(recipe_id: int) -> list[Ingredient]:
 
 
 def create_post_by_row(post_id: int) -> Post:
-    with sqlite3.connect("data/fire.db") as db:
+    with sqlite3.connect(DB_URL) as db:
         c = db.cursor()
         c.execute(
             "SELECT NumberOfLikes, Rating, Reviews FROM Posts WHERE RecipeId = ?",
@@ -86,7 +88,7 @@ def get_recipe_by_id(recipe_id):
 def get_trending_recipe_by_offset(offset, count=1):
     if offset == "-":
         offset = 0
-    with sqlite3.connect("data/fire.db") as db:
+    with sqlite3.connect(DB_URL) as db:
         c = db.cursor()
         recipe_ids = c.execute(
             """
@@ -129,7 +131,7 @@ def get_recipe_filtered_by_ingredient(without: str, with_="-"):
         WHERE IngredientId IN ExcludeIds;
         """
 
-    with sqlite3.connect("data/fire.db") as db:
+    with sqlite3.connect(DB_URL) as db:
         c = db.cursor()
         result = c.execute(query).fetchall()
 
@@ -158,7 +160,7 @@ def get_recipe_filtered_by_tag(without, with_="-"):
         WHERE TagId IN ExcludeIds;
         """
 
-    with sqlite3.connect("data/fire.db") as db:
+    with sqlite3.connect(DB_URL) as db:
         c = db.cursor()
         result = c.execute(query).fetchall()
 
@@ -170,7 +172,7 @@ def get_recipe_filtered_by_tag(without, with_="-"):
 @app.get("/api/v1/tag/all")
 def get_all_tags():
     tags = []
-    with sqlite3.connect("data/fire.db") as db:
+    with sqlite3.connect(DB_URL) as db:
         c = db.cursor()
         c.execute("SELECT TagId, TagName FROM Tags")
         for tag_id, tag_name in c.fetchall():
@@ -182,7 +184,7 @@ def get_all_tags():
 @app.get("/api/v1/tag/by-id/<tag_id>")
 def get_tag_by_id(tag_id):
     ids = transform_ids(tag_id)
-    with sqlite3.connect("data/fire.db") as db:
+    with sqlite3.connect(DB_URL) as db:
         c = db.cursor()
         c.execute(f"""
                   WITH GetIds(TagId)
@@ -198,7 +200,7 @@ def get_tag_by_id(tag_id):
 @app.get("/api/v1/ingredient/all")
 def get_all_ingredients():
     ingredients = []
-    with sqlite3.connect("data/fire.db") as db:
+    with sqlite3.connect(DB_URL) as db:
         c = db.cursor()
         c.execute("SELECT IngredientId, IngredientName FROM Ingredients")
         for ingredient_id, ingredient_name in c.fetchall():
@@ -210,7 +212,7 @@ def get_all_ingredients():
 @app.get("/api/v1/ingredient/by-id/<ingredient_id>")
 def get_tag_by_id2(ingredient_id):
     ids = transform_ids(ingredient_id)
-    with sqlite3.connect("data/fire.db") as db:
+    with sqlite3.connect(DB_URL) as db:
         c = db.cursor()
         c.execute(f"""
                   WITH GetIds(IngredientId)
