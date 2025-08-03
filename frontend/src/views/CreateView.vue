@@ -171,8 +171,8 @@
       formData.append('instructions', recipeData.instructions)
 
       // Send to Flask backend
-      const response = await fetch('http://localhost:5000/api/recipes', {
-        method: 'POST',
+      const response = await fetch('/api/v1/recipe/save', {
+        method: 'PUT',
         body: formData,
         // Don't set Content-Type header - let browser set it with boundary
       })
