@@ -13,6 +13,17 @@
 
   const recipeId = computed(() => route.params.id)
 
+  // Number formatter using Intl.NumberFormat
+  const nf = new Intl.NumberFormat('en', { notation: 'compact' })
+  const formattedLikes = computed(() => {
+    return nf.format(recipe.value?.likes || 0)
+  })
+
+  // Computed property for recipe name character count
+  const recipeNameCharCount = computed(() => {
+    return recipe.value?.name?.length || 0
+  })
+
   const recipeNameFontSize = computed(() => {
     if (!recipe.value?.name) return 36
     const length = recipe.value.name.length
@@ -36,6 +47,7 @@
     const foundRecipe = await loadRecipeById(recipeId.value)
     if (foundRecipe) {
       recipe.value = foundRecipe
+      console.log(recipe.value)
     }
   }
 
@@ -110,6 +122,55 @@
   const goToHome = () => {
     router.push('/')
   }
+
+  // Parse tags from JSON string format
+  const parsedTags = computed(() => {
+    if (!recipe.value?.tags) return []
+
+    // If tags is already an array of objects, return as is
+    if (Array.isArray(recipe.value.tags) && recipe.value.tags.length > 0) {
+      // Check if first item is a string (JSON format) or object
+      if (typeof recipe.value.tags[0] === 'string') {
+        return recipe.value.tags.map(tag => {
+          try {
+            return JSON.parse(tag)
+          } catch (e) {
+            console.error('Error parsing tag:', tag, e)
+            return { id: 0, name: tag }
+          }
+        })
+      }
+      return recipe.value.tags
+    }
+
+    return []
+  })
+
+  // Parse ingredients from JSON string format
+  const parsedIngredients = computed(() => {
+    if (!recipe.value?.ingredients) return []
+
+    // If ingredients is already an array of objects, return as is
+    if (
+      Array.isArray(recipe.value.ingredients) &&
+      recipe.value.ingredients.length > 0
+    ) {
+      // Check if first item is a string (JSON format) or object
+      if (typeof recipe.value.ingredients[0] === 'string') {
+        return recipe.value.ingredients.map(ingredient => {
+          try {
+            return JSON.parse(ingredient)
+          } catch (e) {
+            console.error('Error parsing ingredient:', ingredient, e)
+            return { id: 0, ingredient: ingredient, amount: null, unit: null }
+          }
+        })
+      }
+      return recipe.value.ingredients
+    }
+
+    return []
+  })
 </script>
 <template>
   <div class="recipe-view">
@@ -147,7 +208,14 @@
           <h1 :style="{ fontSize: recipeNameFontSize + 'px' }">
             {{ recipe.name }}
           </h1>
-          <p>🔥{{ recipe.likes }}</p>
+          <button
+            class="like-button"
+            :class="{ liked: isLiked }"
+            @click="toggleLike"
+          >
+            <p class="like-icon">🔥</p>
+            <p class="like-count">{{ formattedLikes }}</p>
+          </button>
         </div>
         <div class="recipe-rating">
           <div class="stars-container">
@@ -161,23 +229,25 @@
             </span>
             <p>({{ recipe.reviews }})</p>
           </div>
-          <button
-            @click="toggleLike"
-            class="like-button"
-            :class="{ liked: isLiked }"
-          >
-            🔥
-          </button>
         </div>
         <div class="recipe-tags">
-          <p>Tags: {{ recipe.tags.join(', ') }}</p>
+          <p>
+            Tags:
+            <span
+              v-for="(tag, index) in parsedTags"
+              :key="tag.id || index"
+              class="tag-item"
+            >
+              {{ tag.name }}{{ index < parsedTags.length - 1 ? ', ' : '' }}
+            </span>
+          </p>
         </div>
         <div class="recipe-ingredients">
           <h2>Ingredients</h2>
           <ul>
             <li
-              v-for="ingredient in recipe.ingredients"
-              :key="ingredient.ingredient"
+              v-for="ingredient in parsedIngredients"
+              :key="ingredient.id || ingredient.ingredient"
               class="ingredient-item"
               :class="{ checked: isIngredientChecked(ingredient.ingredient) }"
               @click="toggleIngredient(ingredient.ingredient)"
@@ -190,7 +260,16 @@
                 />
                 <FontAwesomeIcon v-else icon="fa-check" class="check-icon" />
               </div>
-              <p>{{ ingredient.ingredient }}</p>
+              <div class="ingredient-details">
+                <p class="ingredient-name">{{ ingredient.ingredient }}</p>
+                <p
+                  v-if="ingredient.amount || ingredient.unit"
+                  class="ingredient-amount"
+                >
+                  {{ ingredient.amount
+                  }}{{ ingredient.unit ? ' ' + ingredient.unit : '' }}
+                </p>
+              </div>
             </li>
           </ul>
         </div>
@@ -234,8 +313,8 @@
   }
 
   .like-button {
-    width: 40px;
-    height: 40px;
+    width: 80px;
+    height: 80px;
     border-radius: 50%;
     border: none;
     background-color: #666;
@@ -244,6 +323,7 @@
     cursor: pointer;
     transition: all 0.3s ease;
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
@@ -256,10 +336,34 @@
   .recipe-name {
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    align-items: flex-start; /* Changed from center to allow for multi-line text */
+    min-height: 80px; /* Increased height for better text wrapping */
+    gap: 16px; /* Add gap between title and like button */
   }
+
+  .recipe-name h1 {
+    color: #fff;
+    font-family: var(--font-primary);
+    font-style: normal;
+    font-weight: 400;
+    line-height: 1.2;
+    margin: 0;
+    word-wrap: break-word;
+    hyphens: auto;
+    flex: 1; /* Allow title to take available space */
+    text-align: left; /* Align text to the left for better readability */
+    /* Dynamic font size based on character count */
+    font-size: clamp(20px, calc(36px - (var(--char-count, 0) * 0.8px)), 36px);
+  }
+
+  .recipe-name .like-button {
+    flex-shrink: 0; /* Prevent like button from shrinking */
+    align-self: center; /* Center the like button vertically */
+  }
+
   .recipe-name p {
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     color: #fff;
@@ -270,22 +374,16 @@
     font-weight: 400;
     line-height: normal;
   }
-  .recipe-name h1 {
-    color: #fff;
-    font-family: var(--font-primary);
-    font-style: normal;
-    font-weight: 400;
-    line-height: 1.2;
-    margin: 0;
-    word-wrap: break-word;
-    hyphens: auto;
-  }
 
   .recipe-rating {
     display: flex;
     align-items: center;
     justify-content: space-between;
     width: 98%; /* Makes the like button align with the number */
+  }
+
+  .like-count {
+    font-size: 20px !important;
   }
 
   .recipe-rating p {
@@ -308,6 +406,11 @@
     font-style: normal;
     font-weight: 400;
     line-height: 125.725%; /* 22.631px */
+  }
+
+  .tag-item {
+    color: #ffd700;
+    font-weight: 500;
   }
 
   .stars {
@@ -398,6 +501,26 @@
   .cross-icon {
     color: #fff;
     font-size: 12px;
+  }
+
+  .ingredient-details {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .ingredient-name {
+    margin: 0;
+    transition: all 0.2s ease;
+    font-weight: 500;
+  }
+
+  .ingredient-amount {
+    margin: 0;
+    transition: all 0.2s ease;
+    font-size: 14px;
+    opacity: 0.8;
+    font-style: italic;
   }
 
   .ingredient-item p {
