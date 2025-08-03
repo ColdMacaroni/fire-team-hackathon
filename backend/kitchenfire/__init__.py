@@ -458,7 +458,25 @@ def create_comment(post_id):
                   VALUES ({post_id, comment['author'], comment['body'], comment['rating']});
                   """)
         db.commit()
+    update_rating_for_post(post_id)
     return Response(status=201)
+
+
+def update_rating_for_post(post_id):
+    with sqlite3.connect(DB_URL) as db:
+        c = db.cursor()
+        ratings = c.execute(f"""
+                            SELECT Rating
+                            FROM Comments
+                            WHERE PostId = {post_id};
+                            """).fetchall()
+        overall_rating = sum(ratings) / len(ratings)
+        c.execute(f"""
+                  INSERT INTO Posts (Rating)
+                  VALUES ({overall_rating})
+                  WHERE PostId = {post_id};
+                  """)
+        db.commit()
 
 
 @app.post("/api/v1/post/like/<post_id>")
