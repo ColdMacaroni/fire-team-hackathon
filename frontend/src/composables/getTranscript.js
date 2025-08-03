@@ -1,7 +1,6 @@
 import axios from 'axios';
-require('dotenv').config();
 
-const apiKey = process.env.VITE_TRANSCRIPT_API_KEY;
+const apiKey = import.meta.env.VITE_TRANSCRIPT_API_KEY;
 
 export async function getTranscript(url) {
   try {
