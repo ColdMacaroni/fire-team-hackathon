@@ -11,6 +11,7 @@ from kitchenfire.recipe import Recipe
 if __name__ == "__main__":
     if not os.getcwd().endswith("migrations"):
         os.chdir("migrations")
+
     database = sqlite3.connect("../data/fire.db")
     cursor = database.cursor()
 
@@ -99,7 +100,12 @@ if __name__ == "__main__":
         for row in reader:
             if rowNumber != 0:
                 recipe_name, no_likes, rating, reviews = row
-                posts[recipe_name] = Post(-1, int(no_likes), float(rating), int(reviews))
+                posts[recipe_name] = Post(
+                    Recipe(-1, "", "", "", -1, -1, "", [], []),
+                    int(no_likes),
+                    float(rating),
+                    int(reviews)
+                )
 
             rowNumber += 1
 
