@@ -157,7 +157,46 @@ VALUES (?, ?, ?, ?, ?, ?);
             ),
         )
 
-    return 232
+        db.commit();
+
+        recipe_id = c.execute("""
+                  SELECT RecipeId FROM Recipes
+                  WHERE RecipeName = ?
+                  """, (json_post['name'],)).fetchone()[0]
+        recipe_id = int(recipe_id)
+
+        # -- has tags
+
+        c.executemany(
+                """
+                INSERT INTO HasTag
+                VALUES (?, ?)
+                """,
+                ((recipe_id, t) for t in tag_ids))
+        db.commit()
+
+        ings = {}
+        for iiiii in json_post['ingredients']:
+            ings[iiiii['ingredient']] = iiiii
+
+        # ingredient amount unit
+
+        c.executemany(
+                """
+                INSERT INTO Requires
+                VALUES (?, ?, ?, ?)
+                """,
+                ((recipe_id, iiiid, ings[iiiiname]['amount'], ings[iiiiname]['unit'] ) for iiiiname,iiiid in ing_to_id.items()))
+        db.commit()
+
+        #----
+        c.execute("""
+                  INSERT INTO Posts (RecipeId, NumberOfLikes, Rating, Reviews)
+                  VALUES (?, ?, ?, ?)
+                  """, (recipe_id, 0, 0, 0))
+        db.commit()
+
+    return recipe_id
 
 
 def ingredients_by_recipe_id(recipe_id: int) -> list[Ingredient]:
