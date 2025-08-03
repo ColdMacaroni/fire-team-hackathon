@@ -125,6 +125,7 @@
     isLiked3.value = !isLiked3.value
 
     if (isLiked3.value) {
+      isLiked1.value = false;
       fetch('/api/v1/post/dislike/' + recipeId.value, {
         method: 'POST',
       })
@@ -148,6 +149,7 @@
     isLiked1.value = !isLiked1.value
 
     if (isLiked1.value) {
+      isLiked3.value = false;
       fetch('/api/v1/post/like/' + recipeId.value, {
         method: 'POST',
       })
@@ -405,8 +407,8 @@
     flex-shrink: 0;
   }
   .like-button.liked {
-    background-color: #ff6b6b;
-    animation: pulse 0.3s ease;
+    /*background-color: #ff6b6b;*/
+    /*animation: pulse 0.3s ease;*/
   }
 
   .recipe-name {
