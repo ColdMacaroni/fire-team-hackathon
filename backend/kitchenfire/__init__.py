@@ -14,6 +14,8 @@ app = Flask(__name__)
 DB_URL = "data/fire.db"
 
 
+
+
 def tags_by_recipe_id(recipe_id: int) -> list[Tag]:
     with sqlite3.connect(DB_URL) as db:
         c = db.cursor()
@@ -448,7 +450,7 @@ def save_recipe():
         return Response(status=409)
 
 
-@app.post("api/v1/post/<post_id>/create_comment")
+@app.post("/api/v1/post/<post_id>/create_comment")
 def create_comment(post_id):
     comment = request.json
     with sqlite3.connect(DB_URL) as db:
