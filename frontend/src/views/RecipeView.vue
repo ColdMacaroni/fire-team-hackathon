@@ -240,6 +240,7 @@
           <h1 :style="{ fontSize: recipeNameFontSize + 'px' }">
             {{ recipe.name }}
           </h1>
+          <p>🔥{{ recipe.likes }}</p>
         </div>
         <div class="recipe-rating">
           <div class="stars-container">
@@ -259,6 +260,13 @@
             :class="{ liked: isLiked }"
           >
             🔥
+          </button>
+          <button
+            @click="viewComments"
+            class="like-button"
+            :class="{ liked: isLiked }"
+          >
+            🗨️
           </button>
           <button
             @click="doDislike"
