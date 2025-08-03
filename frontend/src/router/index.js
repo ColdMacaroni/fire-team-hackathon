@@ -8,6 +8,11 @@ import RecipeView from '../views/RecipeView.vue'
 const routes = [
   {
     path: '/',
+    name: 'Explore',
+    component: ExploreView,
+  },
+  {
+    path: '/home',
     name: 'Home',
     component: HomeView,
   },
@@ -20,11 +25,6 @@ const routes = [
     path: '/create',
     name: 'Create',
     component: CreateView,
-  },
-  {
-    path: '/explore',
-    name: 'Explore',
-    component: ExploreView,
   },
   {
     path: '/recipe/:id',

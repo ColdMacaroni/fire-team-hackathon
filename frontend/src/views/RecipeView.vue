@@ -309,11 +309,21 @@
               <div class="ingredient-details">
                 <p class="ingredient-name">{{ ingredient.ingredient }}</p>
                 <p
-                  v-if="ingredient.amount || ingredient.unit"
+                  v-if="
+                    (ingredient.amount && ingredient.amount !== 'N/A') ||
+                    (ingredient.unit && ingredient.unit !== 'N/A')
+                  "
                   class="ingredient-amount"
                 >
-                  {{ ingredient.amount
-                  }}{{ ingredient.unit ? ' ' + ingredient.unit : '' }}
+                  {{
+                    ingredient.amount && ingredient.amount !== 'N/A'
+                      ? ingredient.amount
+                      : ''
+                  }}{{
+                    ingredient.unit && ingredient.unit !== 'N/A'
+                      ? ' ' + ingredient.unit
+                      : ''
+                  }}
                 </p>
               </div>
             </li>

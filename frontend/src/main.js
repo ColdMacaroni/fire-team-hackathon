@@ -16,6 +16,7 @@ import {
   faTimes,
   faImage,
   faArrowLeft,
+  faPen,
 } from '@fortawesome/free-solid-svg-icons'
 
 library.add(
@@ -26,7 +27,8 @@ library.add(
   faCheck,
   faTimes,
   faImage,
-  faArrowLeft
+  faArrowLeft,
+  faPen
 )
 
 const app = createApp(App)

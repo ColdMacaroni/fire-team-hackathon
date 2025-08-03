@@ -1,5 +1,6 @@
 <script setup>
   import { useRouter } from 'vue-router'
+  import { ref, computed } from 'vue'
 
   const router = useRouter()
 
@@ -10,10 +11,35 @@
     },
   })
 
+  // Generate a random color for fallback
+  const randomColor = computed(() => {
+    const colors = [
+      '#FF6B6B', // Red
+      '#4ECDC4', // Teal
+      '#45B7D1', // Blue
+      '#96CEB4', // Green
+      '#FFEAA7', // Yellow
+      '#DDA0DD', // Plum
+      '#98D8C8', // Mint
+      '#F7DC6F', // Gold
+      '#BB8FCE', // Purple
+      '#85C1E9', // Light Blue
+      '#F8C471', // Orange
+      '#82E0AA', // Light Green
+    ]
+    return colors[Math.floor(Math.random() * colors.length)]
+  })
+
+  const imageError = ref(false)
+
   function navigateToRecipe(id) {
     router.push(`/recipe/${id}`)
     // Scroll to top of the new page
     window.scrollTo(0, 0)
+  }
+
+  function handleImageError() {
+    imageError.value = true
   }
 </script>
 
@@ -24,19 +50,21 @@
     data-v-inspector="src/components/RecipeCard.vue:11:5"
   >
     <div
-      v-if="recipe.image != ''"
+      v-if="recipe.image && recipe.image !== '' && !imageError"
       class="recipe-image"
       data-v-inspector="src/components/RecipeCard.vue:12:9"
     >
       <img
         :src="recipe.image"
         :alt="recipe.name"
+        @error="handleImageError"
         data-v-inspector="src/components/RecipeCard.vue:13:13"
       />
     </div>
     <div
       v-else
       class="recipe-image"
+      :style="{ backgroundColor: randomColor }"
       data-v-inspector="src/components/RecipeCard.vue:15:9"
     ></div>
     <div

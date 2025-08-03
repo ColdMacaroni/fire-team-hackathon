@@ -3,6 +3,7 @@
 
   import { getTranscript } from '../composables/getTranscript.js'
   import { getAIRecipe } from '../composables/getAIRecipe.js'
+  import { useRecipes } from '../composables/useRecipes.js'
   import AIRecipeIngredientDisplay from '../components/AIRecipeIngredientDisplay.vue'
   import AIRecipeInstructionDisplay from '../components/AIRecipeInstructionDisplay.vue'
 
@@ -12,11 +13,25 @@
   const aiRecipeResult = ref(null)
   const aiError = ref(null)
 
+  // Use recipes composable
+  const {
+    saveRecipe,
+    loading: recipesLoading,
+    error: recipesError,
+  } = useRecipes()
+
+  // Loading and error states for save operation
+  const isSaving = ref(false)
+  const saveError = ref('')
+  const saveSuccess = ref('')
+
   const handleSearch = async () => {
     loading.value = true
     error.value = null
     aiRecipeResult.value = null
     aiError.value = null
+    saveError.value = ''
+    saveSuccess.value = ''
     try {
       const transcript = await getTranscript(tiktokUrl.value)
       console.log(transcript)
@@ -73,11 +88,116 @@
       loading.value = false
     }
   }
+
+  // Handle saving the AI-generated recipe
+  const handleSaveRecipe = async () => {
+    if (!aiRecipeResult.value) return
+
+    try {
+      isSaving.value = true
+      saveError.value = ''
+      saveSuccess.value = ''
+
+      // Debug: Log the original AI recipe result
+      console.log('Original AI recipe result:', aiRecipeResult.value)
+
+      // Format the AI recipe data to match the exact structure expected by the backend
+      const recipeData = {
+        name:
+          (aiRecipeResult.value.name || 'AI Generated Recipe') +
+          ' - ' +
+          new Date().toISOString().slice(0, 19).replace('T', ' '),
+        image: aiRecipeResult.value.image || '/recipe_not_found.png',
+        tags: Array.isArray(aiRecipeResult.value.tags)
+          ? aiRecipeResult.value.tags.filter(tag => tag && tag.trim() !== '')
+          : [''],
+        ingredients: Array.isArray(aiRecipeResult.value.ingredients)
+          ? aiRecipeResult.value.ingredients
+              .map(ing => {
+                // Handle different possible ingredient formats from AI
+                const ingredientName =
+                  ing.ingredient || ing.name || ing.item || ''
+                const amount = ing.amount || ing.quantity || ing.qty || ''
+                const unit = ing.unit || 'g'
+
+                return {
+                  ingredient: ingredientName,
+                  amount: amount,
+                  unit: unit,
+                }
+              })
+              .filter(ing => ing.ingredient.trim() !== '') // Remove empty ingredients
+          : [
+              {
+                ingredient: 'Sample ingredient',
+                amount: '1',
+                unit: 'g',
+              },
+            ],
+        instructions: aiRecipeResult.value.instructions || '',
+        description: aiRecipeResult.value.description || 'No Description',
+        cooktime: parseInt(aiRecipeResult.value.cookingTime) || 30,
+        difficulty: parseInt(aiRecipeResult.value.difficulty) || 2,
+      }
+
+      console.log('Formatted recipe data:', recipeData)
+      console.log(
+        'Formatted recipe data JSON:',
+        JSON.stringify(recipeData, null, 2)
+      )
+
+      // Validate required fields
+      if (!recipeData.name || recipeData.name.trim() === '') {
+        throw new Error('Recipe name is required')
+      }
+
+      if (!recipeData.instructions || recipeData.instructions.trim() === '') {
+        throw new Error('Recipe instructions are required')
+      }
+
+      if (
+        !Array.isArray(recipeData.ingredients) ||
+        recipeData.ingredients.length === 0
+      ) {
+        throw new Error('At least one ingredient is required')
+      }
+
+      const savedRecipe = await saveRecipe(recipeData)
+
+      if (savedRecipe) {
+        console.log('Recipe saved successfully:', savedRecipe)
+        saveSuccess.value = 'Recipe saved successfully!'
+      } else {
+        saveError.value = 'Failed to save recipe. Please try again.'
+      }
+    } catch (error) {
+      console.error('Error saving recipe:', error)
+      saveError.value =
+        error.message || 'Failed to save recipe. Please try again.'
+    } finally {
+      isSaving.value = false
+    }
+  }
 </script>
 
 <template>
   <div class="page-container">
+    <!-- Save Button - appears at top when AI recipe is generated -->
+    <div v-if="aiRecipeResult" class="save-button-container">
+      <button
+        @click="handleSaveRecipe"
+        :disabled="isSaving"
+        class="save-btn"
+        aria-label="Save Recipe"
+      >
+        {{ isSaving ? 'Saving Recipe...' : 'Save Recipe' }}
+      </button>
+      <div v-if="saveSuccess" class="success-msg">{{ saveSuccess }}</div>
+      <div v-if="saveError" class="error-msg">{{ saveError }}</div>
+    </div>
+
     <h1 class="section-title">Generated Recipes</h1>
+
     <div class="search-bar-container">
       <input
         v-model="tiktokUrl"
@@ -171,5 +291,42 @@
     max-width: 100%;
     overflow-x: auto;
     margin-top: 1.5rem;
+  }
+
+  .save-button-container {
+    margin: 1rem 0 2rem 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .save-btn {
+    background-color: var(--color-accent);
+    color: white;
+    border: none;
+    padding: 15px 30px;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+    width: 100%;
+    max-width: 300px;
+  }
+
+  .save-btn:hover:not(:disabled) {
+    background-color: #1976d2;
+  }
+
+  .save-btn:disabled {
+    background-color: #aaa;
+    cursor: not-allowed;
+  }
+
+  .success-msg {
+    background-color: #4caf50;
+    color: white;
+    padding: 15px;
+    border-radius: 8px;
+    text-align: center;
   }
 </style>

@@ -13,10 +13,10 @@
       data-v-inspector="src/components/NavigationBar.vue:7:9"
     >
       <FontAwesomeIcon
-        icon="fa-home"
+        icon="fa-compass"
         data-v-inspector="src/components/NavigationBar.vue:8:13"
       />
-      <p data-v-inspector="src/components/NavigationBar.vue:9:13">Home</p>
+      <p data-v-inspector="src/components/NavigationBar.vue:9:13">Explore</p>
     </RouterLink>
     <RouterLink
       to="/create"
@@ -30,15 +30,15 @@
       <p data-v-inspector="src/components/NavigationBar.vue:13:13">Create</p>
     </RouterLink>
     <RouterLink
-      to="/explore"
+      to="/home"
       class="nav-link"
       data-v-inspector="src/components/NavigationBar.vue:15:9"
     >
       <FontAwesomeIcon
-        icon="fa-compass"
+        icon="fa-pen"
         data-v-inspector="src/components/NavigationBar.vue:16:13"
       />
-      <p data-v-inspector="src/components/NavigationBar.vue:17:13">Explore</p>
+      <p data-v-inspector="src/components/NavigationBar.vue:17:13">Saved</p>
     </RouterLink>
     <RouterLink
       to="/generate"
