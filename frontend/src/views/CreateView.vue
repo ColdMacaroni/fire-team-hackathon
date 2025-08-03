@@ -148,7 +148,7 @@
           data-v-inspector="src/views/CreateView.vue:211:17"
         >
           <h2 data-v-inspector="src/views/CreateView.vue:212:21">
-            Recipe Name*
+            Recipe Name
           </h2>
           <RecipeNameInput
             v-model="recipeData.name"
