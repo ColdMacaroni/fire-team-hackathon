@@ -195,6 +195,7 @@ def get_tag_by_id(tag_id):
         tag = [{"name": tag_name, "id": tag_id} for (tag_id, tag_name) in c.fetchall()]
     return Response(json.dumps(tag), content_type="application/json")
 
+
 @app.get("/api/v1/ingredient/all")
 def get_all_ingredients():
     ingredients = []
@@ -244,6 +245,7 @@ def like_post(post_id):
         db.commit()
     return Response(status=201)
 
+
 @app.post("/api/v1/post/dislike/<post_id>")
 def dislike_post(post_id):
     with sqlite3.connect("data/fire.db") as db:
@@ -262,3 +264,29 @@ def dislike_post(post_id):
 
         db.commit()
     return Response(status=201)
+
+
+@app.post("/api/v1/post/<post_id>/<comment_id>/like")
+def like_comment(post_id, comment_id):
+    with sqlite3.connect("data/fire.db") as db:
+        c = db.cursor()
+        c.execute(f"""
+                  UPDATE Comments
+                  SET NumberOfLikes = NumberOfLikes + 1
+                  WHERE CommentId = {comment_id} AND PostId = {post_id};
+                  """)
+        db.commit()
+
+
+@app.post("/api/v1/post/<post_id>/<comment_id>/dislike")
+def dislike_comment(post_id, comment_id):
+    with sqlite3.connect("data/fire.db") as db:
+        c = db.cursor()
+        c.execute(f"""
+                  UPDATE Comments
+                  SET NumberOfLikes = NumberOfLikes - 1
+                  WHERE CommentId = {comment_id}
+                  AND PostId = {post_id}
+                  AND NumberOfLikes > 0;
+                  """)
+        db.commit()
