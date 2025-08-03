@@ -454,8 +454,8 @@ def create_comment(post_id):
     with sqlite3.connect(DB_URL) as db:
         c = db.cursor()
         c.execute(f"""
-                  INSERT INTO Comments (PostId, Author, Body)
-                  VALUES ({post_id, comment['author'], comment['body']});
+                  INSERT INTO Comments (PostId, Author, Body, Rating)
+                  VALUES ({post_id, comment['author'], comment['body'], comment['rating']});
                   """)
         db.commit()
     return Response(status=201)
