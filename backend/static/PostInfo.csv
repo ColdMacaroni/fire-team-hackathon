@@ -1,9 +1,8 @@
-"Recipe Name","Number of Likes", "Rating", "Reviews"
-Honey Butter Chicken, 896, 4.7, 97
-Butter Chicken, 801, 4.5, 35
-Big Mac Taco, 5, 2.1, 2
-Watermelon Shaved Ice, 1902, 5, 20
-Cucumber Salad, 2837, 5, 562
-Fire Chicken, 2090, 3.2, 305
-Egg Fried Rice, 731, 4.6, 21
-Tiramisu, 2556, 4.9, 211
+Recipe Name,Number of Likes,Rating,Reviews
+Honey Butter Chicken,896,4.7,97
+Butter Chicken,801,4.5,35
+Watermelon Shaved Ice,1902,5,20
+Cucumber Salad,2837,5,562
+Fire Chicken,2090,3.2,305
+Egg Fried Rice,731,4.6,21
+Tiramisu,2556,4.9,211
