@@ -19,8 +19,12 @@
     }
     if (Array.isArray(r.instructions)) return r.instructions
     if (typeof r.instructions === 'string') {
-      // Split by newlines and filter out empty lines
-      return r.instructions.split('\n').filter(step => step.trim() !== '')
+      // Split by newlines, trim, filter out empty, then trim first 2 chars
+      return r.instructions
+        .split('\n')
+        .map(step => step.trim())
+        .filter(step => step !== '')
+        .map(step => step.length > 2 ? step.slice(2) : '');
     }
     return []
   })

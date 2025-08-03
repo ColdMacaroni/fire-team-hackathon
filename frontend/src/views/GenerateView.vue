@@ -159,7 +159,6 @@
     margin-top: 1rem;
   }
   .recipe-container {
-    background: #f8f9fa;
     border-radius: 8px;
     padding: 2rem;
     margin-top: 2rem;
