@@ -30,6 +30,7 @@ def tags_by_recipe_id(recipe_id: int) -> list[Tag]:
         ).fetchall()
     return [Tag(*t) for t in tags]
 
+
 def create_post_to_database(json_post) -> int:
     print(json_post)
     # const formattedRecipe = {
@@ -53,84 +54,108 @@ def create_post_to_database(json_post) -> int:
     #   dislikes: 0, // Random dislikes between 1-11
     #   comments: 0, // Random comments between 10-40
     # }
-    tags: list[str] = json_post['tags']
+    tags: list[str] = json_post["tags"]
     with sqlite3.connect(DB_URL) as db:
         c = db.cursor()
-        c.execute("""
+        c.execute(
+            """
             CREATE TEMPORARY TABLE NewPostTags(TagName);
-        """)
+        """
+        )
 
-        c.executemany("""
+        c.executemany(
+            """
             INSERT OR IGNORE INTO NewPostTags (TagName)
             VALUES (?)
-        """, ((t,) for t in tags))
+        """,
+            ((t,) for t in tags),
+        )
         db.commit()
-
 
         # insert tags
-        c.execute("""
+        c.execute(
+            """
             INSERT OR IGNORE INTO Tags (TagName)
             SELECT * FROM NewPostTags
-        """)
+        """
+        )
         db.commit()
 
-        tag_ids = c.execute("""
+        tag_ids = c.execute(
+            """
             SELECT TagId FROM Tags
             NATURAL JOIN NewPostTags
-        """).fetchall()
+        """
+        ).fetchall()
         tag_ids = [t[0] for t in tag_ids]
 
-        c.execute("""
+        c.execute(
+            """
             DROP TABLE NewPostTags;
-        """)
+        """
+        )
 
         # Ingredients
 
-        c.execute("""
+        c.execute(
+            """
             CREATE TEMPORARY TABLE NewPostIngredients(IngredientName, TypeId);
-        """)
+        """
+        )
 
-        c.executemany("""
+        c.executemany(
+            """
             INSERT OR IGNORE INTO NewPostIngredients (IngredientName, TypeId)
             VALUES (?, ?)
-        """, ((i['ingredient'], 1) for i in json_post['ingredients']))
+        """,
+            ((i["ingredient"], 1) for i in json_post["ingredients"]),
+        )
         db.commit()
 
         # insert ings
-        c.execute("""
+        c.execute(
+            """
             INSERT OR IGNORE INTO Ingredients (IngredientName, TypeId)
             SELECT * FROM NewPostIngredients
-        """)
+        """
+        )
         db.commit()
 
-        ing_ids = c.execute("""
+        ing_ids = c.execute(
+            """
             SELECT IngredientName, IngredientId FROM Ingredients
             NATURAL JOIN NewPostIngredients;
-        """).fetchall()
+        """
+        ).fetchall()
         ing_to_id = {name: id_ for name, id_ in ing_ids}
 
-        c.execute("""
+        c.execute(
+            """
             DROP TABLE NewPostIngredients;
-        """)
+        """
+        )
 
         # -- create recipe
-        exists = not not c.execute("SELECT COUNT(*) FROM Recipes WHERE RecipeName = ?", (json_post['name'],)).fetchone()[0]
+        exists = not not c.execute(
+            "SELECT COUNT(*) FROM Recipes WHERE RecipeName = ?", (json_post["name"],)
+        ).fetchone()[0]
         if exists:
             return -1
 
-        c.execute("""
+        c.execute(
+            """
 INSERT INTO Recipes (RecipeName, Description, Instructions, CookTime, Difficulty, PhotoURL)
 VALUES (?, ?, ?, ?, ?, ?);
-                  """, 
-                  (
-                      json_post['name'],
-                      json_post.get('description', "No Description"),
-                      json_post['instructions'],
-                      json_post.get('cooktime', 0),
-                      json_post.get('difficulty', 3),
-                      json_post.get('image',  "/recipe_not_found.png" ),
-                      ))
-
+                  """,
+            (
+                json_post["name"],
+                json_post.get("description", "No Description"),
+                json_post["instructions"],
+                json_post.get("cooktime", 0),
+                json_post.get("difficulty", 3),
+                json_post.get("image", "/recipe_not_found.png"),
+            ),
+        )
 
     return 232
 
@@ -201,19 +226,18 @@ def get_trending_recipe_by_offset(offset, count=1):
             ORDER BY NumberOfRecentLikes DESC
             LIMIT ? OFFSET ?
             """,
-            (int(count), int(offset))).fetchall()
+            (int(count), int(offset)),
+        ).fetchall()
 
     json = [create_post_by_row(int(*recipe_id)).to_json() for recipe_id in recipe_ids]
 
-    return Response(
-            f"[{','.join(json)}]",
-            content_type="application/json")
+    return Response(f"[{','.join(json)}]", content_type="application/json")
 
 
 # Takes smth like 123,1234,345
 # returns (123),(1234),(345)
 def transform_ids(ids: str) -> str:
-    return ','.join(map(lambda i: f"({int(i)})", ids.replace(" ", ",").split(",")))
+    return ",".join(map(lambda i: f"({int(i)})", ids.replace(" ", ",").split(",")))
 
 
 @app.get("/api/v1/recipe/filter/ingredient/<without>")
@@ -221,7 +245,7 @@ def transform_ids(ids: str) -> str:
 def get_recipe_filtered_by_ingredient(without: str, with_="-"):
     # Safety: ids are cast to int, so no sql injection
     exclude_ids = transform_ids(without) if without != "-" else "(null)"
-    include_ids = transform_ids(with_)  if with_ != "-" else "(null)"
+    include_ids = transform_ids(with_) if with_ != "-" else "(null)"
 
     query = f"""
         WITH
@@ -240,9 +264,9 @@ def get_recipe_filtered_by_ingredient(without: str, with_="-"):
         result = c.execute(query).fetchall()
 
     return Response(
-            json.dumps([{"id": t[0], "name": t[1]} for t in result]),
-            content_type="application/json")
-
+        json.dumps([{"id": t[0], "name": t[1]} for t in result]),
+        content_type="application/json",
+    )
 
 
 @app.get("/api/v1/recipe/filter/tag/<without>")
@@ -250,7 +274,7 @@ def get_recipe_filtered_by_ingredient(without: str, with_="-"):
 def get_recipe_filtered_by_tag(without, with_="-"):
     # Safety: ids are cast to int, so no sql injection
     exclude_ids = transform_ids(without) if without != "-" else "(null)"
-    include_ids = transform_ids(with_)  if with_ != "-" else "(null)"
+    include_ids = transform_ids(with_) if with_ != "-" else "(null)"
 
     query = f"""
         WITH
@@ -269,8 +293,9 @@ def get_recipe_filtered_by_tag(without, with_="-"):
         result = c.execute(query).fetchall()
 
     return Response(
-            json.dumps([{"id": t[0], "name": t[1]} for t in result]),
-            content_type="application/json")
+        json.dumps([{"id": t[0], "name": t[1]} for t in result]),
+        content_type="application/json",
+    )
 
 
 @app.get("/api/v1/tag/all")
@@ -290,16 +315,19 @@ def get_tag_by_id(tag_id):
     ids = transform_ids(tag_id)
     with sqlite3.connect(DB_URL) as db:
         c = db.cursor()
-        c.execute(f"""
+        c.execute(
+            f"""
                   WITH GetIds(TagId)
                   AS (VALUES {ids})
                   SELECT TagId, TagName
                   FROM Tags
                   WHERE TagId IN GetIds
-                  """)
+                  """
+        )
 
         tag = [{"name": tag_name, "id": tag_id} for (tag_id, tag_name) in c.fetchall()]
     return Response(json.dumps(tag), content_type="application/json")
+
 
 @app.get("/api/v1/ingredient/all")
 def get_all_ingredients():
@@ -318,17 +346,23 @@ def get_tag_by_id2(ingredient_id):
     ids = transform_ids(ingredient_id)
     with sqlite3.connect(DB_URL) as db:
         c = db.cursor()
-        c.execute(f"""
+        c.execute(
+            f"""
                   WITH GetIds(IngredientId)
                   AS (VALUES {ids})
                   SELECT IngredientId, IngredientName
                   FROM Ingredients
                   WHERE IngredientId IN GetIds
-                  """)
+                  """
+        )
 
-        ingredients = [{"name": ingredient_name, "id": ingredient_id} for (ingredient_id, ingredient_name) in c.fetchall()]
+        ingredients = [
+            {"name": ingredient_name, "id": ingredient_id}
+            for (ingredient_id, ingredient_name) in c.fetchall()
+        ]
 
     return Response(json.dumps(ingredients), content_type="application/json")
+
 
 @app.put("/api/v1/recipe/save")
 def save_recipe():
