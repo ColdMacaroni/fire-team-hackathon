@@ -19,16 +19,11 @@ When users use our site, they will first see the most trending recipes the home 
 When users share recipes from other apps and sites they will have the option to share using our site. Our site will searched our database for this recipe, but if no match is found, a new recipe will be created containing the information from the original post. The user can then use this recipe or use this link to share this recipe.
 
 ## QR code
-Here is the link...
-https://fire.up-on-the.net/
-
-Qr code?
-
+![https://fire.up-on-the.net/](QRcode.png)
 
 ## The rest of the pitch
 ### Why it's different
 What sets Kitchen Fire apart is our focus on social logging and discovery, not just recipe storage or inspiration. Unlike Pinterest or generic cooking sites, we're building a community-first platform that taps into the emotional, trackable habits people already use for books and movies - applied to something even more universal: food. We deliver concise, easy-to-follow recipes with streamlined ingredient lists, so users can get cooking faster. Our platform prioritizes smart, ingredient-based discovery and meaningful interactions - likes, comments, and ratings - presented in a clean, intuitive interface. By merging utility with community, we surface high-quality content and create a social experience that feels both familiar and refreshingly focused.
-
 
 ### Future expansion
 Easy way to add recipes from social media onto the site. (hopefully this is a existing feature)
