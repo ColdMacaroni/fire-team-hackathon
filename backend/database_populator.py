@@ -79,7 +79,7 @@ if __name__ == "__main__":
                 recipes[name] = recipe
             rowNumber += 1
 
-    trending: Dict[str, int] = {}
+    trending: Dict[str, float] = {}
 
     with open("../static/TrendingInfo.csv") as raw_trending_info:
         reader = csv.reader(raw_trending_info)
@@ -87,7 +87,7 @@ if __name__ == "__main__":
 
         for row in reader:
             if rowNumber != 0:
-                trending[row[0]] = int(row[1])
+                trending[row[0]] = float(row[1])
 
             rowNumber += 1
 
