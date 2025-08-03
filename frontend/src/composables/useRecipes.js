@@ -1,60 +1,77 @@
 import { ref, computed } from 'vue'
-import recipesData from '../data/recipes.json'
+import apiService from '../services/api.js'
 
 export function useRecipes() {
   const recipes = ref([])
   const loading = ref(false)
   const error = ref(null)
 
-  // Load all recipes from data/recipes.json
+  // Load all recipes from Flask backend
   const loadAllRecipes = async () => {
     try {
       loading.value = true
       error.value = null
 
-      // Load recipes from the JSON file
-      recipes.value = recipesData.recipes || []
+      // Load recipes from Flask backend using trending endpoint
+      const backendRecipes = await apiService.getTrendingRecipes(0, 12) // Get first 12 trending recipes
+      recipes.value = backendRecipes || []
     } catch (err) {
-      error.value = 'Failed to load recipes'
-      console.error('Error loading recipes from JSON file:', err)
+      error.value = 'Failed to load recipes from backend'
+      console.error('Error loading recipes from backend:', err)
+      // Set empty array instead of falling back to JSON
+      recipes.value = []
     } finally {
       loading.value = false
     }
   }
 
-  // Load a specific recipe by ID from data/recipes.json or localStorage
+  // Load a specific recipe by ID from Flask backend
   const loadRecipeById = async recipeId => {
     try {
       loading.value = true
       error.value = null
 
-      // First, try to find the recipe in the JSON file
-      const allRecipes = recipesData.recipes || []
-      let foundRecipe = allRecipes.find(
-        recipe => recipe.id === parseInt(recipeId)
-      )
+      // Load from Flask backend
+      const backendRecipes = await apiService.getRecipeById(recipeId)
+      if (backendRecipes && backendRecipes.length > 0) {
+        return backendRecipes[0] // Return the first recipe from the array
+      }
 
-      // If not found in JSON, check localStorage (for user-created recipes)
-      if (!foundRecipe) {
-        const savedRecipes = localStorage.getItem('createdRecipes')
-        if (savedRecipes) {
-          const localStorageRecipes = JSON.parse(savedRecipes)
-          foundRecipe = localStorageRecipes.find(
-            recipe => recipe.id === parseInt(recipeId)
-          )
+      // If not found in backend, check localStorage (for user-created recipes)
+      const savedRecipes = localStorage.getItem('createdRecipes')
+      if (savedRecipes) {
+        const localStorageRecipes = JSON.parse(savedRecipes)
+        const foundRecipe = localStorageRecipes.find(
+          recipe => recipe.id === parseInt(recipeId)
+        )
+        if (foundRecipe) {
+          return foundRecipe
         }
       }
 
-      if (foundRecipe) {
-        return foundRecipe
-      } else {
-        error.value = 'Recipe not found'
-        return null
-      }
-    } catch (err) {
-      error.value = 'Failed to load recipe'
-      console.error('Error loading recipe:', err)
+      error.value = 'Recipe not found'
       return null
+    } catch (err) {
+      error.value = 'Failed to load recipe from backend'
+      console.error('Error loading recipe from backend:', err)
+      return null
+    } finally {
+      loading.value = false
+    }
+  }
+
+  // Load trending recipes from Flask backend
+  const loadTrendingRecipes = async (limit = 10) => {
+    try {
+      loading.value = true
+      error.value = null
+
+      // Get trending recipes from backend
+      const trendingRecipes = await apiService.getTrendingRecipes(0, limit)
+      recipes.value = trendingRecipes || []
+    } catch (err) {
+      error.value = 'Failed to load trending recipes'
+      console.error('Error loading trending recipes:', err)
     } finally {
       loading.value = false
     }
@@ -251,6 +268,7 @@ export function useRecipes() {
     // Methods
     loadAllRecipes,
     loadRecipeById,
+    loadTrendingRecipes,
     loadFavoritedRecipes,
     loadCreatedRecipes,
     saveRecipe,
