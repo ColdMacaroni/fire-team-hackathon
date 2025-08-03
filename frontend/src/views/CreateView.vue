@@ -150,9 +150,8 @@
       if (recipeData.image) {
         const response = await fetch(recipeData.image)
         const blob = await response.blob()
-        const imageFile = new File([blob], 'recipe-image.jpg', {
-          type: 'image/jpeg',
-        })
+        var reader = new FileReader();
+        var imageFile = reader.readAsDataURL(blob);
         formData.append('image', imageFile)
       }
 
