@@ -273,10 +273,10 @@
             </li>
           </ul>
         </div>
-        <div class="recipe-instructions">
-          <h2>Instructions</h2>
-          <p>{{ recipe.instructions }}</p>
-        </div>
+      </div>
+      <div class="recipe-instructions">
+        <h2>Instructions</h2>
+        <p>{{ recipe.instructions }}</p>
       </div>
 
       <!-- Spacer to prevent navbar overlap -->

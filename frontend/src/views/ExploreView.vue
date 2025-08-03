@@ -93,6 +93,7 @@
 </script>
 
 <template>
+  <h1 class="explore-title">Explore</h1>
   <div class="explore-container">
     <div class="page-swiper">
       <!-- Loading State -->
@@ -149,7 +150,6 @@
       </div>
     </div>
 
-    <!-- Pinterest-style Grid Section -->
     <div class="recipe-grid-section">
       <div v-if="loading" class="grid-loading">
         <div class="loading-spinner"></div>
@@ -176,6 +176,16 @@
 </template>
 
 <style scoped>
+  .explore-title {
+    width: 90vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 24px;
+    font-weight: 600;
+    margin-top: 20px;
+  }
+
   .explore-container {
     display: flex;
     flex-direction: column;
@@ -319,7 +329,7 @@
     flex-direction: column;
     height: 60%;
     width: 100%;
-    padding: 20px;
+    padding: 20px, 20px, 40px, 20px;
     /* Hide scrollbar for webkit browsers */
     scrollbar-width: none; /* Firefox */
   }

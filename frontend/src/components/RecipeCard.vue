@@ -103,6 +103,10 @@
     text-overflow: ellipsis;
     white-space: nowrap;
   }
+  .recipe-image {
+    display: flex;
+    justify-content: center;
+  }
 
   .recipe-stars {
     display: flex;

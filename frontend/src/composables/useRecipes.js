@@ -125,16 +125,10 @@ export function useRecipes() {
       loading.value = true
       error.value = null
 
-      // Generate unique ID
-      const newId = Date.now()
-
       // Format the recipe data
       const formattedRecipe = {
-        id: newId,
         name: recipeData.name,
         image: recipeData.image || '',
-        rating: 0,
-        reviews: 0,
         tags: recipeData.tags.filter(tag => tag.trim() !== ''),
         ingredients: recipeData.ingredients
           .filter(ing => ing.ingredient.trim() !== '')
@@ -144,10 +138,9 @@ export function useRecipes() {
             unit: ing.unit,
           })),
         instructions: recipeData.instructions,
-        isFavorited: false,
-        likes: 0,
-        dislikes: 0,
-        comments: 0,
+        description: recipeData.description || '',
+        cookingTime: parseInt(recipeData.cookingTime) || 0,
+        difficulty: parseInt(recipeData.difficulty) || 1,
       }
 
       // Get existing recipes
