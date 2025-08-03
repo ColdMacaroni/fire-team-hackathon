@@ -27,9 +27,3 @@ class Post:
         }
 
         return json.dumps(out)
-
-    @staticmethod
-    def from_json(s) -> None:
-        return None
-
-
