@@ -1,4 +1,4 @@
-from flask import Flask, Response
+from flask import Flask, Response, request
 import sqlite3
 import json
 
@@ -223,3 +223,7 @@ def get_tag_by_id2(ingredient_id):
         ingredients = [{"name": ingredient_name, "id": ingredient_id} for (ingredient_id, ingredient_name) in c.fetchall()]
 
     return Response(json.dumps(ingredients), content_type="application/json")
+
+@app.put("/api/v1/recipe/save")
+def save_recipe():
+    return "nil"

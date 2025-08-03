@@ -11,7 +11,6 @@ class Post:
     reviews: int
 
     def to_json(self) -> str:
-        print(self.recipe.recipe_id, type(self.recipe.recipe_id))
         out = {
             "id": self.recipe.recipe_id,
             "name": self.recipe.name,
@@ -28,3 +27,9 @@ class Post:
         }
 
         return json.dumps(out)
+
+    @staticmethod
+    def from_json(s) -> None:
+        return None
+
+
