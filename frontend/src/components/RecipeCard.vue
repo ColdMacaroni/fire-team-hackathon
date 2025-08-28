@@ -1,90 +1,66 @@
 <script setup>
-  import { useRouter } from 'vue-router'
-  import { ref, computed } from 'vue'
+import { useRouter } from 'vue-router'
+import { ref, computed } from 'vue'
 
-  const router = useRouter()
+const router = useRouter()
 
-  defineProps({
-    recipe: {
-      type: Object,
-      required: true,
-    },
-  })
+defineProps({
+  recipe: {
+    type: Object,
+    required: true,
+  },
+})
 
-  // Generate a random color for fallback
-  const randomColor = computed(() => {
-    const colors = [
-      '#FF6B6B', // Red
-      '#4ECDC4', // Teal
-      '#45B7D1', // Blue
-      '#96CEB4', // Green
-      '#FFEAA7', // Yellow
-      '#DDA0DD', // Plum
-      '#98D8C8', // Mint
-      '#F7DC6F', // Gold
-      '#BB8FCE', // Purple
-      '#85C1E9', // Light Blue
-      '#F8C471', // Orange
-      '#82E0AA', // Light Green
-    ]
-    return colors[Math.floor(Math.random() * colors.length)]
-  })
+// Generate a random color for fallback
+const randomColor = computed(() => {
+  const colors = [
+    '#FF6B6B', // Red
+    '#4ECDC4', // Teal
+    '#45B7D1', // Blue
+    '#96CEB4', // Green
+    '#FFEAA7', // Yellow
+    '#DDA0DD', // Plum
+    '#98D8C8', // Mint
+    '#F7DC6F', // Gold
+    '#BB8FCE', // Purple
+    '#85C1E9', // Light Blue
+    '#F8C471', // Orange
+    '#82E0AA', // Light Green
+  ]
+  return colors[Math.floor(Math.random() * colors.length)]
+})
 
-  const imageError = ref(false)
+const imageError = ref(false)
 
-  function navigateToRecipe(id) {
-    router.push(`/recipe/${id}`)
-    // Scroll to top of the new page
-    window.scrollTo(0, 0)
-  }
+function navigateToRecipe(id) {
+  router.push(`/recipe/${id}`)
+  // Scroll to top of the new page
+  window.scrollTo(0, 0)
+}
 
-  function handleImageError() {
-    imageError.value = true
-  }
+function handleImageError() {
+  imageError.value = true
+}
 </script>
 
 <template>
-  <div
-    class="recipe-card"
-    @click="navigateToRecipe(recipe.id)"
-    data-v-inspector="src/components/RecipeCard.vue:11:5"
-  >
-    <div
-      v-if="recipe.image && recipe.image !== '' && !imageError"
-      class="recipe-image"
-      data-v-inspector="src/components/RecipeCard.vue:12:9"
-    >
-      <img
-        :src="recipe.image"
-        :alt="recipe.name"
-        @error="handleImageError"
-        data-v-inspector="src/components/RecipeCard.vue:13:13"
-      />
+  <div class="recipe-card" @click="navigateToRecipe(recipe.id)" data-v-inspector="src/components/RecipeCard.vue:11:5">
+    <div v-if="recipe.image && recipe.image !== '' && !recipe.image.startsWith('#') && !imageError" class="recipe-image"
+      data-v-inspector="src/components/RecipeCard.vue:12:9">
+      <img :src="recipe.image" :alt="recipe.name" @error="handleImageError"
+        data-v-inspector="src/components/RecipeCard.vue:13:13" />
     </div>
-    <div
-      v-else
-      class="recipe-image"
-      :style="{ backgroundColor: randomColor }"
-      data-v-inspector="src/components/RecipeCard.vue:15:9"
-    ></div>
-    <div
-      class="recipe-content"
-      data-v-inspector="src/components/RecipeCard.vue:17:9"
-    >
-      <h3
-        class="recipe-name"
-        data-v-inspector="src/components/RecipeCard.vue:18:13"
-      >
+    <div v-else-if="recipe.image && recipe.image.startsWith('#')" class="recipe-image"
+      :style="{ backgroundColor: recipe.image }" data-v-inspector="src/components/RecipeCard.vue:15:9"></div>
+    <div v-else class="recipe-image" :style="{ backgroundColor: randomColor }"
+      data-v-inspector="src/components/RecipeCard.vue:15:9"></div>
+    <div class="recipe-content" data-v-inspector="src/components/RecipeCard.vue:17:9">
+      <h3 class="recipe-name" data-v-inspector="src/components/RecipeCard.vue:18:13">
         {{ recipe.name }}
       </h3>
       <div class="recipe-stars">
         <div class="stars">
-          <span
-            v-for="star in 5"
-            :key="star"
-            class="star"
-            :class="{ filled: star <= recipe.rating }"
-          >
+          <span v-for="star in 5" :key="star" class="star" :class="{ filled: star <= recipe.rating }">
             ★
           </span>
         </div>
@@ -95,71 +71,72 @@
 </template>
 
 <style scoped>
-  .recipe-card {
-    background-color: var(--color-background-secondary);
-    border-radius: 12px;
-    overflow: hidden;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    transition: transform 0.2s ease;
-  }
+.recipe-card {
+  background-color: var(--color-background-secondary);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease;
+}
 
-  .recipe-card:hover {
-    transform: translateY(-2px);
-  }
+.recipe-card:hover {
+  transform: translateY(-2px);
+}
 
-  .recipe-image {
-    height: 120px;
-    overflow: hidden;
-  }
+.recipe-image {
+  height: 120px;
+  overflow: hidden;
+}
 
-  .recipe-image img {
-    height: 100%;
-    object-fit: cover;
-  }
+.recipe-image img {
+  height: 100%;
+  object-fit: cover;
+}
 
-  .recipe-content {
-    padding: 12px;
-  }
+.recipe-content {
+  padding: 12px;
+}
 
-  .recipe-name {
-    color: var(--color-text);
-    margin: 0 0 8px 0;
-    font-size: 16px;
-    font-weight: 600;
-    line-height: 1.3;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-  .recipe-image {
-    display: flex;
-    justify-content: center;
-  }
+.recipe-name {
+  color: var(--color-text);
+  margin: 0 0 8px 0;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.3;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
 
-  .recipe-stars {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-  }
+.recipe-image {
+  display: flex;
+  justify-content: center;
+}
 
-  .stars {
-    display: flex;
-    gap: 1px;
-  }
+.recipe-stars {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
 
-  .star {
-    font-size: 14px;
-    color: #666;
-    transition: color 0.2s ease;
-  }
+.stars {
+  display: flex;
+  gap: 1px;
+}
 
-  .star.filled {
-    color: #ffd700;
-  }
+.star {
+  font-size: 14px;
+  color: #666;
+  transition: color 0.2s ease;
+}
 
-  .rating-text {
-    color: var(--color-text);
-    opacity: 0.7;
-    font-size: 12px;
-  }
+.star.filled {
+  color: #ffd700;
+}
+
+.rating-text {
+  color: var(--color-text);
+  opacity: 0.7;
+  font-size: 12px;
+}
 </style>

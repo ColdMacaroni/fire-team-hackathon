@@ -206,7 +206,7 @@ export function useRecipes() {
           })),
         instructions: recipeData.instructions,
         description: recipeData.description || '',
-        cookingTime: parseInt(recipeData.cookingTime) || 0,
+        cooktime: parseInt(recipeData.cooktime) || 0,
         difficulty: parseInt(recipeData.difficulty) || 1,
       }
 
